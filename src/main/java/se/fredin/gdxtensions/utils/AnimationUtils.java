@@ -32,7 +32,7 @@ public class AnimationUtils {
 	 * @param animSpeed the animation speed
 	 * @return a new animation
 	 */
-	public Animation getFramesFromRegion(TextureRegion spriteSheet, float animSpeed) {
+	public static Animation getFramesFromRegion(TextureRegion spriteSheet, float animSpeed) {
 		TextureRegion[] region = TextureUtils.split(spriteSheet, 32, 32, false);
 		return new Animation(animSpeed, region);
 	}
@@ -44,7 +44,7 @@ public class AnimationUtils {
 	 * @param flipX whether or not to flip the xPosition of each frame
 	 * @return a new animation
 	 */
-	public Animation getFramesFromRegion(TextureRegion spriteSheet, float animSpeed, boolean flipX) {
+	public static Animation getFramesFromRegion(TextureRegion spriteSheet, float animSpeed, boolean flipX) {
 		TextureRegion[] region = TextureUtils.split(spriteSheet, 32, 32, flipX);
 		return new Animation(animSpeed, region);
 	}
@@ -57,7 +57,7 @@ public class AnimationUtils {
 	 * @param frameHeight the height of each frame
 	 * @return a new animation
 	 */
-	public Animation getFramesFromRegion(TextureRegion spriteSheet, float animSpeed, int frameWidth, int frameHeight) {
+	public static Animation getFramesFromRegion(TextureRegion spriteSheet, float animSpeed, int frameWidth, int frameHeight) {
 		TextureRegion[] region = TextureUtils.split(spriteSheet, frameWidth, frameHeight, false);
 		return new Animation(animSpeed, region);
 	}
@@ -71,7 +71,7 @@ public class AnimationUtils {
 	 * @param flipX
 	 * @return
 	 */
-	public Animation getFramesFromRegion(TextureRegion spriteSheet, float animSpeed, int frameWidth, int frameHeight, boolean flipX) {
+	public static Animation getFramesFromRegion(TextureRegion spriteSheet, float animSpeed, int frameWidth, int frameHeight, boolean flipX) {
 		TextureRegion[] region = TextureUtils.split(spriteSheet, frameWidth, frameHeight, flipX);
 		return new Animation(animSpeed, region);
 	}
