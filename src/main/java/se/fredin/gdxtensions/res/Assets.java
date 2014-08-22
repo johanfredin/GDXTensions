@@ -13,15 +13,13 @@ import com.badlogic.gdx.utils.GdxRuntimeException;
 
 /**
  * Handles all the game assets
- * @authors Johan Fredin, Niklas Istenes 
- *
+ * @authors Johan Fredin 
  */
 public class Assets implements Disposable {
 
 	public static boolean LOAD_SYNCHRONOUSLY = false;
-	
-	private AssetManager manager;
 	private static Assets assets;
+	private AssetManager manager;
 
 	public static Assets getInstance() {
 		if(assets == null) {
@@ -81,10 +79,11 @@ public class Assets implements Disposable {
 	}
 
 	/**
-	 * Loads all the assets required for the menu screens
+	 * Load all the assets given
+	 * @param params the assets to load
 	 */
 	@SuppressWarnings("unchecked")
-	public void loadMenuAssets(LoadParams... params) {
+	public void load(LoadParams... params) {
 		// Set the manager for the textures
 		for(LoadParams param : params) {
 			manager.load(param.path, param.clazz);	
@@ -93,9 +92,9 @@ public class Assets implements Disposable {
 	}
 
 	/**
-	 * Unloads all the menu screen assets
+	 * Unloads all the given assets
 	 */
-	public void unloadMenuAssets(String... assets) {
+	public void unload(String... assets) {
 		try {
 			for(String asset : assets) {
 				manager.unload(asset);
@@ -107,10 +106,19 @@ public class Assets implements Disposable {
 
 	
 	/**
-	 * Loads a tile map with the given index
-	 * @param worldType the type of map to load (beach, grass etc)
-	 * @param index the index of the map we want to load
-	 * @param isTestLevel whether to retrieve the map from the test levels path or not
+	 * Load a tiled map
+	 * @param tmxFilePath path to the map
+	 */
+	public void loadTileMap(String tmxFilePath) {
+		manager.setLoader(TiledMap.class, new TmxMapLoader(new InternalFileHandleResolver()));
+		manager.load(tmxFilePath, TiledMap.class);
+		manager.finishLoading();
+	}
+	
+	/**
+	 * Load a tiled map
+	 * @param tmxFilePath the path to the map
+	 * @param textureFilter texture filter to use for the map
 	 */
 	public void loadTileMap(String tmxFilePath, TextureFilter textureFilter) {
 		manager.setLoader(TiledMap.class, new TmxMapLoader(new InternalFileHandleResolver()));
@@ -122,41 +130,49 @@ public class Assets implements Disposable {
 	}
 	
 	/**
-	 * Unloads a tile map with the given index if the map is loaded
-	 * @param tmxFilePath the path to the tmxMap to load
+	 * Unloads a tile map loaded
+	 * @param tmxFilePath the path to the tmxMap to unload
 	 */
 	public void unloadTileMap(String tmxFilePath) {
 		manager.unload(tmxFilePath);
 	}
 	
-	/**
-	 * Unload the in game assets
-	 */
-	public void unloadInGameAssets() {
-	}
-	
-
 	private Assets() {
 		manager = new AssetManager();
 		if(LOAD_SYNCHRONOUSLY) {
-			loadMenuAssets();
+			load();
 			Texture.setAssetManager(manager);
 			manager.finishLoading();
 		}
 	}
 	
+	/**
+	 * Useful when you wish to use a loading screen
+	 * @return the progress (0 = nothing loaded, 100 = fully loaded)
+	 */
 	public int getProgress() {
 		return (int) (manager.getProgress() * 100);
 	}
 
+	/**
+	 * @return whether or not assets are still being loaded
+	 */
 	public boolean isLoading() {
 		return !manager.update();
 	}
 	
+	/**
+	 * Lets us find out if an asset is loaded or not
+	 * @param path
+	 * @return
+	 */
 	public boolean isLoaded(String path) {
 		return manager.isLoaded(path);
 	}
 	
+	/**
+	 * Makes the application freeze until all the assets are loaded
+	 */
 	public void finishLoading() {
 		manager.finishLoading();
 		Texture.setAssetManager(manager);
