@@ -9,7 +9,6 @@ import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader.Parameters;
 import com.badlogic.gdx.utils.Disposable;
-import com.badlogic.gdx.utils.GdxRuntimeException;
 
 /**
  * Handles all the game assets
@@ -80,27 +79,26 @@ public class Assets implements Disposable {
 
 	/**
 	 * Load all the assets given
-	 * @param params the assets to load
 	 */
-	@SuppressWarnings("unchecked")
-	public void load(LoadParams... params) {
-		// Set the manager for the textures
-		for(LoadParams param : params) {
-			manager.load(param.path, param.clazz);	
-		}
+	public void load() {
+		//TODO:populate with your own assets e.g manager.load("myasset", asset.class);
+		
 		Texture.setAssetManager(manager);
+	}
+	
+	/**
+	 * Use to unload assets
+	 */
+	public void unload() {
+		//TODO: populate with assets you want to unload e.g manager.unload("myasset");
 	}
 
 	/**
 	 * Unloads all the given assets
 	 */
 	public void unload(String... assets) {
-		try {
-			for(String asset : assets) {
-				manager.unload(asset);
-			}
-		} catch(GdxRuntimeException ex) {
-			ex.printStackTrace();
+		for(String asset : assets) {
+			manager.unload(asset);
 		}
 	}
 
