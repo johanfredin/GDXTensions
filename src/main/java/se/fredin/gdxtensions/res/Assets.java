@@ -1,5 +1,7 @@
 package se.fredin.gdxtensions.res;
 
+import se.fredin.gdxtensions.utils.WorldType;
+
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.assets.loaders.resolvers.InternalFileHandleResolver;
 import com.badlogic.gdx.graphics.Texture;
@@ -9,6 +11,8 @@ import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader.Parameters;
 import com.badlogic.gdx.utils.Disposable;
+import com.badlogic.gdx.utils.GdxRuntimeException;
+import com.badlogic.gdx.utils.Logger;
 
 /**
  * Handles all the game assets
@@ -17,16 +21,16 @@ import com.badlogic.gdx.utils.Disposable;
 public class Assets implements Disposable {
 
 	public static boolean LOAD_SYNCHRONOUSLY = false;
+	protected AssetManager manager;
 	private static Assets assets;
-	private AssetManager manager;
-
+	
 	public static Assets getInstance() {
 		if(assets == null) {
 			assets = new Assets();
 		}
 		return assets;
 	}
-
+	
 	/**
 	 * Lets us retrieve an object from the loaded assets.
 	 * Usually the object needs to be cast to the type 
@@ -48,7 +52,7 @@ public class Assets implements Disposable {
 		return sprite;
 	}
 
-	/**
+	/**§§§§§§§§§§§§as
 	 * Returns a sprite and lets us flip the values we want
 	 * @param path
 	 * @param flipX whether to flip the x value
@@ -82,8 +86,12 @@ public class Assets implements Disposable {
 	 */
 	public void load() {
 		//TODO:populate with your own assets e.g manager.load("myasset", asset.class);
-		
 		Texture.setAssetManager(manager);
+	}
+	
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+	public void load(String name, Class clazz) {
+		manager.load(name, clazz);
 	}
 	
 	/**
@@ -128,6 +136,42 @@ public class Assets implements Disposable {
 	}
 	
 	/**
+	 * Loads a tile map with the given index
+	 * @param worldType the type of map to load (beach, grass etc)
+	 * @param index the index of the map we want to load
+	 * @param isTestLevel whether to retrieve the map from the test levels path or not
+	 */
+	public void loadTileMap(WorldType worldType, byte index, boolean isTestLevel) {
+		manager.setLoader(TiledMap.class, new TmxMapLoader(new InternalFileHandleResolver()));
+	   
+		Parameters p = new Parameters();
+		p.textureMagFilter = TextureFilter.Nearest;
+		p.textureMinFilter = TextureFilter.Nearest;
+		
+		String path = isTestLevel ? "levels/test/level-" : "levels/" + worldType.getDisplayName().toLowerCase() + "/level-";
+		manager.load(path + index + ".tmx", TiledMap.class, p);
+		manager.finishLoading();
+	}
+	
+	/**
+	 * Unloads a tile map with the given index if the map is loaded
+	 * @param worldType the type of map to load (beach, grass etc)
+	 * @param index the index of the map we want to load
+	 * @param isTestLevel whether to retrieve the map from the test levels path or not
+	 */
+	public void unloadTileMap(WorldType worldType, byte index, boolean isTestLevel) {
+		try {
+			String path = isTestLevel ? "levels/test/level-" : "levels/" + worldType.getDisplayName().toLowerCase() + "/level-";
+				manager.unload(path + index + ".tmx");
+		} catch (GdxRuntimeException gre) {
+			Logger l = new Logger("IOError", Logger.ERROR);
+			l.error(gre.getLocalizedMessage());
+		}
+	}
+	
+	
+	
+	/**
 	 * Unloads a tile map loaded
 	 * @param tmxFilePath the path to the tmxMap to unload
 	 */
@@ -135,7 +179,7 @@ public class Assets implements Disposable {
 		manager.unload(tmxFilePath);
 	}
 	
-	private Assets() {
+	protected Assets() {
 		manager = new AssetManager();
 		if(LOAD_SYNCHRONOUSLY) {
 			load();
@@ -175,5 +219,6 @@ public class Assets implements Disposable {
 		manager.finishLoading();
 		Texture.setAssetManager(manager);
 	}
+	
 	
 }

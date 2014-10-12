@@ -21,6 +21,12 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
+/**
+ * MenuBaseScreen extends the BaseScreen and adds further functionality for screens using
+ * a stage. Contains a TextureAtlas, Skin and a Stage as well as fields for width, height and center positions.
+ * @author Johan Fredin
+ *
+ */
 public abstract class MenuBaseScreen extends BaseScreen {
 
 	protected Skin skin;
@@ -39,11 +45,10 @@ public abstract class MenuBaseScreen extends BaseScreen {
 	/**
 	 * Create a new menu base screen
 	 * @param game
-	 * @param alternatives what we want to happen when the back button is pressed in this screen.
 	 */
 	public MenuBaseScreen(Game game) {
 		super(game);
-		this.stage = new Stage(new StretchViewport(VIEWPORT_WIDTH, VIEWPORT_HEIGHT));
+		this.stage = new Stage(new StretchViewport(viewportWidth, viewportHeight));
 		this.worldWidth = stage.getViewport().getWorldWidth();
 		this.worldHeight = stage.getViewport().getWorldHeight();
 		this.centerX = worldWidth / 2;
@@ -59,7 +64,7 @@ public abstract class MenuBaseScreen extends BaseScreen {
 	 */
 	public MenuBaseScreen(Game game, String pathToPackFile) {
 		this(game);
-		this.atlas = (TextureAtlas) Assets.getInstance().get("sprites/ui/menu.pack");
+		this.atlas = (TextureAtlas) Assets.getInstance().get(pathToPackFile);
 		this.skin = new Skin(atlas);
 	}
 	
@@ -71,9 +76,7 @@ public abstract class MenuBaseScreen extends BaseScreen {
 	 * @param viewportForStage the viewport we want the stage to have
 	 */
 	public MenuBaseScreen(Game game, String pathToPackFile, Viewport viewportForStage) {
-		this(game);
-		this.atlas = (TextureAtlas) Assets.getInstance().get("sprites/ui/menu.pack");
-		this.skin = new Skin(atlas);
+		this(game, pathToPackFile);
 		this.stage.setViewport(viewportForStage);
 	}
 

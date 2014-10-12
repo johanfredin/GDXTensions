@@ -79,7 +79,7 @@ public class ParticleHelper implements Disposable {
 	 * @param batch
 	 * @param deltaTime
 	 */
-	public void renderAndUpdate(SpriteBatch batch, float deltaTime) {
+	public void render(SpriteBatch batch, float deltaTime) {
 		if(enabled()) {
 			for(PooledEffect pooledEffect : pooledEffectsArray) {
 				pooledEffect.draw(batch, isPaused ? 0.0f : deltaTime * speed);

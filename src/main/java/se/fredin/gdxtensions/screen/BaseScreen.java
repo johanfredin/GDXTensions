@@ -11,18 +11,42 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Disposable;
 import com.badlogic.gdx.utils.Scaling;
 
+/**
+ * BaseScreen holds general objects that each Screen object in libGDX usually requires,
+ * a camera, spritebatch and a game object. It also contains static fields for default 
+ * viewport width and height. 
+ * @author Johan Fredin
+ *
+ */
 public abstract class BaseScreen implements Screen, Disposable {
 	
-	public static short VIEWPORT_WIDTH = 400;
-	public static short VIEWPORT_HEIGHT = 240;
+	/** Default viewport width for the camera */
+	public static short viewportWidth = 400;
+	/** Default viewport height for the camera */
+	public static short viewportHeight = 240;
 	
 	protected OrthographicCamera camera;
 	protected SpriteBatch batch;
 	protected Game game;
 	
+	/**
+	 * Instantiates the base screen and the objects 
+	 * @param game our game instance responsible for switching screens
+	 */
 	public BaseScreen(Game game) {
 		this.game = game;
-		this.init();
+		this.batch = new SpriteBatch();
+		this.camera = new OrthographicCamera(viewportWidth, viewportHeight);
+		this.camera.position.set(viewportWidth / 2, viewportHeight / 2, 0);
+		this.camera.update();
+	}
+	
+	/**
+	 * Set the camera y to be top or bottom left
+	 * @param yDown if <b>true</b> the camera y will start at the bottom left corner
+	 */
+	public void setCameraYDown(boolean yDown) {
+		this.camera.setToOrtho(yDown);
 	}
 	
 	public OrthographicCamera getCamera() {
@@ -33,19 +57,9 @@ public abstract class BaseScreen implements Screen, Disposable {
 		return this.batch;
 	}
 	
-	public void init() {
-		batch = new SpriteBatch();
-		camera = new OrthographicCamera(VIEWPORT_WIDTH, VIEWPORT_HEIGHT);
-		camera.position.set(VIEWPORT_WIDTH / 2, VIEWPORT_HEIGHT / 2, 0);
-		camera.update();
-	}
-		
 	@Override
 	public void resize(int width, int height) {
-        float fixedHeight = 240f; // your preferred viewHeight
-        //very useful and easy function to get preferred width and height and still keeping the same aspect ratio :)
-        Vector2 size = Scaling.fillY.apply(width, height, width, fixedHeight);
-
+        Vector2 size = Scaling.fillY.apply(width, height, width, viewportHeight);
         camera.setToOrtho(false, size.x, size.y);
 		camera.update();
 	}
