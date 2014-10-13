@@ -1,4 +1,4 @@
-package se.fredin.gdxtensions.res;
+package se.fredin.gdxtensions.assetmanagement;
 
 import se.fredin.gdxtensions.utils.WorldType;
 
@@ -52,7 +52,7 @@ public class Assets implements Disposable {
 		return sprite;
 	}
 
-	/**§§§§§§§§§§§§as
+	/**
 	 * Returns a sprite and lets us flip the values we want
 	 * @param path
 	 * @param flipX whether to flip the x value

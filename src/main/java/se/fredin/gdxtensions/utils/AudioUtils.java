@@ -3,7 +3,7 @@ package se.fredin.gdxtensions.utils;
 import java.util.HashMap;
 import java.util.Map;
 
-import se.fredin.gdxtensions.res.Assets;
+import se.fredin.gdxtensions.assetmanagement.Assets;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Music;

@@ -1,6 +1,6 @@
 package se.fredin.gdxtensions.screen;
 
-import se.fredin.gdxtensions.res.Assets;
+import se.fredin.gdxtensions.assetmanagement.Assets;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
@@ -21,9 +21,9 @@ import com.badlogic.gdx.utils.Scaling;
 public abstract class BaseScreen implements Screen, Disposable {
 	
 	/** Default viewport width for the camera */
-	public static short viewportWidth = 400;
+	public static short viewportWidth = 640;
 	/** Default viewport height for the camera */
-	public static short viewportHeight = 240;
+	public static short viewportHeight = 360;
 	
 	protected OrthographicCamera camera;
 	protected SpriteBatch batch;

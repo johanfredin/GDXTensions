@@ -1,6 +1,6 @@
 package se.fredin.gdxtensions.scene2d;
 
-import se.fredin.gdxtensions.res.Assets;
+import se.fredin.gdxtensions.assetmanagement.Assets;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;

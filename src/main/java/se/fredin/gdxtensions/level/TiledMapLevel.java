@@ -1,6 +1,6 @@
 package se.fredin.gdxtensions.level;
 
-import se.fredin.gdxtensions.res.Assets;
+import se.fredin.gdxtensions.assetmanagement.Assets;
 import se.fredin.gdxtensions.screen.BaseScreen;
 
 import com.badlogic.gdx.maps.tiled.TiledMap;

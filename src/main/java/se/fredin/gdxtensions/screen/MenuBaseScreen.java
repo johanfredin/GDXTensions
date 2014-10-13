@@ -1,6 +1,6 @@
 package se.fredin.gdxtensions.screen;
 
-import se.fredin.gdxtensions.res.Assets;
+import se.fredin.gdxtensions.assetmanagement.Assets;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
