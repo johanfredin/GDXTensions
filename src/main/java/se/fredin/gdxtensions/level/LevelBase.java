@@ -43,4 +43,5 @@ public interface LevelBase extends Disposable {
 	 * @param camera
 	 */
 	void render(SpriteBatch batch, OrthographicCamera camera);
+	
 }
