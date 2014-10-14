@@ -4,113 +4,107 @@ import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
 
+
 public class AnimationUtils {
-
-	/** The starting default pixel width for each frame */
-	public static short defaultWidth = 32;
-	/** The starting default pixel height for each frame */
-	public static short defaultHeight = 32;
-	
-	public static void setDefaultWidth(short defaultWidth) {
-		AnimationUtils.defaultWidth = defaultWidth;
-	}
-	
-	public static void setDefaultHeight(short defaultHeight) {
-		AnimationUtils.defaultHeight = defaultHeight;
-	}
-	
-	public static short getDefaultWidth() {
-		return defaultWidth;
-	}
-	
-	public static short getDefaultHeight() {
-		return defaultHeight;
-	}
 	
 	/**
-	 * Creates a customized animation from from a given sprite sheet. We need
-	 * further control here compared to the methods we already have in the
-	 * GameObject super class.
-	 * 
+	 * Creates a customized animation from from a given sprite sheet. 
 	 * @param animSpeed the speed of the animation
-	 * @param flipX whether to flip the x position
-	 * @param positions the frames from the sprite sheet we want to take out
+	 * @param textureToSplit the Texture object to split up
 	 * @return a new animation object
 	 */
-	public static Animation getFramesFromRegion(TextureRegion region, float animSpeed, boolean flipX, int... positions) {
-		TextureRegion[] res = TextureUtils.split(region, defaultWidth, defaultHeight, flipX, false, positions);
-		return new Animation(animSpeed, res);
+	public static Animation getAnimation(TextureRegion region, float animSpeed) {
+		TextureRegion[] reg = TextureUtils.split(region);
+		return new Animation(animSpeed, reg);
 	}
 	
 	/**
-	 * Creates a customized animation from from a given sprite sheet. We need
-	 * further control here compared to the methods we already have in the
-	 * GameObject super class.
-	 * 
+	 * Creates a customized animation from from a given sprite sheet. 
 	 * @param animSpeed the speed of the animation
-	 * @param flipX whether to flip the x position
-	 * @param startIndex the starting index in the spritesheet
-	 * @param endIndex the last index in the spritesheet
+	 * @param textureToSplit the Texture object to split up
+	 * @param frameWidth the desired frame width
+	 * @param frameHeight the desired frame height
 	 * @return a new animation object
 	 */
-	//TODO: To be added in textureutils
-	public static Animation getFramesFromRegion(TextureRegion region, float animSpeed, boolean flipX, short startIndex, short endIndex) {
-		int totalFrames = endIndex - startIndex;
-		int[] positions = new int[totalFrames];
-		TextureRegion[] res = new TextureRegion[totalFrames];
-		for (int i = startIndex; i < endIndex; i++) {
-			res[i] = new TextureRegion(region, positions[i] * defaultWidth, 0, defaultWidth, defaultHeight);
-			res[i].flip(flipX, false);
-		}
-		return new Animation(animSpeed, region);
+	public static Animation getAnimation(TextureRegion region, float animSpeed, int frameWidth, int frameHeight) {
+		TextureRegion[] reg = TextureUtils.split(region, frameWidth, frameHeight);
+		return new Animation(animSpeed, reg);
 	}
 	
 	/**
-	 * Get an animation from a sprite sheet with defaultWidth * defaultHeight frames.
-	 * @param spriteSheet the sprite sheet we want to split up
-	 * @param animSpeed the animation speed
-	 * @return a new animation
+	 * Creates a customized animation from from a given sprite sheet. 
+	 * @param animSpeed the speed of the animation
+	 * @param textureToSplit the Texture object to split up
+	 * @param frameWidth the desired frame width
+	 * @param frameHeight the desired frame height
+	 * @param flipX whether or not to flip each frame horizontally
+	 * @return a new animation object
 	 */
-	public static Animation getFramesFromRegion(TextureRegion spriteSheet, float animSpeed) {
-		return getFramesFromRegion(spriteSheet, animSpeed, false);
+	public static Animation getAnimation(TextureRegion region, float animSpeed, int frameWidth, int frameHeight, boolean flipX) {
+		TextureRegion[] reg = TextureUtils.split(region, frameWidth, frameHeight, flipX);
+		return new Animation(animSpeed, reg);
 	}
-
+	
 	/**
-	 * Get an animation from a sprite sheet with defaultWidth * defaultHeight frames.
-	 * @param spriteSheet the sprite sheet we want to split up
-	 * @param animSpeed the animation speed
-	 * @param flipX whether or not to flip the xPosition of each frame
-	 * @return a new animation
+	 * Creates a customized animation from from a given sprite sheet. 
+	 * @param animSpeed the speed of the animation
+	 * @param textureToSplit the Texture object to split up
+	 * @param frameWidth the desired frame width
+	 * @param frameHeight the desired frame height
+	 * @param flipX whether or not to flip each frame horizontally
+	 * @param flipY whether or not to flip each frame vertically
+	 * @return a new animation object
 	 */
-	public static Animation getFramesFromRegion(TextureRegion spriteSheet, float animSpeed, boolean flipX) {
-		TextureRegion[] region = TextureUtils.split(spriteSheet, defaultWidth, defaultHeight, flipX);
-		return new Animation(animSpeed, region);
-		
+	public static Animation getAnimation(TextureRegion region, float animSpeed, int frameWidth, int frameHeight, boolean flipX, boolean flipY) {
+		TextureRegion[] reg = TextureUtils.split(region, frameWidth, frameHeight, flipX, flipY);
+		return new Animation(animSpeed, reg);
 	}
-
+	
 	/**
-	 * Get an animation from a sprite sheet were we customize width and height of each frame.
-	 * @param spriteSheet the sprite sheet we want to split up
-	 * @param animSpeed the animation speed
-	 * @param frameWidth the width of each frame
-	 * @param frameHeight the height of each frame
-	 * @return a new animation
+	 * Creates a customized animation from from a given sprite sheet. 
+	 * @param animSpeed the speed of the animation
+	 * @param textureToSplit the Texture object to split up
+	 * @param frameWidth the desired frame width
+	 * @param frameHeight the desired frame height
+	 * @param intervalRegExp lets you specify a certain interval of frames, if you for example want frame 2 to 6 you simply write "2-6", 
+	 * the string must be formatted this way!
+	 * @return a new animation object
 	 */
-	public static Animation getFramesFromRegion(TextureRegion spriteSheet, float animSpeed, int frameWidth, int frameHeight) {
-		return getFramesFromRegion(spriteSheet, animSpeed, frameWidth, frameHeight, false);
+	public static Animation getAnimation(TextureRegion region, float animSpeed, int frameWidth, int frameHeight, String intervalRexExp) {
+		TextureRegion[] reg = TextureUtils.split(region, frameWidth, frameHeight, intervalRexExp);
+		return new Animation(animSpeed, reg);
 	}
-
+	
 	/**
-	 * Get an animation from a sprite sheet were we customize width and height of each frame.
-	 * @param spriteSheet the sprite sheet we want to split up
-	 * @param animSpeed the animation speed
-	 * @param frameWidth the width of each frame
-	 * @param frameHeight the height of each frame
-	 * @param flipX whether or not to flip the frames horizontally
-	 * @return a new animation
+	 * Creates a customized animation from from a given sprite sheet. 
+	 * @param animSpeed the speed of the animation
+	 * @param textureToSplit the Texture object to split up
+	 * @param frameWidth the desired frame width
+	 * @param frameHeight the desired frame height
+	 * @param flipX whether or not to flip each frame horizontally
+	 * @param flipY whether or not to flip each frame vertically
+	 * @param intervalRegExp lets you specify a certain interval of frames, if you for example want frame 2 to 6 you simply write "2-6", 
+	 * the string must be formatted this way!
+	 * @return a new animation object
 	 */
-	public static Animation getFramesFromRegion(TextureRegion spriteSheet, float animSpeed, int frameWidth, int frameHeight, boolean flipX) {
-		TextureRegion[] region = TextureUtils.split(spriteSheet, frameWidth, frameHeight, flipX);
-		return new Animation(animSpeed, region);
+	public static Animation getAnimation(TextureRegion region, float animSpeed, int frameWidth, int frameHeight, boolean flipX, boolean flipY, String intervalRexExp) {
+		TextureRegion[] reg = TextureUtils.split(region, frameWidth, frameHeight, flipX, flipY, intervalRexExp);
+		return new Animation(animSpeed, reg);
+	}
+	
+	/**
+	 * Creates a customized animation from from a given sprite sheet. 
+	 * @param animSpeed the speed of the animation
+	 * @param textureToSplit the Texture object to split up
+	 * @param frameWidth the desired frame width
+	 * @param frameHeight the desired frame height
+	 * @param flipX whether or not to flip each frame horizontally
+	 * @param flipY whether or not to flip each frame vertically
+	 * @param desiredFrames the specific frames we want to retrieve, convenient when we don't need the entire sprite sheet
+	 * @return a new animation object
+	 */
+	public static Animation getAnimation(TextureRegion region, float animSpeed, int frameWidth, int frameHeight, boolean flipX, boolean flipY, int... desiredFrames) {
+		TextureRegion[] reg = TextureUtils.split(region, frameWidth, frameHeight, flipX, flipY, desiredFrames);
+		return new Animation(animSpeed, reg);
 	}
 }

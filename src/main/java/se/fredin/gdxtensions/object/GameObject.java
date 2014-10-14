@@ -19,7 +19,9 @@ public abstract class GameObject implements GameObjectBase, Disposable {
 
 	public final byte DIRECTION_LEFT = 0;
 	public final byte DIRECTION_RIGHT = 1;
-	public final byte DIRECTION_NONE = 2;
+	public final byte DIRECTION_UP = 2;
+	public final byte DIRECTION_DOWN = 4;
+	public final byte DIRECTION_NONE = 8;
  
 	protected static final float GAMESPEED = 1f;
 	protected static final float JUMP = 216.0f * GAMESPEED;
@@ -143,8 +145,12 @@ public abstract class GameObject implements GameObjectBase, Disposable {
 		return this.bounds;
 	}
 
-	public void switchDirection() {
+	public void switchXDirection() {
 		direction = direction == DIRECTION_RIGHT ? DIRECTION_LEFT : DIRECTION_RIGHT;
+	}
+	
+	public void switchYDirection() {
+		direction = direction == DIRECTION_UP ? DIRECTION_DOWN : DIRECTION_UP;
 	}
 
 	public void setSpeed(float speed) {
@@ -200,9 +206,28 @@ public abstract class GameObject implements GameObjectBase, Disposable {
 		return direction == DIRECTION_LEFT;
 	}
 	
+	/**
+	 * direction == DIRECTION_UP ?
+	 * @return
+	 */
+	public boolean isHeadingUp() {
+		return direction == DIRECTION_UP;
+	}
+	
+	/**
+	 * direction == DIRECTION_DOWN ?
+	 * @return
+	 */
+	public boolean isHeadingDown() {
+		return direction == DIRECTION_DOWN;
+	}
 	
 	public byte getDirection() {
 		return direction;
+	}
+	
+	public void setDirection(byte direction) {
+		this.direction = direction;
 	}
 
 	/**

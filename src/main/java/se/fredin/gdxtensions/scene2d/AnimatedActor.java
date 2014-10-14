@@ -27,7 +27,7 @@ public class AnimatedActor extends Image {
 	 */
 	public AnimatedActor(TextureRegion region, final float ANIM_SPEED, int frameWidth, int frameHeight, boolean visible) {
 		super(region);
-		this.animation = AnimationUtils.getFramesFromRegion(region, ANIM_SPEED, frameWidth, frameHeight);
+		this.animation = AnimationUtils.getAnimation(region, ANIM_SPEED, (short)frameWidth, (short)frameHeight);
 		this.currentFrame = animation.getKeyFrame(stateTime);
 		this.setWidth(frameWidth);
 		this.setHeight(frameHeight);
