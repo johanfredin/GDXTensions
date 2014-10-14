@@ -6,29 +6,29 @@ import com.badlogic.gdx.InputAdapter;
 
 public class GeneralInput {
 
-	public boolean exitButtonPressed;
-	public boolean leftButtonPressed;
-	public boolean rightButtonPressed;
-	public boolean upButtonPressed;
-	public boolean downButtonPressed;
-	public boolean shootButtonPressed;
-	public boolean menuButtonPressed;
-	public boolean mapButtonPressed;
-	public boolean pauseButtonPressed;
-	public boolean isCrouchButtonPressed;
-	public boolean isJumpButtonPressed;
+	private boolean exitButtonPressed;
+	private boolean leftButtonPressed;
+	private boolean rightButtonPressed;
+	private boolean upButtonPressed;
+	private boolean downButtonPressed;
+	private boolean shootButtonPressed;
+	private boolean menuButtonPressed;
+	private boolean mapButtonPressed;
+	private boolean pauseButtonPressed;
+	private boolean isCrouchButtonPressed;
+	private boolean isJumpButtonPressed;
 	
-	public final short left = Keys.LEFT;
-	public final short right = Keys.RIGHT;
-	public final short up = Keys.UP;
-	public final short down = Keys.DOWN;
-	public final short shoot = Keys.CONTROL_LEFT;
-	public final short exit = Keys.ESCAPE;
-	public final short menu = Keys.ALT_LEFT;
-	public final short pause = Keys.P;
-	public final short map = Keys.M;
-	public final short jump = Keys.SPACE;
-	public final short crouch = Keys.SHIFT_LEFT;
+	private short left = Keys.LEFT;
+	private short right = Keys.RIGHT;
+	private short up = Keys.UP;
+	private short down = Keys.DOWN;
+	private short shoot = Keys.CONTROL_LEFT;
+	private short exit = Keys.ESCAPE;
+	private short menu = Keys.ALT_LEFT;
+	private short pause = Keys.P;
+	private short map = Keys.M;
+	private short jump = Keys.SPACE;
+	private short crouch = Keys.SHIFT_LEFT;
 	
 	private InputAdapter keyBoardInputAdapter;
 	
@@ -42,37 +42,78 @@ public class GeneralInput {
 			break;
 		}
 	}
+	
+	public boolean isExitButtonPressed() {
+		return exitButtonPressed;
+	}
+
+	public boolean isLeftButtonPressed() {
+		return leftButtonPressed;
+	}
+
+	public boolean isRightButtonPressed() {
+		return rightButtonPressed;
+	}
+
+	public boolean isUpButtonPressed() {
+		return upButtonPressed;
+	}
+
+	public boolean isDownButtonPressed() {
+		return downButtonPressed;
+	}
+
+	public boolean isShootButtonPressed() {
+		return shootButtonPressed;
+	}
+
+	public boolean isMenuButtonPressed() {
+		return menuButtonPressed;
+	}
+
+	public boolean isMapButtonPressed() {
+		return mapButtonPressed;
+	}
+
+	public boolean isPauseButtonPressed() {
+		return pauseButtonPressed;
+	}
+
+	public boolean isCrouchButtonPressed() {
+		return isCrouchButtonPressed;
+	}
+
+	public boolean isJumpButtonPressed() {
+		return isJumpButtonPressed;
+	}
 
 	private InputAdapter getKeyboard() {
 		InputAdapter adapter = new InputAdapter(){
 			@Override
 			public boolean keyDown(int keycode) {
-				switch(keycode) {
-				case left:
+				if(keycode == left) {
 					leftButtonPressed = true;
-					break;
-				case right:
+				} if(keycode == right) {
 					rightButtonPressed = true;
-					break;
-				case up:
+				} if(keycode == up) {
 					upButtonPressed = true;
-					break;
-				case down:
+				} if(keycode == down) {
 					downButtonPressed = true;
-					break;
-				case shoot:
+				} if(keycode == shoot) {
 					shootButtonPressed = true;
-					break;
-				case map:
+				} if(keycode == map) {
 					mapButtonPressed = true;
-					break;
-				case pause:
+				} if(keycode == pause) {
 					pauseButtonPressed = true;
-					break;
-				case exit:
+				} if(keycode == exit) {
 					exitButtonPressed = true;
-					break;
-				default:
+				} if(keycode == crouch) {
+					isCrouchButtonPressed = true;
+				} if(keycode == menu) {
+					menuButtonPressed = true;
+				} if(keycode == jump) {
+					isJumpButtonPressed = true;
+				} else {
 					return false;
 				}
 				return true;
@@ -80,32 +121,29 @@ public class GeneralInput {
 			
 			@Override
 			public boolean keyUp(int keycode) {
-				switch(keycode) {
-				case left:
+				if(keycode == left) {
 					leftButtonPressed = false;
-					break;
-				case right:
+				} if(keycode == right) {
 					rightButtonPressed = false;
-					break;
-				case up:
+				} if(keycode == up) {
 					upButtonPressed = false;
-					break;
-				case down:
+				} if(keycode == down) {
 					downButtonPressed = false;
-					break;
-				case shoot:
+				} if(keycode == shoot) {
 					shootButtonPressed = false;
-					break;
-				case map:
+				} if(keycode == map) {
 					mapButtonPressed = false;
-					break;
-				case pause:
+				} if(keycode == pause) {
 					pauseButtonPressed = false;
-					break;
-				case exit:
+				} if(keycode == exit) {
 					exitButtonPressed = false;
-					break;
-				default:
+				} if(keycode == crouch) {
+					isCrouchButtonPressed = false;
+				} if(keycode == menu) {
+					menuButtonPressed = false;
+				} if(keycode == jump) {
+					isJumpButtonPressed = false;
+				} else {
 					return false;
 				}
 				return true;

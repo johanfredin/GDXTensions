@@ -11,6 +11,22 @@ public class AnimationUtils {
 	/** The starting default pixel height for each frame */
 	public static short defaultHeight = 32;
 	
+	public static void setDefaultWidth(short defaultWidth) {
+		AnimationUtils.defaultWidth = defaultWidth;
+	}
+	
+	public static void setDefaultHeight(short defaultHeight) {
+		AnimationUtils.defaultHeight = defaultHeight;
+	}
+	
+	public static short getDefaultWidth() {
+		return defaultWidth;
+	}
+	
+	public static short getDefaultHeight() {
+		return defaultHeight;
+	}
+	
 	/**
 	 * Creates a customized animation from from a given sprite sheet. We need
 	 * further control here compared to the methods we already have in the
@@ -22,12 +38,8 @@ public class AnimationUtils {
 	 * @return a new animation object
 	 */
 	public static Animation getFramesFromRegion(TextureRegion region, float animSpeed, boolean flipX, int... positions) {
-		TextureRegion[] res = new TextureRegion[positions.length];
-		for (int i = 0; i < positions.length; i++) {
-			res[i] = new TextureRegion(region, positions[i] * defaultWidth, 0, defaultWidth, defaultHeight);
-			res[i].flip(flipX, false);
-		}
-		return new Animation(animSpeed, region);
+		TextureRegion[] res = TextureUtils.split(region, defaultWidth, defaultHeight, flipX, false, positions);
+		return new Animation(animSpeed, res);
 	}
 	
 	/**
@@ -41,6 +53,7 @@ public class AnimationUtils {
 	 * @param endIndex the last index in the spritesheet
 	 * @return a new animation object
 	 */
+	//TODO: To be added in textureutils
 	public static Animation getFramesFromRegion(TextureRegion region, float animSpeed, boolean flipX, short startIndex, short endIndex) {
 		int totalFrames = endIndex - startIndex;
 		int[] positions = new int[totalFrames];
