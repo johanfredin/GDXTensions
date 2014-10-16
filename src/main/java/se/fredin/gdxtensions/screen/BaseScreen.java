@@ -1,11 +1,11 @@
 package se.fredin.gdxtensions.screen;
 
 import se.fredin.gdxtensions.assetmanagement.Assets;
+import se.fredin.gdxtensions.utils.GameCamera;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Disposable;
@@ -25,7 +25,7 @@ public abstract class BaseScreen implements Screen, Disposable {
 	/** Default viewport height for the camera */
 	public static short viewportHeight = 360;
 	
-	protected OrthographicCamera camera;
+	protected GameCamera camera;
 	protected SpriteBatch batch;
 	protected Game game;
 	
@@ -36,7 +36,7 @@ public abstract class BaseScreen implements Screen, Disposable {
 	public BaseScreen(Game game) {
 		this.game = game;
 		this.batch = new SpriteBatch();
-		this.camera = new OrthographicCamera(viewportWidth, viewportHeight);
+		this.camera = new GameCamera(viewportWidth, viewportHeight);
 		this.camera.position.set(viewportWidth / 2, viewportHeight / 2, 0);
 		this.camera.update();
 	}
@@ -49,7 +49,7 @@ public abstract class BaseScreen implements Screen, Disposable {
 		this.camera.setToOrtho(yDown);
 	}
 	
-	public OrthographicCamera getCamera() {
+	public GameCamera getCamera() {
 		return this.camera;
 	}
 	

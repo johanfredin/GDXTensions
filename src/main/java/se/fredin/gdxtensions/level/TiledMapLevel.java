@@ -72,5 +72,15 @@ public abstract class TiledMapLevel<T extends BaseScreen> extends Level {
 		super.dispose();
 		mapRenderer.dispose();
 	}
+	
+	@Override
+	public String toString() {
+		return "TiledMapLevel\n" +
+			   "============= \n" +
+			   "Map width=" + mapWidth + "\n" +
+			   "Map height=" + mapHeight + "\n" +
+			   "Tile width=" + tileWidth + "\n" +
+			   "Tile height=" + tileHeight + "\n" ;
+	}
 
 }
