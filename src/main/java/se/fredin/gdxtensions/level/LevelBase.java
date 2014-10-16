@@ -2,7 +2,6 @@ package se.fredin.gdxtensions.level;
 
 import se.fredin.gdxtensions.utils.ScreenType;
 
-import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.Disposable;
 
@@ -40,8 +39,7 @@ public interface LevelBase extends Disposable {
 	/**
 	 * Renders to the screen
 	 * @param batch
-	 * @param camera
 	 */
-	void render(SpriteBatch batch, OrthographicCamera camera);
+	void render(SpriteBatch batch);
 	
 }

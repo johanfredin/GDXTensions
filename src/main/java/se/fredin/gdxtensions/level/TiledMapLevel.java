@@ -69,7 +69,6 @@ public abstract class TiledMapLevel<T extends BaseScreen> extends Level {
 	
 	@Override
 	public void dispose() {
-		super.dispose();
 		mapRenderer.dispose();
 	}
 	
