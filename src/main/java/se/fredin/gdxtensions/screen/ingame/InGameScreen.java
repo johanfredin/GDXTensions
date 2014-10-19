@@ -3,6 +3,7 @@ package se.fredin.gdxtensions.screen.ingame;
 import se.fredin.gdxtensions.assetmanagement.Assets;
 import se.fredin.gdxtensions.level.LevelBase;
 import se.fredin.gdxtensions.screen.BaseScreen;
+import se.fredin.gdxtensions.utils.lang.LanguageBasedSkin;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
@@ -59,7 +60,7 @@ public abstract class InGameScreen implements Disposable {
 		this.worldWidth = stage.getViewport().getWorldWidth();
 		
 		TextureAtlas atlas = (TextureAtlas) Assets.getInstance().get("sprites/ui/dialogs.pack");
-		this.skin = new Skin(atlas);
+		this.skin = new LanguageBasedSkin(atlas);
 		
 		// We only instantiate the white canvas image here, it's up to the sub-classes to handle it 
 		// the way they see fit.

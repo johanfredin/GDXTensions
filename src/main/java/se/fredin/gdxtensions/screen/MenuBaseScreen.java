@@ -1,6 +1,7 @@
 package se.fredin.gdxtensions.screen;
 
 import se.fredin.gdxtensions.assetmanagement.Assets;
+import se.fredin.gdxtensions.utils.lang.LanguageBasedSkin;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
@@ -65,7 +66,7 @@ public abstract class MenuBaseScreen extends BaseScreen {
 	public MenuBaseScreen(Game game, String pathToPackFile) {
 		this(game);
 		this.atlas = (TextureAtlas) Assets.getInstance().get(pathToPackFile);
-		this.skin = new Skin(atlas);
+		this.skin = new LanguageBasedSkin(atlas);
 	}
 	
 	/**

@@ -22,7 +22,7 @@ public class ShapeRendererPlus extends ShapeRenderer {
 	}
 	
 	/**
-	 * Constructs a new ShapeRendererPlus with a given ShapeType
+	 * Constructs a new ShapeRendererPlus with a given {@link ShapeType}.Line
 	 * @param shapeType what shapeType to use
 	 */
 	public ShapeRendererPlus(ShapeType shapeType) {
@@ -67,60 +67,104 @@ public class ShapeRendererPlus extends ShapeRenderer {
 	}
 	
 	/**
-	 * Renders an arbitrary amount of rectangles, if no shapeType has been set it will use its default Line setting.
-	 * Will throw a null pointer exception if no camera have been given
+	 * Renders an arbitrary amount of {@link Rectangle} objects, if no {@link ShapeType} has been set it will use its default Line setting.
+	 * THIS METHOD MUST BE CALLED BETWEEN {@link ShapeRendererPlus#begin()} and {@link ShapeRendererPlus#end()}
 	 * @param rectangles the rectangles to draw.
 	 */
 	public void renderBoundaries(Rectangle... rectangles) {
-		this.setProjectionMatrix(camera.combined);
-		this.begin(shapeType);
 		for(Rectangle rectangle : rectangles) {
 			this.rect(rectangle.x, rectangle.y, rectangle.width, rectangle.height);
 		}
-		this.end();
 	}
 	
 	/**
-	 * Renders an arbitrary amount of rectangles, if no shapeType has been set it will use its default Line setting.
-	 * @param camera the camera to use
+	 * Renders an {@link Array} of {@link Rectangle} objects, if no {@link ShapeType} has been set it will use its default Line setting.
+	 * THIS METHOD MUST BE CALLED BETWEEN {@link ShapeRendererPlus}.begin() and {@link ShapeRendererPlus}.end()
+	 * @param rectangles the rectangles to draw.
+	 */
+	public void renderBoundaries(Array<Rectangle> rectangles) {
+		for(Rectangle rectangle : rectangles) {
+			this.rect(rectangle.x, rectangle.y, rectangle.width, rectangle.height);
+		}
+	}
+	
+	/**
+	 * Renders an arbitrary amount of {@link Rectangle} objects, if no {@link ShapeType} has been set it will use its default Line setting.
+	 * This method calls begin() and end() and can therefore NOT be used between existing begin()/end() calls
+	 * @param camera the {@link GameCamera} to use
 	 * @param rectangles the rectangles to draw.
 	 */
 	public void renderBoundaries(GameCamera camera, Rectangle... rectangles) {
 		this.setProjectionMatrix(camera.combined);
 		this.begin(shapeType);
-		for(Rectangle rectangle : rectangles) {
-			this.rect(rectangle.x, rectangle.y, rectangle.width, rectangle.height);
-		}
+		renderBoundaries(rectangles);
 		this.end();
 	}
 	
 	/**
-	 * Renders an arbitrary amount of rectangles, if no shapeType has been set it will use its default Line setting.
-	 * Will throw a NullPointerException if no camera is given
+	 * Renders an {@link Array} amount of {@link Rectangle} objects, if no {@link ShapeType} has been set it will use its default Line setting.
+	 * This method calls begin() and end() and can therefore NOT be used between existing begin()/end() calls
+	 * @param camera the {@link GameCamera} to use
+	 * @param rectangles the rectangles to draw.
+	 */
+	public void renderBoundaries(GameCamera camera, Array<Rectangle> rectangles) {
+		this.setProjectionMatrix(camera.combined);
+		this.begin(shapeType);
+		renderBoundaries(rectangles);
+		this.end();
+	}
+	
+	/**
+	 * Renders an arbitrary amount of {@link Rectangle} objects, if no {@link ShapeType} has been set it will use its default Line setting.
+	 * This method calls begin() and end() and can therefore NOT be used between existing begin()/end() calls
 	 * @param shapeType the shapeType to use
 	 * @param rectangles the rectangles to draw.
 	 */
 	public void renderBoundaries(ShapeType shapeType, Rectangle... rectangles) {
 		this.setProjectionMatrix(camera.combined);
 		this.begin(shapeType);
-		for(Rectangle rectangle : rectangles) {
-			this.rect(rectangle.x, rectangle.y, rectangle.width, rectangle.height);
-		}
+		renderBoundaries(rectangles);
 		this.end();
 	}
 	
 	/**
-	 * Renders an arbitrary amount of rectangles, if no shapeType has been set it will use its default Line setting.
-	 * @param camera the camera to use
+	 * Renders an {@link Array} of {@link Rectangle} objects, if no {@link ShapeType} has been set it will use its default Line setting.
+	 * This method calls begin() and end() and can therefore NOT be used between existing begin()/end() calls
+	 * @param shapeType the shapeType to use
+	 * @param rectangles the rectangles to draw.
+	 */
+	public void renderBoundaries(ShapeType shapeType, Array<Rectangle> rectangles) {
+		this.setProjectionMatrix(camera.combined);
+		this.begin(shapeType);
+		renderBoundaries(rectangles);
+		this.end();
+	}
+	
+	/**
+	 * Renders an arbitrary amount of {@link Rectangle} objects.
+	 * This method calls begin() and end() and can therefore NOT be used between existing begin()/end() calls
+	 * @param camera the {@link GameCamera} to use
 	 * @param shapeType the shapeType to use
 	 * @param rectangles the rectangles to draw.
 	 */
 	public void renderBoundaries(GameCamera camera, ShapeType shapeType, Rectangle... rectangles) {
 		this.setProjectionMatrix(camera.combined);
 		this.begin(shapeType);
-		for(Rectangle rectangle : rectangles) {
-			this.rect(rectangle.x, rectangle.y, rectangle.width, rectangle.height);
-		}
+		renderBoundaries(rectangles);
+		this.end();
+	}
+
+	/**
+	 * Renders an {@link Array} of {@link Rectangle} objects.
+	 * This method calls begin() and end() and can therefore NOT be used between existing begin()/end() calls
+	 * @param camera the camera to use
+	 * @param shapeType the shapeType to use
+	 * @param rectangles the rectangles to draw.
+	 */
+	public void renderBoundaries(GameCamera camera, ShapeType shapeType, Array<Rectangle> rectangles) {
+		this.setProjectionMatrix(camera.combined);
+		this.begin(shapeType);
+		renderBoundaries(rectangles);
 		this.end();
 	}
 	
@@ -129,17 +173,29 @@ public class ShapeRendererPlus extends ShapeRenderer {
 	 * Perhaps some enemies, bullets etc and you want to render their edges of fill them.
 	 * If no shapetype have been given the default "Line" will be used.
 	 * Will throw a nullpointer exception if no camera has been set.
+	 * THIS METHOD MUST BE CALLED BETWEEN {@link ShapeRendererPlus}.begin() and {@link ShapeRendererPlus}.end()
 	 * @param rectangleArrays the rectangles to draw
 	 */
 	public void renderBoundaries(Array<Rectangle>... rectangleArrays) {
-		this.setProjectionMatrix(camera.combined);
-		this.begin(shapeType);
 		for(Array<Rectangle> rectangleArray : rectangleArrays) {
 			for(Rectangle rectangle : rectangleArray) {
 				this.rect(rectangle.x, rectangle.y, rectangle.width, rectangle.height);
 			}
 		}
-		this.end();
+	}
+	
+	/**
+	 * Renders an arbitrary amount of rectangle arrays. Useful when you have different collections of objects.
+	 * Perhaps some enemies, bullets etc and you want to render their edges of fill them.
+	 * If no shapetype have been given the default "Line" will be used.
+	 * Will throw a nullpointer exception if no camera has been set.
+	 * THIS METHOD MUST BE CALLED BETWEEN {@link ShapeRendererPlus}.begin() and {@link ShapeRendererPlus}.end()
+	 * @param rectangleArrays the {@link Rectangle}[] arrays to draw
+	 */
+	public void renderBoundaries(Rectangle[]... rectangleArrays) {
+		for(Rectangle[] rectangleArray : rectangleArrays) {
+			renderBoundaries(rectangleArray);
+		}
 	}
 	
 	/**
@@ -157,6 +213,20 @@ public class ShapeRendererPlus extends ShapeRenderer {
 				this.rect(rectangle.x, rectangle.y, rectangle.width, rectangle.height);
 			}
 		}
+		this.end();
+	}
+	
+	/**
+	 * Renders an arbitrary amount of rectangle arrays. Useful when you have different collections of objects.
+	 * Perhaps some enemies, bullets etc and you want to render their edges of fill them.
+	 * Will use the default Line if no {@link ShapeType} have been set
+	 * @param camera the {@link GameCamera} to use
+	 * @param rectangleArrays the {@link Array} of {@link Rectangle}'s to draw
+	 */
+	public void renderBoundaries(GameCamera camera, Rectangle[]... rectangleArrays) {
+		this.setProjectionMatrix(camera.combined);
+		this.begin(shapeType);
+		renderBoundaries(rectangleArrays);
 		this.end();
 	}
 	
@@ -181,6 +251,20 @@ public class ShapeRendererPlus extends ShapeRenderer {
 	/**
 	 * Renders an arbitrary amount of rectangle arrays. Useful when you have different collections of objects.
 	 * Perhaps some enemies, bullets etc and you want to render their edges of fill them.
+	 * will throw a {@link NullPointerException} if no {@link GameCamera} has been set
+	 * @param shapeType the {@link ShapeType} to use
+	 * @param rectangleArrays the rectangles to draw
+	 * */
+	public void renderBoundaries(ShapeType shapeType, Rectangle[]... rectangleArrays) {
+		this.setProjectionMatrix(camera.combined);
+		this.begin(shapeType);
+		renderBoundaries(rectangleArrays);
+		this.end();
+	}
+	
+	/**
+	 * Renders an arbitrary amount of rectangle arrays. Useful when you have different collections of objects.
+	 * Perhaps some enemies, bullets etc and you want to render their edges of fill them.
 	 * @param camera the {@link GameCamera} to use
 	 * @param shapeType the {@link ShapeType} to use
 	 * @param rectangleArrays the rectangles to draw
@@ -193,6 +277,20 @@ public class ShapeRendererPlus extends ShapeRenderer {
 				this.rect(rectangle.x, rectangle.y, rectangle.width, rectangle.height);
 			}
 		}
+		this.end();
+	}
+	
+	/**
+	 * Renders an arbitrary amount of rectangle arrays. Useful when you have different collections of objects.
+	 * Perhaps some enemies, bullets etc and you want to render their edges of fill them.
+	 * @param camera the {@link GameCamera} to use
+	 * @param shapeType the {@link ShapeType} to use
+	 * @param rectangleArrays the rectangles to draw
+	 * */
+	public void renderBoundaries(GameCamera camera, ShapeType shapeType, Rectangle[]... rectangleArrays) {
+		this.setProjectionMatrix(camera.combined);
+		this.begin(shapeType);
+		renderBoundaries(rectangleArrays);
 		this.end();
 	}
 	

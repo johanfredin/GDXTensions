@@ -7,7 +7,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
  * @author Niklas Istenes, Johan Fredin
  *
  */
-interface GameObjectBase {
+public interface GameObjectBase {
 
 	/**
 	 * Renders to the screen
