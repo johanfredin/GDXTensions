@@ -1,6 +1,6 @@
-package se.fredin.gdxtensions.utils;
+package se.fredin.gdxtensions.utils.text;
 
-import se.fredin.gdxtensions.utils.text.OutputFormatter;
+import se.fredin.gdxtensions.utils.text.OutputFormatter.LineBreakSettings;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
@@ -17,14 +17,16 @@ public class Dialog {
 	private float timer;
 	private String formattedText;
 	
+	
+	
 	/**
 	 * Constructs a new {@link Dialog} instance
 	 * @param speed how fast the characters will appear
 	 * @param maxWidth the max width until break row
 	 */
-	public Dialog(String text, float timePerCharacter, int lineBreakIndex, boolean absoluteBreakRow) {
+	public Dialog(String text, float timePerCharacter, short lineBreakIndex, LineBreakSettings lineBreakSettings) {
 		this.timePerCharacter = timePerCharacter;
-		this.formattedText = new OutputFormatter().getFormatedString(lineBreakIndex, text, absoluteBreakRow);
+		this.formattedText = new OutputFormatter().getFormatedString(text, lineBreakIndex, lineBreakSettings);
 	}
 
 	public void render(SpriteBatch batch) {
