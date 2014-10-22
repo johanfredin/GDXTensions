@@ -5,20 +5,20 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.utils.Array;
 
 /**
- * Extension of the libGDX ShapeRenderer with extra methods for rendering rectangles.
+ * Extension of the libGDX {@link ShapeRenderer} with extra methods for rendering rectangles.
  * @author Johan Fredin
  *
  */
 public class ShapeRendererPlus extends ShapeRenderer {
 
 	private GameCamera camera;
-	private ShapeType shapeType = ShapeType.Line;
+	private ShapeType shapeType;
 	
 	/**
 	 * Constructs a new ShapeRendererPlus with default settings
 	 */
 	public ShapeRendererPlus() {
-		super();
+		this(null, ShapeType.Line);
 	}
 	
 	/**
@@ -26,8 +26,7 @@ public class ShapeRendererPlus extends ShapeRenderer {
 	 * @param shapeType what shapeType to use
 	 */
 	public ShapeRendererPlus(ShapeType shapeType) {
-		this();
-		this.shapeType = shapeType;
+		this(null, shapeType);
 	}
 	
 	/**
@@ -35,8 +34,7 @@ public class ShapeRendererPlus extends ShapeRenderer {
 	 * @param camera the GameCamera to use
 	 */
 	public ShapeRendererPlus(GameCamera camera) {
-		this();
-		this.camera = camera;
+		this(camera, ShapeType.Line);
 	}
 	
 	/**
@@ -45,7 +43,17 @@ public class ShapeRendererPlus extends ShapeRenderer {
 	 * @param shapeType what shapeType to use
 	 */
 	public ShapeRendererPlus(GameCamera camera, ShapeType shapeType) {
-		this();
+		this(camera, shapeType, 5000);
+	}
+	
+	/**
+	 * Constructs a new ShapeRendererPlus with a given camera and shapeType
+	 * @param camera the GameCamera to use
+	 * @param shapeType what shapeType to use
+	 * @param maxVertices max amount of vertices to use
+	 */
+	public ShapeRendererPlus(GameCamera camera, ShapeType shapeType, int maxVertices) {
+		super(maxVertices);
 		this.camera = camera;
 		this.shapeType = shapeType;
 	}
@@ -172,7 +180,7 @@ public class ShapeRendererPlus extends ShapeRenderer {
 	 * Renders an arbitrary amount of rectangle arrays. Useful when you have different collections of objects.
 	 * Perhaps some enemies, bullets etc and you want to render their edges of fill them.
 	 * If no shapetype have been given the default "Line" will be used.
-	 * Will throw a nullpointer exception if no camera has been set.
+	 * Will throw a {@link NullPointerException} if no camera has been set.
 	 * THIS METHOD MUST BE CALLED BETWEEN {@link ShapeRendererPlus}.begin() and {@link ShapeRendererPlus}.end()
 	 * @param rectangleArrays the rectangles to draw
 	 */

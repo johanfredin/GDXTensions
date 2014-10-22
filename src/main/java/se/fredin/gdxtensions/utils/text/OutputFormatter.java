@@ -2,8 +2,7 @@ package se.fredin.gdxtensions.utils.text;
 
 
 /**
- * Lets us format the output of a labels text to fix into the given
- * dialog.
+ * Lets us format the output of a labels text to fix into a given dialog etc.
  * @author Johan Fredin
  *
  */
@@ -11,20 +10,17 @@ public class OutputFormatter {
 	
 	/** Default index for a line break */
 	public static final short DEFAULT_LINEBREAK_INDEX = 20;
-	/** Counter for how many line breaks a text will have */
-	protected byte amountOfLineBreaks;
-	/** The index of the text where we want the line breaks to be */
-	protected short lineBreakIndex = DEFAULT_LINEBREAK_INDEX;
-	/** How we will handle our line breaks, default is {@link LineBreakSettings#ABSOLUTE} */
-	protected LineBreakSettings lineBreakSettings;
+
+	private byte amountOfLineBreaks;
+	private short lineBreakIndex;
+	private LineBreakSettings lineBreakSettings;
 	
 	/**
 	 * Constructs a new {@link OutputFormatter} instance with {@link #DEFAULT_LINEBREAK_INDEX}
 	 * and {@link LineBreakSettings#ABSOLUTE}
 	 */
 	public OutputFormatter() {
-		this.lineBreakIndex = DEFAULT_LINEBREAK_INDEX;
-		this.lineBreakSettings = LineBreakSettings.ABSOLUTE;
+		this(DEFAULT_LINEBREAK_INDEX, LineBreakSettings.ABSOLUTE);
 	}
 	
 	/**
@@ -33,7 +29,7 @@ public class OutputFormatter {
 	 * @param lineBreakIndex the index where we want a line break to be inserted
 	 */
 	public OutputFormatter(short lineBreakIndex) {
-		this.lineBreakIndex = lineBreakIndex;
+		this(lineBreakIndex, LineBreakSettings.ABSOLUTE);
 	}
 	
 	/**
@@ -42,7 +38,7 @@ public class OutputFormatter {
 	 * @param lineBreakSettings how we want to handle our line breaks
 	 */
 	public OutputFormatter(LineBreakSettings lineBreakSettings) {
-		this.lineBreakSettings = lineBreakSettings;
+		this(DEFAULT_LINEBREAK_INDEX, lineBreakSettings);
 	}
 	
 	/**
@@ -58,7 +54,9 @@ public class OutputFormatter {
 	
 	/** 
 	 * Enumerator to decide how we want to handle line breaks in
-	 * a text
+	 * a text, the options are: {@link #ABSOLUTE} for immediate line break,
+	 * {@link #NEXT_SEQUENCE} that makes a line break after current word and
+	 * {@link #PREVIOUS_SEQUENCE} that makes a line break before current word
 	 * @author Johan Fredin
 	 *
 	 */
@@ -122,7 +120,6 @@ public class OutputFormatter {
 		char newLine = '\n';
 		for(short i = 0, interval = 0; i < textToFormat.length(); i++, interval++) {
 			char letter = textToFormat.charAt(i);
-			builder.append(letter);
 			
 			if(interval >= lineBreakIndex) {
 				switch(lineBreakSettings) {
@@ -136,31 +133,29 @@ public class OutputFormatter {
 					amountOfLineBreaks++;
 					break;
 				case NEXT_SEQUENCE:
-					if(letter != separator && amountOfLineBreaks < 1) {
+					if(letter != separator) {
 						lineBreakIndex += 1;
-						break;
 					} else {
-						builder.setCharAt(i, newLine);
+						letter = newLine;
 						interval = -1;
 						amountOfLineBreaks++;
 					}
 					break;
 				case PREVIOUS_SEQUENCE:
-					
-					if(letter != ' ') {
+					if(letter != separator) {
 						int lastIndex = builder.lastIndexOf(separator.toString());
 						builder.setCharAt(lastIndex, newLine);
 						interval = (short) (lineBreakIndex - lastIndex);
-						amountOfLineBreaks++;
 					} else {
-						builder.setCharAt(i, newLine);
-						lineBreakIndex = (short) (interval);
+						letter = newLine;
+						lineBreakIndex = interval;
 						interval = -1;
-						amountOfLineBreaks++;
 					}
+					amountOfLineBreaks++;
 					break;
 				}
 			}
+			builder.append(letter);
 		}
 		return builder.toString();
 	}
@@ -172,6 +167,38 @@ public class OutputFormatter {
 	 */
 	public byte getAmountOfLineBreaks() {
 		return amountOfLineBreaks;
+	}
+	
+	/**
+	 * Set the index where we want the line break to be.
+	 * @param lineBreakIndex
+	 */
+	public void setLineBreakIndex(short lineBreakIndex) {
+		this.lineBreakIndex = lineBreakIndex;
+	}
+	
+	/**
+	 * Get the index used for line break
+	 * @return
+	 */
+	public short getLineBreakIndex() {
+		return lineBreakIndex;
+	}
+	
+	/**
+	 * Set the settings we want to use for line breaks
+	 * @param lineBreakSettings
+	 */
+	public void setLineBreakSettings(LineBreakSettings lineBreakSettings) {
+		this.lineBreakSettings = lineBreakSettings;
+	}
+	
+	/**
+	 * The settings used for line breaks
+	 * @return
+	 */
+	public LineBreakSettings getLineBreakSettings() {
+		return lineBreakSettings;
 	}
 
 }
