@@ -18,7 +18,6 @@ import com.badlogic.gdx.scenes.scene2d.actions.RepeatAction;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
-import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.utils.Disposable;
 import com.badlogic.gdx.utils.Scaling;
 import com.badlogic.gdx.utils.viewport.FillViewport;
@@ -33,7 +32,7 @@ public abstract class InGameScreen implements Disposable {
 	/** Used to detect if the game is paused */
 	public static boolean isPaused;
 
-	protected Skin skin;
+	protected LanguageBasedSkin skin;
 	protected LevelBase levelBase;
 	protected Stage stage;
 	

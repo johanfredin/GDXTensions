@@ -2,20 +2,17 @@ package se.fredin.gdxtensions.utils.text;
 
 import se.fredin.gdxtensions.utils.text.OutputFormatter.LineBreakSettings;
 
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-
 /**
- * Used to display an old school RPG like dialog where the characters
- * show up one after the other. User will be able to specify the 
- * speed and width of the dialogs. The {@link Dialog} class is working closely with 
- * the {@link OutputFormatter} class. All text that is given have previously gone 
- * through the {@link OutputFormatter} where line break index and line break settings
- * have been set. If no parameters for line break index of line break settings are set here
- * the {@link OutputFormatter} will use it's own default settings.
+ * Used to have text animated like in RPG games e.g the letters show up one after the other. 
+ * User will be able to specify the speed and width of the dialogs. 
+ * The {@link AnimatedText} class is working closely with  the {@link OutputFormatter} class. 
+ * All text that is given is first sent to the {@link OutputFormatter} where line break index 
+ * and line break settings are set. If no parameters for line break index of line break settings 
+ * are given here the {@link OutputFormatter} will use it's own default settings.
  * @author Johan Fredin
  *
  */
-public class Dialog {
+public class AnimatedText {
 
 	/** The default time we want each character to take before displaying the next one */
 	public static final float DEFAULT_TIME_PER_CHARACTER = .05f;
@@ -23,6 +20,7 @@ public class Dialog {
 	public static final String DEFAULT_TEXT = "This class lets you output letters in an animated fashion!";
 	
 	private String formattedText;
+	private String currentText;
 	private float timePerCharacter;
 	private float timer;
 	private short index;
@@ -30,69 +28,70 @@ public class Dialog {
 	private char currentCharacter;
 	private boolean isLogToConsole;
 	
+	
 	/**
-	 * Constructs a new {@link Dialog} with default settings
+	 * Constructs a new {@link AnimatedText} with default settings
 	 */
-	public Dialog() {
-		this(DEFAULT_TEXT, DEFAULT_TIME_PER_CHARACTER, OutputFormatter.DEFAULT_LINEBREAK_INDEX, LineBreakSettings.PREVIOUS_SEQUENCE, false);
+	public AnimatedText() {
+		this(DEFAULT_TEXT, DEFAULT_TIME_PER_CHARACTER, OutputFormatter.DEFAULT_LINEBREAK_INDEX, OutputFormatter.DEFAULT_LINEBREAK_SETTINGS, false);
 	}
 	
 	/**
-	 * Constructs a new {@link Dialog} with a given text
+	 * Constructs a new {@link AnimatedText} with a given text
 	 * @param text the text previously formatted by {@link OutputFormatter} to display
 	 */
-	public Dialog(String text) {
-		this(text, DEFAULT_TIME_PER_CHARACTER, OutputFormatter.DEFAULT_LINEBREAK_INDEX, LineBreakSettings.PREVIOUS_SEQUENCE, false);
+	public AnimatedText(String text) {
+		this(text, DEFAULT_TIME_PER_CHARACTER, OutputFormatter.DEFAULT_LINEBREAK_INDEX, OutputFormatter.DEFAULT_LINEBREAK_SETTINGS, false);
+	}
+	
+	public AnimatedText(String text, LineBreakSettings lineBreakSettings) {
+		this(text, DEFAULT_TIME_PER_CHARACTER, OutputFormatter.DEFAULT_LINEBREAK_INDEX, lineBreakSettings, false);
 	}
 	
 	/**
-	 * Constructs a new {@link Dialog} with a given text and time per character 
+	 * Constructs a new {@link AnimatedText} with a given text and time per character 
 	 * @param text the text previously formatted by {@link OutputFormatter} to display
 	 * @param timePerCharacter the amount of time we want for each character before typing out the next one.
 	 */
-	public Dialog(String text, float timePerCharacter) {
-		this(text, timePerCharacter, OutputFormatter.DEFAULT_LINEBREAK_INDEX, LineBreakSettings.PREVIOUS_SEQUENCE, false);
+	public AnimatedText(String text, float timePerCharacter) {
+		this(text, timePerCharacter, OutputFormatter.DEFAULT_LINEBREAK_INDEX, OutputFormatter.DEFAULT_LINEBREAK_SETTINGS, false);
 	}
 	
 	/**
-	 * Constructs a new {@link Dialog} with a given text, time per character and index for line break 
+	 * Constructs a new {@link AnimatedText} with a given text, time per character and index for line break 
 	 * @param text the text previously formatted by {@link OutputFormatter} to display
 	 * @param timePerCharacter the amount of time we want for each character before typing out the next one.
 	 * @param lineBreakIndex the index where we want the line break to occur.
 	 */
-	public Dialog(String text, float timePerCharacter, short lineBreakIndex) {
-		this(text, timePerCharacter, lineBreakIndex, LineBreakSettings.PREVIOUS_SEQUENCE, false);
+	public AnimatedText(String text, float timePerCharacter, short lineBreakIndex) {
+		this(text, timePerCharacter, lineBreakIndex, OutputFormatter.DEFAULT_LINEBREAK_SETTINGS, false);
 	}
 	
 	/**
-	 * Constructs a new {@link Dialog} with a given text, time per character and index for line break 
+	 * Constructs a new {@link AnimatedText} with a given text, time per character and index for line break 
 	 * @param text the text previously formatted by {@link OutputFormatter} to display
 	 * @param timePerCharacter the amount of time we want for each character before typing out the next one.
 	 * @param lineBreakIndex the index where we want the line break to occur.
 	 * @param lineBreakSettings the {@link LineBreakSettings} we want to use
 	 */
-	public Dialog(String text, float timePerCharacter, short lineBreakIndex, LineBreakSettings lineBreakSettings) {
+	public AnimatedText(String text, float timePerCharacter, short lineBreakIndex, LineBreakSettings lineBreakSettings) {
 		this(text, timePerCharacter, lineBreakIndex, lineBreakSettings, false);
 	}
 	
 	/**
-	 * Constructs a new {@link Dialog} with a given text, time per character and index for line break 
+	 * Constructs a new {@link AnimatedText} with a given text, time per character and index for line break 
 	 * @param text the text previously formatted by {@link OutputFormatter} to display
 	 * @param timePerCharacter the amount of time we want for each character before typing out the next one.
 	 * @param lineBreakIndex the index where we want the line break to occur.
 	 * @param lineBreakSettings the {@link LineBreakSettings} we want to use
 	 * @param isLogToConsole whether or not to print to console using {@link System#out}
 	 */
-	public Dialog(String text, float timePerCharacter, short lineBreakIndex, LineBreakSettings lineBreakSettings, boolean isLogToConsole) {
+	public AnimatedText(String text, float timePerCharacter, short lineBreakIndex, LineBreakSettings lineBreakSettings, boolean isLogToConsole) {
 		this.timePerCharacter = timePerCharacter;
 		this.formattedText = new OutputFormatter().getFormatedString(text, lineBreakIndex, lineBreakSettings);
 		this.isLogToConsole = isLogToConsole;
 	}
 
-	public void render(SpriteBatch batch) {
-		
-	}
-	
 	/**
 	 * Updates the dialog
 	 * @param deltaTime
@@ -100,6 +99,7 @@ public class Dialog {
 	public void tick(float deltaTime) {
 		if(timer >= counter && index < formattedText.length()) {
 			currentCharacter = formattedText.charAt(index);
+			currentText += currentCharacter;
 			if(isLogToConsole) {
 				System.out.print(currentCharacter);
 			}
@@ -172,5 +172,13 @@ public class Dialog {
 	 */
 	public void setLogToConsole(boolean isLogToConsole) {
 		this.isLogToConsole = isLogToConsole;
+	}
+	
+	/**
+	 * Return the text as it is right now
+	 * @return
+	 */
+	public String getCurrentText() {
+		return currentText;
 	}
 }

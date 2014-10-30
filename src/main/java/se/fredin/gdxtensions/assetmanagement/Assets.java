@@ -22,7 +22,7 @@ public class Assets implements Disposable {
 
 	public static boolean LOAD_SYNCHRONOUSLY = false;
 	protected AssetManager manager;
-	private static Assets assets;
+	public static Assets assets;
 	
 	public static Assets getInstance() {
 		if(assets == null) {
@@ -39,6 +39,7 @@ public class Assets implements Disposable {
 	 * @return
 	 */
 	public Object get(String fileName) {
+		System.out.println("Assets() get called for asset=" + fileName);
 		return manager.get(fileName);
 	}
 
@@ -85,8 +86,6 @@ public class Assets implements Disposable {
 	 * Load all the assets given
 	 */
 	public void load() {
-		//TODO:populate with your own assets e.g manager.load("myasset", asset.class);
-		Texture.setAssetManager(manager);
 	}
 	
 	@SuppressWarnings({ "unchecked", "rawtypes" })
@@ -94,13 +93,6 @@ public class Assets implements Disposable {
 		manager.load(name, clazz);
 	}
 	
-	/**
-	 * Use to unload assets
-	 */
-	public void unload() {
-		//TODO: populate with assets you want to unload e.g manager.unload("myasset");
-	}
-
 	/**
 	 * Unloads all the given assets
 	 */
@@ -149,7 +141,8 @@ public class Assets implements Disposable {
 		p.textureMinFilter = TextureFilter.Nearest;
 		
 		String path = isTestLevel ? "levels/test/level-" : "levels/" + worldType.getDisplayName().toLowerCase() + "/level-";
-		manager.load(path + index + ".tmx", TiledMap.class, p);
+		String finalPath = path + index + ".tmx";
+		manager.load(finalPath, TiledMap.class, p);
 		manager.finishLoading();
 	}
 	
@@ -183,7 +176,6 @@ public class Assets implements Disposable {
 		manager = new AssetManager();
 		if(LOAD_SYNCHRONOUSLY) {
 			load();
-			Texture.setAssetManager(manager);
 			manager.finishLoading();
 		}
 	}
@@ -217,7 +209,6 @@ public class Assets implements Disposable {
 	 */
 	public void finishLoading() {
 		manager.finishLoading();
-		Texture.setAssetManager(manager);
 	}
 	
 	

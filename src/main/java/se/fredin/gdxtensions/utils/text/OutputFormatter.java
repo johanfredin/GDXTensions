@@ -10,7 +10,9 @@ public class OutputFormatter {
 	
 	/** Default index for a line break */
 	public static final short DEFAULT_LINEBREAK_INDEX = 20;
-
+	/** Default line break settings = {@link LineBreakSettings#ABSOLUTE} */
+	public static final LineBreakSettings DEFAULT_LINEBREAK_SETTINGS = LineBreakSettings.ABSOLUTE;
+	
 	private byte amountOfLineBreaks;
 	private short lineBreakIndex;
 	private LineBreakSettings lineBreakSettings;
@@ -20,7 +22,7 @@ public class OutputFormatter {
 	 * and {@link LineBreakSettings#ABSOLUTE}
 	 */
 	public OutputFormatter() {
-		this(DEFAULT_LINEBREAK_INDEX, LineBreakSettings.ABSOLUTE);
+		this(DEFAULT_LINEBREAK_INDEX, DEFAULT_LINEBREAK_SETTINGS);
 	}
 	
 	/**
@@ -29,7 +31,7 @@ public class OutputFormatter {
 	 * @param lineBreakIndex the index where we want a line break to be inserted
 	 */
 	public OutputFormatter(short lineBreakIndex) {
-		this(lineBreakIndex, LineBreakSettings.ABSOLUTE);
+		this(lineBreakIndex, DEFAULT_LINEBREAK_SETTINGS);
 	}
 	
 	/**
