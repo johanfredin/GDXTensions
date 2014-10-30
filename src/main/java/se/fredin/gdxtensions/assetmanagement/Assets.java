@@ -11,8 +11,6 @@ import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader.Parameters;
 import com.badlogic.gdx.utils.Disposable;
-import com.badlogic.gdx.utils.GdxRuntimeException;
-import com.badlogic.gdx.utils.Logger;
 
 /**
  * Handles all the game assets
@@ -21,8 +19,9 @@ import com.badlogic.gdx.utils.Logger;
 public class Assets implements Disposable {
 
 	public static boolean LOAD_SYNCHRONOUSLY = false;
-	protected AssetManager manager;
 	public static Assets assets;
+	
+	private AssetManager manager;
 	
 	public static Assets getInstance() {
 		if(assets == null) {
@@ -153,13 +152,8 @@ public class Assets implements Disposable {
 	 * @param isTestLevel whether to retrieve the map from the test levels path or not
 	 */
 	public void unloadTileMap(WorldType worldType, byte index, boolean isTestLevel) {
-		try {
-			String path = isTestLevel ? "levels/test/level-" : "levels/" + worldType.getDisplayName().toLowerCase() + "/level-";
-				manager.unload(path + index + ".tmx");
-		} catch (GdxRuntimeException gre) {
-			Logger l = new Logger("IOError", Logger.ERROR);
-			l.error(gre.getLocalizedMessage());
-		}
+		String path = isTestLevel ? "levels/test/level-" : "levels/" + worldType.getDisplayName().toLowerCase() + "/level-";
+		manager.unload(path + index + ".tmx");
 	}
 	
 	
