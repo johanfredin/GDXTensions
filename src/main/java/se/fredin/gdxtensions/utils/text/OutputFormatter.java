@@ -16,7 +16,7 @@ public class OutputFormatter {
 	private byte amountOfLineBreaks;
 	private short lineBreakIndex;
 	private LineBreakSettings lineBreakSettings;
-	
+
 	/**
 	 * Constructs a new {@link OutputFormatter} instance with {@link #DEFAULT_LINEBREAK_INDEX}
 	 * and {@link LineBreakSettings#ABSOLUTE}

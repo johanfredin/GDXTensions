@@ -48,7 +48,7 @@ public abstract class InGameScreen implements Disposable {
 	 * from the stage AND our customized back button handler.
 	 * @param levelBase the levelBase this dialog will be operating on
 	 */
-	public InGameScreen(LevelBase levelBase) {
+	public InGameScreen(LevelBase levelBase, String packFilePath) {
 		this.levelBase = levelBase;
 		
 		Vector2 size = Scaling.fill.apply(Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), BaseScreen.viewportWidth, BaseScreen.viewportHeight);
@@ -58,12 +58,12 @@ public abstract class InGameScreen implements Disposable {
 		this.worldHeight = stage.getViewport().getWorldHeight();
 		this.worldWidth = stage.getViewport().getWorldWidth();
 		
-		TextureAtlas atlas = (TextureAtlas) Assets.getInstance().get("sprites/ui/dialogs.pack");
+		TextureAtlas atlas = (TextureAtlas) Assets.getInstance().get(packFilePath);
 		this.skin = new LanguageBasedSkin(atlas);
 		
 		// We only instantiate the white canvas image here, it's up to the sub-classes to handle it 
 		// the way they see fit.
-		this.imageToUseForFlashingEffect = new Image(skin.getDrawable("whiterect"));
+//		this.imageToUseForFlashingEffect = new Image(skin.getDrawable("whiterect"));
 		
 		// We want to handle the back button differently in pause dialog!
 		Gdx.input.setInputProcessor(this.stage);

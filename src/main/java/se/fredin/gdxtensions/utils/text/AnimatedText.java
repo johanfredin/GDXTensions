@@ -27,7 +27,7 @@ public class AnimatedText {
 	private float counter;
 	private char currentCharacter;
 	private boolean isLogToConsole;
-	
+	private byte amountOfLineBreaks;
 	
 	/**
 	 * Constructs a new {@link AnimatedText} with default settings
@@ -88,8 +88,10 @@ public class AnimatedText {
 	 */
 	public AnimatedText(String text, float timePerCharacter, short lineBreakIndex, LineBreakSettings lineBreakSettings, boolean isLogToConsole) {
 		this.timePerCharacter = timePerCharacter;
-		this.formattedText = new OutputFormatter().getFormatedString(text, lineBreakIndex, lineBreakSettings);
+		OutputFormatter formatter = new OutputFormatter();
+		this.formattedText = formatter.getFormatedString(text, lineBreakIndex, lineBreakSettings);
 		this.isLogToConsole = isLogToConsole;
+		this.amountOfLineBreaks = formatter.getAmountOfLineBreaks();
 	}
 
 	/**
@@ -180,5 +182,13 @@ public class AnimatedText {
 	 */
 	public String getCurrentText() {
 		return currentText;
+	}
+	
+	public boolean isLineBreakCharacter() {
+		return currentCharacter == '\n';
+	}
+	
+	public byte getAmountOfLineBreaks() {
+		return amountOfLineBreaks;
 	}
 }

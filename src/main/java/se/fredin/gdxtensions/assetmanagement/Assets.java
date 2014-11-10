@@ -38,7 +38,6 @@ public class Assets implements Disposable {
 	 * @return
 	 */
 	public Object get(String fileName) {
-		System.out.println("Assets() get called for asset=" + fileName);
 		return manager.get(fileName);
 	}
 
