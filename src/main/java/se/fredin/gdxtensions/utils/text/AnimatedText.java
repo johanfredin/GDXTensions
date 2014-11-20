@@ -92,6 +92,7 @@ public class AnimatedText {
 		this.formattedText = formatter.getFormatedString(text, lineBreakIndex, lineBreakSettings);
 		this.isLogToConsole = isLogToConsole;
 		this.amountOfLineBreaks = formatter.getAmountOfLineBreaks();
+		this.currentText = "";
 	}
 
 	/**

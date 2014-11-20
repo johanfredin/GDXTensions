@@ -143,7 +143,11 @@ public class AnimatedBitmapFont extends BitmapFont {
 	}
 	
 	public float getHeight(AnimatedText animatedText) {
-		return getCapHeight() * animatedText.getAmountOfLineBreaks();
+		byte amountOfLineBreaks = animatedText.getAmountOfLineBreaks();
+		int multiplier = amountOfLineBreaks < 1 ? 1 : amountOfLineBreaks;
+		float height = getBounds(animatedText.getFormattedText()).height * multiplier;
+		System.out.println("height=" + height);
+		return height;
 	}
 	
 	public void setX(float x) {
