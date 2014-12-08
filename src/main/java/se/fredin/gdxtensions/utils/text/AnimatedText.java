@@ -28,6 +28,7 @@ public class AnimatedText {
 	private char currentCharacter;
 	private boolean isLogToConsole;
 	private byte amountOfLineBreaks;
+	private short lineBreakIndex;
 	
 	/**
 	 * Constructs a new {@link AnimatedText} with default settings
@@ -93,6 +94,7 @@ public class AnimatedText {
 		this.isLogToConsole = isLogToConsole;
 		this.amountOfLineBreaks = formatter.getAmountOfLineBreaks();
 		this.currentText = "";
+		this.lineBreakIndex = lineBreakIndex;
 	}
 
 	/**
@@ -175,6 +177,10 @@ public class AnimatedText {
 	 */
 	public void setLogToConsole(boolean isLogToConsole) {
 		this.isLogToConsole = isLogToConsole;
+	}
+	
+	public short getLineBreakIndex() {
+		return lineBreakIndex;
 	}
 	
 	/**

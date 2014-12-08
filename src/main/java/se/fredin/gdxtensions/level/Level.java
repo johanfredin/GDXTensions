@@ -1,5 +1,7 @@
 package se.fredin.gdxtensions.level;
 
+import com.badlogic.gdx.InputMultiplexer;
+
 import se.fredin.gdxtensions.screen.BaseScreen;
 import se.fredin.gdxtensions.utils.GameCamera;
 
@@ -13,6 +15,7 @@ import se.fredin.gdxtensions.utils.GameCamera;
 public abstract class Level<T extends BaseScreen> implements LevelBase {
 
 	protected GameCamera camera;
+	protected InputMultiplexer inputMultiplexer;
 	
 	/**
 	 * Instantiate the camera and shaperenderer
@@ -20,6 +23,7 @@ public abstract class Level<T extends BaseScreen> implements LevelBase {
 	 */
 	public Level(T screen) {
 		this.camera = screen.getCamera();
+		this.inputMultiplexer = new InputMultiplexer();
 	}
 	
 }

@@ -1,6 +1,8 @@
 package se.fredin.gdxtensions.scene2d;
 
 import se.fredin.gdxtensions.font.AnimatedBitmapFont;
+import se.fredin.gdxtensions.utils.LogUtils;
+import se.fredin.gdxtensions.utils.MVPair;
 import se.fredin.gdxtensions.utils.text.AnimatedText;
 import se.fredin.gdxtensions.utils.text.OutputFormatter;
 import se.fredin.gdxtensions.utils.text.OutputFormatter.LineBreakSettings;
@@ -21,7 +23,7 @@ public class Dialog extends TextArea {
 	private LineBreakSettings lineBreakSettings;
 	
 	public Dialog(String text, TextFieldStyle style) {
-		this(text, style, AnimatedText.DEFAULT_TIME_PER_CHARACTER, OutputFormatter.DEFAULT_LINEBREAK_INDEX, OutputFormatter.DEFAULT_LINEBREAK_SETTINGS);
+		this(text, style, AnimatedText.DEFAULT_TIME_PER_CHARACTER, OutputFormatter.DEFAULT_LINEBREAK_INDEX, LineBreakSettings.ABSOLUTE);
 	}
 	
 	public Dialog(String text, TextFieldStyle style, float timePerCharacter) {
@@ -40,9 +42,17 @@ public class Dialog extends TextArea {
 		this.lineBreakIndex = lineBreakIndex;
 		this.lineBreakSettings = lineBreakSettings;
 		AnimatedBitmapFont font = (AnimatedBitmapFont) style.font;
-		float width = font.getWidth(animatedText);
-		float height = font.getHeight(animatedText) * animatedText.getAmountOfLineBreaks();
+		float width = font.getRegion().getRegionWidth();
+//		float height = font.getRegion().getRegionHeight();
+		float height = font.getHeight(animatedText);
 		setSize(width, height);
+		LogUtils.log(
+			new MVPair("Amount of breaks", animatedText.getAmountOfLineBreaks()),
+			new MVPair("font region width", width),
+			new MVPair("font region height", height),
+			new MVPair("font width", font.getWidth(animatedText)),
+			new MVPair("diff in width", font.getWidth(animatedText) - width),
+			new MVPair("dialog box size", getWidth() + "*" + getHeight()));
 	}
 	
 	public AnimatedText getAnimatedText() {

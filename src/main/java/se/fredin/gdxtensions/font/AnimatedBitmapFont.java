@@ -139,17 +139,14 @@ public class AnimatedBitmapFont extends BitmapFont {
 	}
 	
 	public float getWidth(AnimatedText animatedText) {
-		return getBounds(animatedText.getFormattedText()).width / animatedText.getAmountOfLineBreaks();
+		return getBounds(animatedText.getFormattedText()).width;
 	}
 	
 	public float getHeight(AnimatedText animatedText) {
-		byte amountOfLineBreaks = animatedText.getAmountOfLineBreaks();
-		int multiplier = amountOfLineBreaks < 1 ? 1 : amountOfLineBreaks;
-		float height = getBounds(animatedText.getFormattedText()).height * multiplier;
-		System.out.println("height=" + height);
+		float height = (getRegion().getRegionHeight()) / 1.66f;
 		return height;
 	}
-	
+
 	public void setX(float x) {
 		this.x = x;
 	}
@@ -173,5 +170,6 @@ public class AnimatedBitmapFont extends BitmapFont {
 	public boolean isMultiLine() {
 		return isMultiLine;
 	}
+
 	
 }

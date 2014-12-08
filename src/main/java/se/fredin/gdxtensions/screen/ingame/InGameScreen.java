@@ -177,6 +177,10 @@ public abstract class InGameScreen implements Disposable {
 		})));
 	}
 	
+	public Stage getStage() {
+		return stage;
+	}
+	
 	@Override
 	public void dispose() {
 		Gdx.app.log(this.getClass().getSimpleName(), "dispose called");

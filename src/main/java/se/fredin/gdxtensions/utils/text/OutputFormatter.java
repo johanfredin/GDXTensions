@@ -118,7 +118,7 @@ public class OutputFormatter {
 	 */
 	public String getFormatedString(String textToFormat, short lineBreakIndex, LineBreakSettings lineBreakSettings) {
 		StringBuilder builder = new StringBuilder();
-		Character separator = '-';
+		Character separator = ' ';
 		char newLine = '\n';
 		for(short i = 0, interval = 0; i < textToFormat.length(); i++, interval++) {
 			char letter = textToFormat.charAt(i);
@@ -158,6 +158,7 @@ public class OutputFormatter {
 				}
 			}
 			builder.append(letter);
+			
 		}
 		return builder.toString();
 	}

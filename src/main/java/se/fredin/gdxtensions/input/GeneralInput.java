@@ -1,7 +1,6 @@
 package se.fredin.gdxtensions.input;
 
 import com.badlogic.gdx.Input.Keys;
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputAdapter;
 
 public class GeneralInput {
@@ -36,11 +35,14 @@ public class GeneralInput {
 		switch(device) {
 		case KEYBOARD:
 			this.keyBoardInputAdapter = getKeyboard();
-			Gdx.input.setInputProcessor(keyBoardInputAdapter);
 			break;
 		default:
 			break;
 		}
+	}
+	
+	public InputAdapter getKeyBoardInputAdapter() {
+		return keyBoardInputAdapter;
 	}
 	
 	public boolean isExitButtonPressed() {
