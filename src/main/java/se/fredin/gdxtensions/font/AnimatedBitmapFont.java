@@ -6,6 +6,7 @@ import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.graphics.g2d.BitmapFont.BitmapFontData;
 
 /**
  * Extension of the standard GDX {@link BitmapFont} but with methods for easier drawing
@@ -30,7 +31,7 @@ public class AnimatedBitmapFont extends BitmapFont {
 	public AnimatedBitmapFont() {
 		super();
 	}
-
+	
 	/** Creates a BitmapFont using the default 15pt Arial font included in the libgdx JAR file. This is convenient to easily display
 	 * text without bothering with generating a bitmap font.
 	 * @param flip If true, the glyphs will be flipped for use with a perspective where 0,0 is the upper left corner. */
@@ -139,11 +140,14 @@ public class AnimatedBitmapFont extends BitmapFont {
 	}
 	
 	public float getWidth(AnimatedText animatedText) {
-		return getBounds(animatedText.getFormattedText()).width;
+		BitmapFontData data2 = getData();
+		int id = data2.getFirstGlyph().id;
+		System.out.println("ID of first glyph =" +(char)id + " " + id + " " + (byte)'!');
+		return getBounds(animatedText.getFormattedText()).width / (animatedText.getAmountOfLineBreaks() + 1);
 	}
 	
 	public float getHeight(AnimatedText animatedText) {
-		float height = (getRegion().getRegionHeight()) / 1.66f;
+		float height = (getRegion().getRegionHeight());
 		return height;
 	}
 

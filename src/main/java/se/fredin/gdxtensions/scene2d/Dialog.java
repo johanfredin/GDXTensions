@@ -1,6 +1,7 @@
 package se.fredin.gdxtensions.scene2d;
 
 import se.fredin.gdxtensions.font.AnimatedBitmapFont;
+import se.fredin.gdxtensions.utils.BitmapFontBoundsCalculator;
 import se.fredin.gdxtensions.utils.LogUtils;
 import se.fredin.gdxtensions.utils.MVPair;
 import se.fredin.gdxtensions.utils.text.AnimatedText;
@@ -23,36 +24,48 @@ public class Dialog extends TextArea {
 	private LineBreakSettings lineBreakSettings;
 	
 	public Dialog(String text, TextFieldStyle style) {
-		this(text, style, AnimatedText.DEFAULT_TIME_PER_CHARACTER, OutputFormatter.DEFAULT_LINEBREAK_INDEX, LineBreakSettings.ABSOLUTE);
+		this(text, style, .005f, (short)15, LineBreakSettings.NEXT_SEQUENCE, 10, 10);
 	}
 	
 	public Dialog(String text, TextFieldStyle style, float timePerCharacter) {
-		this(text, style, timePerCharacter, OutputFormatter.DEFAULT_LINEBREAK_INDEX, OutputFormatter.DEFAULT_LINEBREAK_SETTINGS);
+		this(text, style, timePerCharacter, OutputFormatter.DEFAULT_LINEBREAK_INDEX, OutputFormatter.DEFAULT_LINEBREAK_SETTINGS, 10, 10);
 	}
 	
 	public Dialog(String text, TextFieldStyle style, float timePerCharacter, short lineBreakIndex) {
-		this(text, style, timePerCharacter, lineBreakIndex, OutputFormatter.DEFAULT_LINEBREAK_SETTINGS);
+		this(text, style, timePerCharacter, lineBreakIndex, OutputFormatter.DEFAULT_LINEBREAK_SETTINGS, 10, 10);
 	}
 	
-	public Dialog(String text, TextFieldStyle style, float timePerCharacter, short lineBreakIndex, LineBreakSettings lineBreakSettings) {
+	public Dialog(String text, TextFieldStyle style, float timePerCharacter, short lineBreakIndex, float xBorder) {
+		this(text, style, timePerCharacter, lineBreakIndex, OutputFormatter.DEFAULT_LINEBREAK_SETTINGS, xBorder, 10);
+	}
+	
+	public Dialog(String text, TextFieldStyle style, float timePerCharacter, short lineBreakIndex, float xBorder, float yBorder) {
+		this(text, style, timePerCharacter, lineBreakIndex, OutputFormatter.DEFAULT_LINEBREAK_SETTINGS, xBorder, yBorder);
+	}
+	
+	public Dialog(String text, TextFieldStyle style, float timePerCharacter, short lineBreakIndex, LineBreakSettings lineBreakSettings, float xBorder, float yBorder) {
 		super(text, style);
 		this.animatedText = new AnimatedText(text, timePerCharacter, lineBreakIndex, lineBreakSettings);
+		this.animatedText.setLogToConsole(true);
 		this.text = text;
 		this.timePerCharacter = timePerCharacter;
 		this.lineBreakIndex = lineBreakIndex;
 		this.lineBreakSettings = lineBreakSettings;
+		setOrigin(50);
 		AnimatedBitmapFont font = (AnimatedBitmapFont) style.font;
-		float width = font.getRegion().getRegionWidth();
-//		float height = font.getRegion().getRegionHeight();
-		float height = font.getHeight(animatedText);
-		setSize(width, height);
+		BitmapFontBoundsCalculator boundCalc = new BitmapFontBoundsCalculator(font, animatedText);
+		float width = boundCalc.getWidth() + xBorder * 4;
+		float height = boundCalc.getHeight() + yBorder;
+		
+		setWidth(width);
+		setHeight(height);
 		LogUtils.log(
 			new MVPair("Amount of breaks", animatedText.getAmountOfLineBreaks()),
-			new MVPair("font region width", width),
-			new MVPair("font region height", height),
-			new MVPair("font width", font.getWidth(animatedText)),
-			new MVPair("diff in width", font.getWidth(animatedText) - width),
+			new MVPair("Font width i guess will be", font.getWidth(animatedText)),
+			new MVPair("box width", getPrefWidth()),
+			new MVPair("Current line break setting", lineBreakSettings.name()),
 			new MVPair("dialog box size", getWidth() + "*" + getHeight()));
+			
 	}
 	
 	public AnimatedText getAnimatedText() {

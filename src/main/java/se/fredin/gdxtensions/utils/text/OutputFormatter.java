@@ -10,8 +10,8 @@ public class OutputFormatter {
 	
 	/** Default index for a line break */
 	public static final short DEFAULT_LINEBREAK_INDEX = 20;
-	/** Default line break settings = {@link LineBreakSettings#ABSOLUTE} */
-	public static final LineBreakSettings DEFAULT_LINEBREAK_SETTINGS = LineBreakSettings.ABSOLUTE;
+	/** Default line break settings = {@link LineBreakSettings#NEXT_SEQUENCE} */
+	public static final LineBreakSettings DEFAULT_LINEBREAK_SETTINGS = LineBreakSettings.NEXT_SEQUENCE;
 	
 	private byte amountOfLineBreaks;
 	private short lineBreakIndex;
@@ -19,7 +19,7 @@ public class OutputFormatter {
 
 	/**
 	 * Constructs a new {@link OutputFormatter} instance with {@link #DEFAULT_LINEBREAK_INDEX}
-	 * and {@link LineBreakSettings#ABSOLUTE}
+	 * and {@link LineBreakSettings#NEXT_SEQUENCE}
 	 */
 	public OutputFormatter() {
 		this(DEFAULT_LINEBREAK_INDEX, DEFAULT_LINEBREAK_SETTINGS);
@@ -27,7 +27,7 @@ public class OutputFormatter {
 	
 	/**
 	 * Constructs a new {@link OutputFormatter} with a given index for line break.
-	 * {@link #lineBreakSettings} will be {@link LineBreakSettings#ABSOLUTE}
+	 * {@link #lineBreakSettings} will be {@link LineBreakSettings#NEXT_SEQUENCE}
 	 * @param lineBreakIndex the index where we want a line break to be inserted
 	 */
 	public OutputFormatter(short lineBreakIndex) {
@@ -136,10 +136,13 @@ public class OutputFormatter {
 					break;
 				case NEXT_SEQUENCE:
 					if(letter != separator) {
-						lineBreakIndex += 1;
+						// We don't want a following row to be longer than the first (just looks weird)
+						if(amountOfLineBreaks <= 0) {
+							++lineBreakIndex;
+						}
 					} else {
 						letter = newLine;
-						interval = -1;
+						interval = 0;
 						amountOfLineBreaks++;
 					}
 					break;
