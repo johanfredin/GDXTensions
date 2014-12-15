@@ -1,5 +1,6 @@
 package se.fredin.gdxtensions.font;
 
+import se.fredin.gdxtensions.utils.BitmapFontBoundsCalculator;
 import se.fredin.gdxtensions.utils.text.AnimatedText;
 
 import com.badlogic.gdx.files.FileHandle;
@@ -140,15 +141,11 @@ public class AnimatedBitmapFont extends BitmapFont {
 	}
 	
 	public float getWidth(AnimatedText animatedText) {
-		BitmapFontData data2 = getData();
-		int id = data2.getFirstGlyph().id;
-		System.out.println("ID of first glyph =" +(char)id + " " + id + " " + (byte)'!');
-		return getBounds(animatedText.getFormattedText()).width / (animatedText.getAmountOfLineBreaks() + 1);
+		return new BitmapFontBoundsCalculator(this).getCalculatedWidth(animatedText);
 	}
 	
 	public float getHeight(AnimatedText animatedText) {
-		float height = (getRegion().getRegionHeight());
-		return height;
+		return new BitmapFontBoundsCalculator(this).getCalculatedHeight(animatedText);
 	}
 
 	public void setX(float x) {

@@ -115,6 +115,10 @@ public class AnimatedText {
 		}
 	}
 	
+	public String[] getRows() {
+		return formattedText.split("\n");
+	}
+	
 	/**
 	 * get the time taken for each character
 	 * @return

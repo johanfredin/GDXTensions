@@ -27,8 +27,8 @@ public class LogUtils {
 	 * @param message the message you want to assign to assign to the value
 	 * @param value the value
 	 */
-	public static void log(String message, String value) {
-		Gdx.app.log(TAG, message + "=" + value);
+	public static void log(String message, Object value) {
+		Gdx.app.log(TAG, message + "=" + value.toString());
 	}
 	
 	/**

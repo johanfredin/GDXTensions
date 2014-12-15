@@ -1,9 +1,6 @@
 package se.fredin.gdxtensions.scene2d;
 
 import se.fredin.gdxtensions.font.AnimatedBitmapFont;
-import se.fredin.gdxtensions.utils.BitmapFontBoundsCalculator;
-import se.fredin.gdxtensions.utils.LogUtils;
-import se.fredin.gdxtensions.utils.MVPair;
 import se.fredin.gdxtensions.utils.text.AnimatedText;
 import se.fredin.gdxtensions.utils.text.OutputFormatter;
 import se.fredin.gdxtensions.utils.text.OutputFormatter.LineBreakSettings;
@@ -24,7 +21,7 @@ public class Dialog extends TextArea {
 	private LineBreakSettings lineBreakSettings;
 	
 	public Dialog(String text, TextFieldStyle style) {
-		this(text, style, .005f, (short)15, LineBreakSettings.NEXT_SEQUENCE, 10, 10);
+		this(text, style, .005f, OutputFormatter.DEFAULT_LINEBREAK_INDEX, LineBreakSettings.NEXT_SEQUENCE, 10, 10);
 	}
 	
 	public Dialog(String text, TextFieldStyle style, float timePerCharacter) {
@@ -46,26 +43,13 @@ public class Dialog extends TextArea {
 	public Dialog(String text, TextFieldStyle style, float timePerCharacter, short lineBreakIndex, LineBreakSettings lineBreakSettings, float xBorder, float yBorder) {
 		super(text, style);
 		this.animatedText = new AnimatedText(text, timePerCharacter, lineBreakIndex, lineBreakSettings);
-		this.animatedText.setLogToConsole(true);
 		this.text = text;
 		this.timePerCharacter = timePerCharacter;
 		this.lineBreakIndex = lineBreakIndex;
 		this.lineBreakSettings = lineBreakSettings;
-		setOrigin(50);
-		AnimatedBitmapFont font = (AnimatedBitmapFont) style.font;
-		BitmapFontBoundsCalculator boundCalc = new BitmapFontBoundsCalculator(font, animatedText);
-		float width = boundCalc.getWidth() + xBorder * 4;
-		float height = boundCalc.getHeight() + yBorder;
 		
-		setWidth(width);
-		setHeight(height);
-		LogUtils.log(
-			new MVPair("Amount of breaks", animatedText.getAmountOfLineBreaks()),
-			new MVPair("Font width i guess will be", font.getWidth(animatedText)),
-			new MVPair("box width", getPrefWidth()),
-			new MVPair("Current line break setting", lineBreakSettings.name()),
-			new MVPair("dialog box size", getWidth() + "*" + getHeight()));
-			
+		AnimatedBitmapFont font = (AnimatedBitmapFont) style.font;
+		this.setSize(font.getWidth(animatedText), font.getHeight(animatedText));
 	}
 	
 	public AnimatedText getAnimatedText() {
