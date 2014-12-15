@@ -25,7 +25,6 @@ public class BitmapFontBoundsCalculator {
 		this.font = font;
 		this.width = getCalculatedWidth(text);
 		this.height = getCalculatedHeight(text);
-		this.isMonoSpace = checkIfMonoSpace();
 	}
 	
 	public float getCalculatedWidth(AnimatedText animatedText) {

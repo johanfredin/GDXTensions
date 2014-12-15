@@ -142,7 +142,7 @@ public class OutputFormatter {
 						}
 					} else {
 						letter = newLine;
-						interval = 0;
+						interval = -1;
 						amountOfLineBreaks++;
 					}
 					break;

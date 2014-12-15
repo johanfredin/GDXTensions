@@ -5,6 +5,9 @@ import se.fredin.gdxtensions.utils.text.AnimatedText;
 import se.fredin.gdxtensions.utils.text.OutputFormatter;
 import se.fredin.gdxtensions.utils.text.OutputFormatter.LineBreakSettings;
 
+import com.badlogic.gdx.graphics.g2d.Batch;
+import com.badlogic.gdx.scenes.scene2d.actions.Actions;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.TextArea;
 
 /**
@@ -14,42 +17,52 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextArea;
  *
  */
 public class Dialog extends TextArea {
-
+	
+	public static final int TOP = 0, LEFT = 1, BOTTOM = 2, RIGHT = 3;
+	public static float defaultPadding = 10;
+	public static float[] defaultPaddingSettings = {defaultPadding, defaultPadding, defaultPadding, defaultPadding};
+	private float[] customPadding;
+	private Image bounds;
+	private float x;
+	private float y;
+	private float width;
+	private float height;
+	
 	private AnimatedText animatedText;
 	private float timePerCharacter;
 	private short lineBreakIndex;
 	private LineBreakSettings lineBreakSettings;
+	private boolean canTick;
 	
 	public Dialog(String text, TextFieldStyle style) {
-		this(text, style, .005f, OutputFormatter.DEFAULT_LINEBREAK_INDEX, LineBreakSettings.NEXT_SEQUENCE, 10, 10);
+		this(text, style, .005f, OutputFormatter.DEFAULT_LINEBREAK_INDEX, LineBreakSettings.NEXT_SEQUENCE, defaultPaddingSettings);
 	}
 	
 	public Dialog(String text, TextFieldStyle style, float timePerCharacter) {
-		this(text, style, timePerCharacter, OutputFormatter.DEFAULT_LINEBREAK_INDEX, OutputFormatter.DEFAULT_LINEBREAK_SETTINGS, 10, 10);
+		this(text, style, timePerCharacter, OutputFormatter.DEFAULT_LINEBREAK_INDEX, OutputFormatter.DEFAULT_LINEBREAK_SETTINGS, defaultPaddingSettings);
 	}
 	
 	public Dialog(String text, TextFieldStyle style, float timePerCharacter, short lineBreakIndex) {
-		this(text, style, timePerCharacter, lineBreakIndex, OutputFormatter.DEFAULT_LINEBREAK_SETTINGS, 10, 10);
+		this(text, style, timePerCharacter, lineBreakIndex, OutputFormatter.DEFAULT_LINEBREAK_SETTINGS, defaultPaddingSettings);
 	}
 	
-	public Dialog(String text, TextFieldStyle style, float timePerCharacter, short lineBreakIndex, float xBorder) {
-		this(text, style, timePerCharacter, lineBreakIndex, OutputFormatter.DEFAULT_LINEBREAK_SETTINGS, xBorder, 10);
-	}
-	
-	public Dialog(String text, TextFieldStyle style, float timePerCharacter, short lineBreakIndex, float xBorder, float yBorder) {
-		this(text, style, timePerCharacter, lineBreakIndex, OutputFormatter.DEFAULT_LINEBREAK_SETTINGS, xBorder, yBorder);
-	}
-	
-	public Dialog(String text, TextFieldStyle style, float timePerCharacter, short lineBreakIndex, LineBreakSettings lineBreakSettings, float xBorder, float yBorder) {
+	public Dialog(String text, TextFieldStyle style, float timePerCharacter, short lineBreakIndex, LineBreakSettings lineBreakSettings, float[] padding) {
 		super(text, style);
+		this.customPadding = padding;
 		this.animatedText = new AnimatedText(text, timePerCharacter, lineBreakIndex, lineBreakSettings);
-		this.text = text;
 		this.timePerCharacter = timePerCharacter;
 		this.lineBreakIndex = lineBreakIndex;
 		this.lineBreakSettings = lineBreakSettings;
-		
 		AnimatedBitmapFont font = (AnimatedBitmapFont) style.font;
-		this.setSize(font.getWidth(animatedText), font.getHeight(animatedText));
+		this.width = font.getWidth(animatedText);
+		this.height = font.getHeight(animatedText);
+		this.bounds = new Image(style.background);
+		
+		// Initial size = 0
+		this.setSize(0, 0);
+		this.bounds.setSize(0, 0);
+		
+		this.openDialog();
 	}
 	
 	public AnimatedText getAnimatedText() {
@@ -80,17 +93,64 @@ public class Dialog extends TextArea {
 		return lineBreakSettings;
 	}
 	
+	public Image getBounds() {
+		return bounds;
+	}
+	
+	@Override
+	public void setPosition(float x, float y) {
+		bounds.setPosition(x - customPadding[LEFT], y - customPadding[TOP]);
+		super.setPosition(x, y);
+	}
+	
+	@Override
+	public void draw(Batch batch, float parentAlpha) {
+		bounds.draw(batch, parentAlpha);
+		super.draw(batch, parentAlpha);
+	}
+	
 	@Override
 	public void act(float delta) {
 		super.act(delta);
-		tick(delta);
+		bounds.act(delta);
+		
+		if(canTick) {
+			tick(delta);
+		}
 	}
 	
 	public void tick(float delta) {
 		animatedText.tick(delta);
-		setText(animatedText.getCurrentText());
+	    setText(animatedText.getCurrentText());
 	}
 	
+	public void openDialog() {
+		// Temporary values to be replaced when more functionality added
+		this.x = 100;
+		this.y = 100;
+		
+		float boundsX = x - customPadding[LEFT];
+		float boundsY = y - customPadding[TOP];
+		float boundsWidth = width + (customPadding[LEFT] + customPadding[RIGHT]);
+		float boundsHeight = height + (customPadding[TOP] + customPadding[BOTTOM]);
+		
+		this.setPosition(x, y);
+		this.setOrigin(x + (width / 2), y - (height / 2));
+		this.bounds.setPosition(boundsX, boundsY);
+		this.bounds.setOrigin(boundsX + (boundsWidth / 2), boundsY - (boundsHeight / 2));
+		this.bounds.addAction(Actions.moveBy(-boundsWidth / 2, -boundsHeight / 2, 1f));
+		this.addAction(Actions.moveBy(-width / 2, -height / 2, 1f));
+		this.addAction(Actions.sizeTo(width, height, 1f));
+		this.bounds.addAction(Actions.sequence(Actions.sizeTo(boundsWidth, boundsHeight, 1f), Actions.after(Actions.run(new Runnable() {
+			@Override
+			public void run() {
+				canTick = true;
+			}
+		}))));
+	}
 	
+	public void closeDialog() {
+		
+	}
 
 }
