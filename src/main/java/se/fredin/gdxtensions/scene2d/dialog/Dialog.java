@@ -19,6 +19,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextArea;
 public class Dialog extends TextArea {
 	
 	public static final int TOP = 0, LEFT = 1, BOTTOM = 2, RIGHT = 3;
+	public static float defaultDuration = .66f;
 	
 	public static float defaultPadding = 5;
 	public static float[] defaultPaddingSettings = {defaultPadding, defaultPadding, defaultPadding, defaultPadding};
@@ -160,5 +161,5 @@ public class Dialog extends TextArea {
 	public float getDialogHeight() {
 		return dialogHeight;
 	}
-
+	
 }
