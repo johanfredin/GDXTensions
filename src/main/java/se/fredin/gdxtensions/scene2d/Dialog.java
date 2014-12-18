@@ -5,6 +5,7 @@ import se.fredin.gdxtensions.utils.text.AnimatedText;
 import se.fredin.gdxtensions.utils.text.OutputFormatter;
 import se.fredin.gdxtensions.utils.text.OutputFormatter.LineBreakSettings;
 
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
@@ -19,7 +20,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextArea;
 public class Dialog extends TextArea {
 	
 	public static final int TOP = 0, LEFT = 1, BOTTOM = 2, RIGHT = 3;
-	public static float defaultPadding = 10;
+	public static float defaultPadding = 5;
 	public static float[] defaultPaddingSettings = {defaultPadding, defaultPadding, defaultPadding, defaultPadding};
 	private float[] customPadding;
 	private Image bounds;
@@ -33,6 +34,7 @@ public class Dialog extends TextArea {
 	private short lineBreakIndex;
 	private LineBreakSettings lineBreakSettings;
 	private boolean canTick;
+	private boolean isTimeToCloseDialog;
 	
 	public Dialog(String text, TextFieldStyle style) {
 		this(text, style, .005f, OutputFormatter.DEFAULT_LINEBREAK_INDEX, LineBreakSettings.NEXT_SEQUENCE, defaultPaddingSettings);
@@ -47,7 +49,7 @@ public class Dialog extends TextArea {
 	}
 	
 	public Dialog(String text, TextFieldStyle style, float timePerCharacter, short lineBreakIndex, LineBreakSettings lineBreakSettings, float[] padding) {
-		super(text, style);
+		super("", style);
 		this.customPadding = padding;
 		this.animatedText = new AnimatedText(text, timePerCharacter, lineBreakIndex, lineBreakSettings);
 		this.timePerCharacter = timePerCharacter;
@@ -61,8 +63,9 @@ public class Dialog extends TextArea {
 		// Initial size = 0
 		this.setSize(0, 0);
 		this.bounds.setSize(0, 0);
+		this.bounds.setColor(Color.BLUE);
 		
-		this.openDialog();
+		this.openDialog(.8f);
 	}
 	
 	public AnimatedText getAnimatedText() {
@@ -114,9 +117,13 @@ public class Dialog extends TextArea {
 		super.act(delta);
 		bounds.act(delta);
 		
-		if(canTick) {
+		if(canTick && !isTimeToCloseDialog) {
 			tick(delta);
 		}
+	}
+	
+	public boolean isTimeToCloseDialog() {
+		return isTimeToCloseDialog;
 	}
 	
 	public void tick(float delta) {
@@ -124,33 +131,45 @@ public class Dialog extends TextArea {
 	    setText(animatedText.getCurrentText());
 	}
 	
-	public void openDialog() {
+	public void openDialog(float duration) {
 		// Temporary values to be replaced when more functionality added
-		this.x = 100;
-		this.y = 100;
+		this.x = 300;
+		this.y = 200;
 		
-		float boundsX = x - customPadding[LEFT];
-		float boundsY = y - customPadding[TOP];
 		float boundsWidth = width + (customPadding[LEFT] + customPadding[RIGHT]);
 		float boundsHeight = height + (customPadding[TOP] + customPadding[BOTTOM]);
 		
+		float innerDuration = duration / 2;
+		
 		this.setPosition(x, y);
-		this.setOrigin(x + (width / 2), y - (height / 2));
-		this.bounds.setPosition(boundsX, boundsY);
-		this.bounds.setOrigin(boundsX + (boundsWidth / 2), boundsY - (boundsHeight / 2));
-		this.bounds.addAction(Actions.moveBy(-boundsWidth / 2, -boundsHeight / 2, 1f));
-		this.addAction(Actions.moveBy(-width / 2, -height / 2, 1f));
-		this.addAction(Actions.sizeTo(width, height, 1f));
-		this.bounds.addAction(Actions.sequence(Actions.sizeTo(boundsWidth, boundsHeight, 1f), Actions.after(Actions.run(new Runnable() {
+		this.bounds.setPosition(x, y);
+		this.bounds.addAction(Actions.moveBy(-boundsWidth / 2, -boundsHeight / 2, duration));
+		this.bounds.addAction(Actions.sequence(Actions.sizeTo(boundsWidth, boundsHeight, duration), Actions.delay(duration / 4), Actions.after(Actions.run(new Runnable() {
 			@Override
 			public void run() {
 				canTick = true;
 			}
 		}))));
+		this.addAction(Actions.moveBy(-width / 2, -height / 2, innerDuration));
+		this.addAction(Actions.sizeTo(width, height, innerDuration));
 	}
 	
-	public void closeDialog() {
+	public void closeDialog(float duration) {
+		this.isTimeToCloseDialog = true;
+		System.out.println("Dialog closing");
 		
+		// Empty the text in the box when closing
+		this.setText("");
+		
+		float boundsWidth = width + (customPadding[LEFT] + customPadding[RIGHT]);
+		float boundsHeight = height + (customPadding[TOP] + customPadding[BOTTOM]);
+				
+		float innerDuration = duration / 2;
+				
+		this.bounds.addAction(Actions.moveBy(boundsWidth / 2, boundsHeight / 2, duration));
+		this.bounds.addAction(Actions.sizeTo(0, 0, duration));
+		this.addAction(Actions.moveBy(width / 2, height / 2, innerDuration));
+		this.addAction(Actions.sizeTo(0, 0, innerDuration));
 	}
 
 }
