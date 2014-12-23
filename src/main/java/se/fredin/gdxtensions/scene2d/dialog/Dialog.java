@@ -109,8 +109,8 @@ public class Dialog extends TextArea {
 	
 	@Override
 	public void setPosition(float x, float y) {
-		frame.setPosition(x, y);
 		super.setPosition(x, y);
+		frame.setPosition(x, y);
 	}
 	
 	@Override
