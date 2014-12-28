@@ -10,6 +10,22 @@ import com.badlogic.gdx.Gdx;
  */
 public class LogUtils {
 	
+	/** Simple enum for mapping libGDX log levels */
+	public static enum LogLevel {
+		INFO((byte)2),
+		ERROR((byte)1);
+		
+		private byte level;
+		
+		private LogLevel(byte level) {
+			this.level = level;
+		}
+		
+		public byte getLevel() {
+			return level;
+		}
+ 	}
+	
 	/** Default tag to use as logging tag */
 	public static final String TAG = "GDXTensions Log";
 	
@@ -18,6 +34,23 @@ public class LogUtils {
 	 * @param message message to log
 	 */
 	public static void log(String message) {
+		Gdx.app.log(TAG, message);
+	}
+	
+	/** 
+	 * Logs to console a message.
+	 * @param message message to log
+	 */
+	public static void log(String message, LogLevel logLevel) {
+		Gdx.app.setLogLevel(logLevel.getLevel());
+		Gdx.app.log(TAG, message);
+	}
+	
+	/** 
+	 * Logs to console a message.
+	 * @param message message to log
+	 */
+	public static void log(String message, int log) {
 		Gdx.app.log(TAG, message);
 	}
 	
@@ -52,5 +85,6 @@ public class LogUtils {
 			log(message, value);
 		}
 	}
+	
 	
 }

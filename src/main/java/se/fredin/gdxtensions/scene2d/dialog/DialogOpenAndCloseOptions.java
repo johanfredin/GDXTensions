@@ -11,7 +11,6 @@ import com.badlogic.gdx.scenes.scene2d.ui.Image;
 /**
  * Utility class for handling animation of dialog boxes as they open and close
  * @author Johan Fredin
- *
  */
 public class DialogOpenAndCloseOptions {
 

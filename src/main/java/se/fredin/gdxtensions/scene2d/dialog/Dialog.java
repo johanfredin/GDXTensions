@@ -119,7 +119,6 @@ public class Dialog extends TextArea {
 		this.frame.setSize(0, 0);
 		this.frame.setColor(Color.BLUE);
 		
-		this.openDialog();
 	}
 	
 	/**
