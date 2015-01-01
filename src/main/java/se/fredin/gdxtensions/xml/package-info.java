@@ -5,4 +5,4 @@
  * @author burtburgenstein
  *
  */
-package se.fredin.gdxtensions.font.xmldialog;
+package se.fredin.gdxtensions.xml;

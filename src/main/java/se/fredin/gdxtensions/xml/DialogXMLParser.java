@@ -1,4 +1,4 @@
-package se.fredin.gdxtensions.font.xmldialog;
+package se.fredin.gdxtensions.xml;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -49,7 +49,7 @@ public class DialogXMLParser {
 			sb.append("key=" + key + "\n");
 			Array<XMLDialog> xmlDialogs = dialogElements.get(key);
 			for(XMLDialog xmlDialog : xmlDialogs) {
-				sb.append("header=" + xmlDialog.getHeader() + "\n");
+				sb.append("header=" + xmlDialog.getHeader(false) + "\n");
 				sb.append("timeToDisplay=" + xmlDialog.getTimeToDisplay() + "\n");
 				sb.append("text=" + xmlDialog.getText() + "\n------------------------------\n");
 			}

@@ -24,6 +24,7 @@ public class AnimatedBitmapFont extends BitmapFont {
 	public float y;
 	/** whether or not to use line breaks (default is <code>true</code>)*/
 	public boolean isMultiLine = true;
+	private BitmapFontBoundsCalculator bitmapFontBoundsCalculator = new BitmapFontBoundsCalculator(this);
 	
 	/** 
 	 * Creates a BitmapFont using the default 15pt Arial font included in the libgdx JAR file. This is convenient to 
@@ -141,13 +142,21 @@ public class AnimatedBitmapFont extends BitmapFont {
 	}
 	
 	public float getWidth(AnimatedText animatedText) {
-		return new BitmapFontBoundsCalculator(this).getCalculatedWidth(animatedText);
+		return this.bitmapFontBoundsCalculator.getCalculatedWidth(animatedText);
 	}
 	
 	public float getHeight(AnimatedText animatedText) {
-		return new BitmapFontBoundsCalculator(this).getCalculatedHeight(animatedText);
+		return this.bitmapFontBoundsCalculator.getCalculatedHeight(animatedText);
 	}
-
+	
+	public float getHeight(AnimatedText animatedText, byte amountOfAdditionalLineBreaks) {
+		return this.bitmapFontBoundsCalculator.getCalculatedHeight(animatedText, amountOfAdditionalLineBreaks);
+	}
+	
+	public void addLineBreaks(byte amount) {
+		this.bitmapFontBoundsCalculator.addLinebreaks(amount);
+	}
+	
 	public void setX(float x) {
 		this.x = x;
 	}

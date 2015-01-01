@@ -16,6 +16,7 @@ public class BitmapFontBoundsCalculator {
 	private float width;
 	private float height;
 	private boolean isMonoSpace;
+	private byte amountOfLineBreaks;
 	
 	public BitmapFontBoundsCalculator(AnimatedBitmapFont font) {
 		this.font = font;
@@ -60,9 +61,24 @@ public class BitmapFontBoundsCalculator {
 		return finalWidth;
 	}
 	
+	/**
+	 * Get the calculated height according to font width and amount of line breaks
+	 * @param text the text 
+	 * @return
+	 */
 	public float getCalculatedHeight(AnimatedText text) {
+		return getCalculatedHeight(text, (byte) 0);
+	}
+	
+	/**
+	 * Get the calculated height according to font width and amount of line breaks
+	 * @param text the text 
+	 * @param additionalLinesIfHeaderExists if a header exist you need to add the correct extra amount of line breaks.
+	 * @return
+	 */
+	public float getCalculatedHeight(AnimatedText text, byte additionalLinesIfHeaderExists) {
 		BitmapFontData data = font.getData();
-		byte amountOfLineBreaks = (byte)(text.getAmountOfLineBreaks() + 1);
+		this.amountOfLineBreaks = (byte)(text.getAmountOfLineBreaks() + 1 + additionalLinesIfHeaderExists);
 		return data.lineHeight * amountOfLineBreaks;
 	}
 	
@@ -90,6 +106,9 @@ public class BitmapFontBoundsCalculator {
 		return false;
 	}
 	
+	public void addLinebreaks(byte amount) {
+		this.amountOfLineBreaks += amount;
+	}
 	
 	public float getWidth() {
 		return width;

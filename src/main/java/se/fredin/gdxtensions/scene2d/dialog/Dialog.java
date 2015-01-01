@@ -27,6 +27,8 @@ public class Dialog extends TextArea {
 	/** The default duration of the frame animation */
 	public static float defaultDuration = .66f;
 	
+	private float[] padding;
+	
 	private final byte TOP = 0;
 	private final byte LEFT = 1; 
 	private final byte BOTTOM = 2; 
@@ -38,19 +40,27 @@ public class Dialog extends TextArea {
 	private float frameHeight;
 	private float timePerCharacter;
 	private short lineBreakIndex;
-
+	
+	private float timeToDisplay;
+	private float timer;
+	private String header;
+	
 	private Image frame;
 	private DialogOpenAndCloseOptions openCloseOptions;
 	private AnimatedText animatedText;
 	private LineBreakSettings lineBreakSettings;
+	private AnimatedBitmapFont font;
+	
+	private boolean isAllowedToStart;
+	private boolean isOpened;
 	
 	/**
 	 * Create a new dialog with default settings for text animation speed, linebreak index, linebreak settings and padding.
 	 * @param text the text to use for this dialog box
 	 * @param style the {@link TextFieldStyle}
 	 */
-	public Dialog(String text, TextFieldStyle style) {
-		this(text, style, AnimatedText.DEFAULT_TIME_PER_CHARACTER, OutputFormatter.DEFAULT_LINEBREAK_INDEX, LineBreakSettings.NEXT_SEQUENCE, defaultPaddingSettings);
+	public Dialog(String text, float x, float y, TextFieldStyle style) {
+		this(text, x, y, style, AnimatedText.DEFAULT_TIME_PER_CHARACTER, OutputFormatter.DEFAULT_LINEBREAK_INDEX, LineBreakSettings.NEXT_SEQUENCE, defaultPaddingSettings);
 	}
 	
 	/**
@@ -59,8 +69,8 @@ public class Dialog extends TextArea {
 	 * @param style the {@link TextFieldStyle}
 	 * @param timePerCharacter the update speed of the text to be displayed in the box.
 	 */
-	public Dialog(String text, TextFieldStyle style, float timePerCharacter) {
-		this(text, style, timePerCharacter, OutputFormatter.DEFAULT_LINEBREAK_INDEX, OutputFormatter.DEFAULT_LINEBREAK_SETTINGS, defaultPaddingSettings);
+	public Dialog(String text, float x, float y, TextFieldStyle style, float timePerCharacter) {
+		this(text, x, y, style, timePerCharacter, OutputFormatter.DEFAULT_LINEBREAK_INDEX, OutputFormatter.DEFAULT_LINEBREAK_SETTINGS, defaultPaddingSettings);
 	}
 	
 	/**
@@ -70,8 +80,8 @@ public class Dialog extends TextArea {
 	 * @param timePerCharacter the update speed of the text to be displayed in the box.
 	 * @param lineBreakIndex the index in the text where we want a line break.
 	 */
-	public Dialog(String text, TextFieldStyle style, float timePerCharacter, short lineBreakIndex) {
-		this(text, style, timePerCharacter, lineBreakIndex, OutputFormatter.DEFAULT_LINEBREAK_SETTINGS, defaultPaddingSettings);
+	public Dialog(String text, float x, float y, TextFieldStyle style, float timePerCharacter, short lineBreakIndex) {
+		this(text, x, y, style, timePerCharacter, lineBreakIndex, OutputFormatter.DEFAULT_LINEBREAK_SETTINGS, defaultPaddingSettings);
 	}
 	
 	/**
@@ -82,8 +92,8 @@ public class Dialog extends TextArea {
 	 * @param lineBreakIndex the index in the text where we want a line break.
 	 * @param the {@link LineBreakSettings} to use
 	 */
-	public Dialog(String text, TextFieldStyle style, float timePerCharacter, short lineBreakIndex, LineBreakSettings settings) {
-		this(text, style, timePerCharacter, lineBreakIndex, settings, defaultPaddingSettings);
+	public Dialog(String text, float x, float y, TextFieldStyle style, float timePerCharacter, short lineBreakIndex, LineBreakSettings settings) {
+		this(text, x, y, style, timePerCharacter, lineBreakIndex, settings, defaultPaddingSettings);
 	}
 	
 	/**
@@ -95,30 +105,30 @@ public class Dialog extends TextArea {
 	 * @param lineBreakSettings the {@link LineBreakSettings} to use
 	 * @param padding the padding to use for each side (top, left, bottom, right)
 	 */
-	public Dialog(String text, TextFieldStyle style, float timePerCharacter, short lineBreakIndex, LineBreakSettings lineBreakSettings, float[] padding) {
+	public Dialog(String text, float x, float y, TextFieldStyle style, float timePerCharacter, short lineBreakIndex, LineBreakSettings lineBreakSettings, float[] padding) {
 		super("", style);
 		this.frame = new Image(style.background);
-		
-		//TODO: Remove later this temporary hard-coded values
-		setPosition(300, 200);
+		this.padding = padding;
 		
 		this.animatedText = new AnimatedText(text, timePerCharacter, lineBreakIndex, lineBreakSettings);
 		this.timePerCharacter = timePerCharacter;
 		this.lineBreakIndex = lineBreakIndex;
 		this.lineBreakSettings = lineBreakSettings;
-		AnimatedBitmapFont font = (AnimatedBitmapFont) style.font;
+		this.font = (AnimatedBitmapFont) style.font;
 
 		this.dialogWidth = font.getWidth(animatedText);
 		this.dialogHeight = font.getHeight(animatedText);
 		this.frameWidth = dialogWidth + (padding[LEFT] + padding[RIGHT]);
-		this.frameHeight =  dialogHeight + (padding[TOP] + padding[BOTTOM]);
+		this.frameHeight = dialogHeight + (padding[TOP] + padding[BOTTOM]);
 		
-		this.openCloseOptions = new DialogOpenAndCloseOptions(this);
+		this.setPosition(x, y);
+		
 		// Initial size = 0
 		this.setSize(0, 0);
 		this.frame.setSize(0, 0);
 		this.frame.setColor(Color.BLUE);
 		
+		this.openCloseOptions = new DialogOpenAndCloseOptions(this);
 	}
 	
 	/**
@@ -156,6 +166,10 @@ public class Dialog extends TextArea {
 	 */
 	public short getLineBreakIndex() {
 		return lineBreakIndex;
+	}
+	
+	public boolean isClosed() {
+		return openCloseOptions.isClosed();
 	}
 	
 	/**
@@ -197,7 +211,7 @@ public class Dialog extends TextArea {
 		super.act(delta);
 		frame.act(delta);
 		
-		if(openCloseOptions.isCanTick() && !isTimeToCloseDialog()) {
+		if(openCloseOptions.isCanTick() && !isTimeToCloseDialog() && isAllowedToStart) {
 			tick(delta);
 		}
 	}
@@ -228,8 +242,20 @@ public class Dialog extends TextArea {
 	 * @param delta
 	 */
 	public void tick(float delta) {
+		System.out.println("ticking");
 		animatedText.tick(delta);
-	    setText(animatedText.getCurrentText());
+		if(hasHeader()) {
+			setText(header + animatedText.getCurrentText());
+		} else {
+			setText(animatedText.getCurrentText());
+		}
+		
+		if(isTimeLimited()) {
+			timer += delta;
+			if(timer >= animatedText.getTotalTime() + timeToDisplay) {
+				closeDialog();
+			}
+		}
 	}
 	
 	
@@ -239,6 +265,7 @@ public class Dialog extends TextArea {
 	 */
 	public void openDialog() {
 		openCloseOptions.openDialog();
+		this.isOpened = true;
 	}
 	
 	/**
@@ -295,6 +322,75 @@ public class Dialog extends TextArea {
 	 */
 	public float getDialogHeight() {
 		return dialogHeight;
+	}
+	
+	/** 
+	 * Let's us find out if this dialog should be openened withing a limited amount of time
+	 * @return true if {@link #timeToDisplay} > 0 
+	 */
+	public boolean isTimeLimited() {
+		return timeToDisplay > 0;
+	}
+	
+	/**
+	 * @return the amount of time this dialog should be opened, if 0 or less it means this dialog is NOT timebased
+	 */
+	public float getTimeToDisplay() {
+		return timeToDisplay;
+	}
+	
+	/**
+	 * Set how long this dialog should be used
+	 * @param timeToDisplay the time to display this dialog in millis
+	 */
+	public void setTimeToDisplay(float timeToDisplay) {
+		this.timeToDisplay = timeToDisplay;
+	}
+	
+	/**
+	 * Set the header to use e.g the text on top that will not be animated
+	 * @param header the header text
+	 */
+	public void setHeader(String header) {
+		this.header = header;
+	}
+	
+	/**
+	 * @return the header text
+	 */
+	public String getHeader() {
+		return header;
+	}
+	
+	/**
+	 * @return wheather or not this dialog has a header meaning {@link #header} != null
+	 */
+	public boolean hasHeader() {
+		return header != null;
+	}
+	
+	public void addAdditionalLineBreaks(byte amount) {
+		this.dialogHeight = font.getHeight(animatedText, amount);
+		this.frameHeight = dialogHeight + (padding[TOP] + padding[BOTTOM]);
+		this.openCloseOptions.updateAmountOfLineBreaks();
+	}
+	
+	public void setAllowedToStart(boolean isAllowedToStart) {
+		this.isAllowedToStart = isAllowedToStart;
+	}
+	
+	public boolean isAllowedToStart() {
+		return isAllowedToStart;
+	}
+	
+	public boolean isOpened() {
+		return isOpened;
+	}
+	
+	@Override
+	public void setVisible(boolean visible) {
+		super.setVisible(visible);
+		this.frame.setVisible(visible);
 	}
 	
 }

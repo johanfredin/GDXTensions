@@ -1,5 +1,6 @@
-package se.fredin.gdxtensions.font.xmldialog;
+package se.fredin.gdxtensions.xml;
 
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.GdxRuntimeException;
 import com.badlogic.gdx.utils.XmlReader.Element;
 
@@ -8,11 +9,15 @@ public class XMLDialog {
 	private float timeToDisplay;
 	private String header;
 	private String text;
+	private float x;
+	private float y;
 	
 	public XMLDialog(Element element) {
 		this.header = getNameAttributeIfAvailable(element);
 		this.timeToDisplay = getTimeToDisplayIfAvailable(element);
 		this.text = element.getText();
+		this.x = element.getFloat("x", 300.0f);
+		this.y = element.getFloat("y", 200.0f);
 	}
 	
 	private String getNameAttributeIfAvailable(Element element) {
@@ -49,7 +54,20 @@ public class XMLDialog {
 		this.header = name;
 	}
 	
-	public String getHeader() {
+	/**
+	 * Get the header
+	 * @param includeDottedLine if true a dotted underline will be included 
+	 * @return
+	 */
+	public String getHeader(boolean includeDottedLine) {
+		if(includeDottedLine) {
+			char[] dottedLine = new char[header.length()];
+			for(byte i = 0; i < dottedLine.length; i++) {
+				dottedLine[i] = '-';
+			}
+			String underline = new String(dottedLine);
+			return header + "\n" + underline + "\n";
+		}
 		return header;
 	}
 	
@@ -63,6 +81,22 @@ public class XMLDialog {
 	
 	public boolean isTimeLimited() {
 		return timeToDisplay > 0;
+	}
+	
+	public boolean hasHeader() {
+		return header != null;
+	}
+	
+	public float getX() {
+		return x;
+	}
+	
+	public float getY() {
+		return y;
+	}
+	
+	public Vector2 getPosition() {
+		return new Vector2(x, y);
 	}
 	
 	/**

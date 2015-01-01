@@ -23,6 +23,7 @@ public class AnimatedText {
 	private String currentText;
 	private float timePerCharacter;
 	private float timer;
+	private float totalTime;
 	private short index;
 	private float counter;
 	private char currentCharacter;
@@ -95,6 +96,7 @@ public class AnimatedText {
 		this.amountOfLineBreaks = formatter.getAmountOfLineBreaks();
 		this.currentText = "";
 		this.lineBreakIndex = lineBreakIndex;
+		this.totalTime = timePerCharacter * text.length();
 	}
 
 	/**
@@ -201,5 +203,9 @@ public class AnimatedText {
 	
 	public byte getAmountOfLineBreaks() {
 		return amountOfLineBreaks;
+	}
+	
+	public float getTotalTime() {
+		return totalTime;
 	}
 }

@@ -1,7 +1,6 @@
 package se.fredin.gdxtensions.screen.ingame;
 
 import se.fredin.gdxtensions.assetmanagement.Assets;
-import se.fredin.gdxtensions.level.LevelBase;
 import se.fredin.gdxtensions.screen.BaseScreen;
 import se.fredin.gdxtensions.utils.lang.LanguageBasedSkin;
 
@@ -18,6 +17,7 @@ import com.badlogic.gdx.scenes.scene2d.actions.RepeatAction;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Disposable;
 import com.badlogic.gdx.utils.Scaling;
 import com.badlogic.gdx.utils.viewport.FillViewport;
@@ -33,7 +33,6 @@ public abstract class InGameScreen implements Disposable {
 	public static boolean isPaused;
 
 	protected LanguageBasedSkin skin;
-	protected LevelBase levelBase;
 	protected Stage stage;
 	
 	protected Image imageToUseForFlashingEffect;
@@ -48,9 +47,11 @@ public abstract class InGameScreen implements Disposable {
 	 * from the stage AND our customized back button handler.
 	 * @param levelBase the levelBase this dialog will be operating on
 	 */
-	public InGameScreen(LevelBase levelBase, String packFilePath) {
-		this.levelBase = levelBase;
-		
+	public InGameScreen(String packFilePath) {
+		this((TextureAtlas) Assets.getInstance().get(packFilePath));
+	}
+	
+	public InGameScreen(TextureAtlas atlas) {
 		Vector2 size = Scaling.fill.apply(Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), BaseScreen.viewportWidth, BaseScreen.viewportHeight);
 		this.stage = new Stage(new FillViewport(size.x, size.y));
 		this.stage.getViewport().update(Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), true);
@@ -58,16 +59,10 @@ public abstract class InGameScreen implements Disposable {
 		this.worldHeight = stage.getViewport().getWorldHeight();
 		this.worldWidth = stage.getViewport().getWorldWidth();
 		
-		TextureAtlas atlas = (TextureAtlas) Assets.getInstance().get(packFilePath);
 		this.skin = new LanguageBasedSkin(atlas);
-		
-		// We only instantiate the white canvas image here, it's up to the sub-classes to handle it 
-		// the way they see fit.
-//		this.imageToUseForFlashingEffect = new Image(skin.getDrawable("whiterect"));
 		
 		// We want to handle the back button differently in pause dialog!
 		Gdx.input.setInputProcessor(this.stage);
-
 	}
 
 	/**
@@ -124,6 +119,16 @@ public abstract class InGameScreen implements Disposable {
 	 * @param actors the actors we want to add to the stage
 	 */
 	protected void addActorsToStage(Actor...actors) {
+		for(Actor actor : actors) {
+			stage.addActor(actor);
+		}
+	}
+	
+	/**
+	 * Adds a group of actors to the stage at once
+	 * @param actors the actors we want to add to the stage
+	 */
+	protected void addActorsToStage(Array<Actor> actors) {
 		for(Actor actor : actors) {
 			stage.addActor(actor);
 		}

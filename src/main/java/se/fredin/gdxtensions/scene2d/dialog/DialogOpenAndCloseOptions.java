@@ -28,6 +28,7 @@ public class DialogOpenAndCloseOptions {
 	private float duration;
 	private boolean isTimeToCloseDialog;
 	private boolean canTick;
+	private boolean isClosed;
 	
 	/**
 	 * Construct a new dialog with no {@link Interpolation} and {@link Dialog#defaultDuration}
@@ -71,8 +72,13 @@ public class DialogOpenAndCloseOptions {
 		this.frameWidth = dialog.getFrameWidth();
 		this.frameHeight = dialog.getFrameHeight();
 		this.interpolation = interpolation;
-		this.openCloseAnimation = OpenCloseAnimation.QUAD_WIDTH_FIRST;
+		this.openCloseAnimation = OpenCloseAnimation.QUAD_EVEN;
 		this.duration = duration;
+	}
+	
+	public void updateAmountOfLineBreaks() {
+		this.height = dialog.getDialogHeight();
+		this.frameHeight = dialog.getFrameHeight();
 	}
 	
 	/**
@@ -289,6 +295,10 @@ public class DialogOpenAndCloseOptions {
 		};
 	}
 	
+	public boolean isClosed() {
+		return isClosed;
+	}
+	
 	private Runnable closeRunnable() {
 		return new Runnable() {
 			@Override
@@ -297,6 +307,7 @@ public class DialogOpenAndCloseOptions {
 				if(stage != null) {
 					stage.getActors().removeValue(dialog, true);
 					stage.getActors().removeValue(frame, true);
+					isClosed = true;
 					LogUtils.log("Dialog succesfully removed from stage");
 				}
 			}
