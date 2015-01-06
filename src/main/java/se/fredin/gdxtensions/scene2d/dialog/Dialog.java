@@ -54,6 +54,7 @@ public class Dialog extends TextArea {
 	private boolean isAllowedToStart;
 	private boolean isOpened;
 	
+	
 	/**
 	 * Create a new dialog with default settings for text animation speed, linebreak index, linebreak settings and padding.
 	 * @param text the text to use for this dialog box
@@ -211,7 +212,7 @@ public class Dialog extends TextArea {
 		super.act(delta);
 		frame.act(delta);
 		
-		if(openCloseOptions.isCanTick() && !isTimeToCloseDialog() && isAllowedToStart) {
+		if(openCloseOptions.isCanTick() && !isTimeToCloseDialog()) {
 			tick(delta);
 		}
 	}
@@ -242,7 +243,6 @@ public class Dialog extends TextArea {
 	 * @param delta
 	 */
 	public void tick(float delta) {
-		System.out.println("ticking");
 		animatedText.tick(delta);
 		if(hasHeader()) {
 			setText(header + animatedText.getCurrentText());
@@ -264,8 +264,14 @@ public class Dialog extends TextArea {
 	 * and {@link Dialog#defaultDuration} if no values for these have been previously set.
 	 */
 	public void openDialog() {
-		openCloseOptions.openDialog();
-		this.isOpened = true;
+		if(isAllowedToStart && !isOpened) {
+			openCloseOptions.openDialog();
+			this.isOpened = true;
+		}
+	}
+	
+	public boolean isOpened() {
+		return isOpened;
 	}
 	
 	/**
@@ -381,10 +387,6 @@ public class Dialog extends TextArea {
 	
 	public boolean isAllowedToStart() {
 		return isAllowedToStart;
-	}
-	
-	public boolean isOpened() {
-		return isOpened;
 	}
 	
 	@Override

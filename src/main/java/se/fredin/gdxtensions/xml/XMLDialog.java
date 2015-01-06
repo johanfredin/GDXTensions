@@ -6,40 +6,18 @@ import com.badlogic.gdx.utils.XmlReader.Element;
 
 public class XMLDialog {
 
-	private float timeToDisplay;
 	private String header;
 	private String text;
+	private float timeToDisplay;
 	private float x;
 	private float y;
 	
 	public XMLDialog(Element element) {
-		this.header = getNameAttributeIfAvailable(element);
-		this.timeToDisplay = getTimeToDisplayIfAvailable(element);
+		this.header = element.getAttribute("header", null);
+		this.timeToDisplay = element.getFloatAttribute("timeToDisplay", 0.0f);
 		this.text = element.getText();
-		this.x = element.getFloat("x", 300.0f);
-		this.y = element.getFloat("y", 200.0f);
-	}
-	
-	private String getNameAttributeIfAvailable(Element element) {
-		try {
-			return element.getAttribute("header");
-		} catch(GdxRuntimeException ex) {
-			//TODO: Replace hardcoded strings with variables
-			System.err.println("No attribute with name=" + "header");
-		}
-		return null;
-	}
-	
-	private float getTimeToDisplayIfAvailable(Element element) {
-		try {
-			return element.getFloatAttribute("timeToDisplay");
-		} catch(GdxRuntimeException ex) {
-			//TODO: Replace hardcoded strings with variables
-			System.err.println("No attribute with name=" + "timeToDisplay");
-		} catch(NumberFormatException ex) {
-			System.err.println("Could not parse attribute timeToDisplay " + ex.getMessage());
-		}
-		return 0.0f;
+		this.x = getPosOrNegativeOneValue(element, 'x');
+		this.y = getPosOrNegativeOneValue(element, 'y');
 	}
 	
 	public void setTimeToDisplay(float timeToDisplay) {
@@ -52,6 +30,10 @@ public class XMLDialog {
 	
 	public void setHeader(String name) {
 		this.header = name;
+	}
+	
+	public boolean hasPositionSet() {
+		return this.x > -1.0f && this.y > -1.0f;
 	}
 	
 	/**
@@ -118,6 +100,21 @@ public class XMLDialog {
 	@Override
 	public String toString() {
 		return "Name=" + header + "\nText=" + text + "\ntime=" + timeToDisplay;
+	}
+	
+	private float getPosOrNegativeOneValue(Element element, char position) {
+		try {
+			String posAttributes[] = element.getAttribute("pos").split(",");
+			switch(position) {
+			case 'x':
+				return Float.parseFloat(posAttributes[0]);
+			case 'y':
+				return Float.parseFloat(posAttributes[1]);
+			}
+		} catch(GdxRuntimeException ex) {
+			System.err.println("Element " + element.getName() + " does not have the attribute pos");
+		}
+		return -1f;
 	}
 	
 }

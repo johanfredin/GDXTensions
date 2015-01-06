@@ -15,7 +15,7 @@ import se.fredin.gdxtensions.utils.text.OutputFormatter.LineBreakSettings;
 public class AnimatedText {
 
 	/** The default time we want each character to take before displaying the next one */
-	public static final float DEFAULT_TIME_PER_CHARACTER = .05f;
+	public static final float DEFAULT_TIME_PER_CHARACTER = .005f;
 	/** Sample text used when no text is provided */
 	public static final String DEFAULT_TEXT = "This class lets you output letters in an animated fashion!";
 	
