@@ -130,6 +130,7 @@ public class Dialog extends TextArea {
 		this.frame.setColor(Color.BLUE);
 		
 		this.openCloseOptions = new DialogOpenAndCloseOptions(this);
+	
 	}
 	
 	/**
@@ -244,16 +245,19 @@ public class Dialog extends TextArea {
 	 */
 	public void tick(float delta) {
 		animatedText.tick(delta);
+		String currentText = animatedText.getCurrentText();
 		if(hasHeader()) {
-			setText(header + animatedText.getCurrentText());
+			setText(header + currentText);
 		} else {
-			setText(animatedText.getCurrentText());
+			setText(currentText);
 		}
 		
 		if(isTimeLimited()) {
-			timer += delta;
-			if(timer >= animatedText.getTotalTime() + timeToDisplay) {
-				closeDialog();
+			if(animatedText.finishedAnimating(currentText)) {
+				timer += delta;
+				if(timer >= timeToDisplay) {
+					closeDialog();
+				}
 			}
 		}
 	}
@@ -262,6 +266,7 @@ public class Dialog extends TextArea {
 	/**
 	 * Makes the dialog open. Will use the default {@link OpenCloseAnimation#QUAD_EVEN}
 	 * and {@link Dialog#defaultDuration} if no values for these have been previously set.
+	 * The dialog will NOT open more than once and if {@link #isAllowedToStart()} is <b>true</b>
 	 */
 	public void openDialog() {
 		if(isAllowedToStart && !isOpened) {
@@ -270,6 +275,9 @@ public class Dialog extends TextArea {
 		}
 	}
 	
+	/**
+	 * @return whether or not this dialog has been opened
+	 */
 	public boolean isOpened() {
 		return isOpened;
 	}
@@ -369,22 +377,35 @@ public class Dialog extends TextArea {
 	}
 	
 	/**
-	 * @return wheather or not this dialog has a header meaning {@link #header} != null
+	 * @return whether or not this dialog has a header meaning {@link #header} != null
 	 */
 	public boolean hasHeader() {
 		return header != null;
 	}
 	
+	/**
+	 * Sometimes we will need additional line breaks to make the dialog bigger. 
+	 * When there is a header involved this is mandatory or the text will not be displayed
+	 * correctly.
+	 * @param amount the amount of extra line breaks
+	 */
 	public void addAdditionalLineBreaks(byte amount) {
 		this.dialogHeight = font.getHeight(animatedText, amount);
 		this.frameHeight = dialogHeight + (padding[TOP] + padding[BOTTOM]);
 		this.openCloseOptions.updateAmountOfLineBreaks();
 	}
 	
+	/**
+	 * Set whether or not this dialog can start
+	 * @param isAllowedToStart
+	 */
 	public void setAllowedToStart(boolean isAllowedToStart) {
 		this.isAllowedToStart = isAllowedToStart;
 	}
 	
+	/**
+	 * @return whether or not this dialog is allowed to start
+	 */
 	public boolean isAllowedToStart() {
 		return isAllowedToStart;
 	}

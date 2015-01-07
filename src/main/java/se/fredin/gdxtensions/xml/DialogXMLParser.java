@@ -10,6 +10,12 @@ import com.badlogic.gdx.utils.GdxRuntimeException;
 import com.badlogic.gdx.utils.XmlReader;
 import com.badlogic.gdx.utils.XmlReader.Element;
 
+/**
+ * This class takes an xml file that will contain all dialogs for a level and parses it into a {@link Map}. Please refer to the documentation of
+ * how this xmlfile needs to be built or check out the existing "examples.xml" file. Parsing is made using libGDX's {@link XmlReader} and {@link Element}
+ * @author burtburgenstein
+ *
+ */
 public class DialogXMLParser {
 
 	private final String LEVEL_DIALOGS = "level-dialogs";
@@ -17,6 +23,10 @@ public class DialogXMLParser {
 	
 	private Map<String, XMLDialogs> dialogElements;
 	
+	/**
+	 * Constructs a new {@link DialogXMLParser} passing in the path to the xml file that should be parsed
+	 * @param path the path to the xmlfile that should be parsed
+	 */
 	public DialogXMLParser(String path) {
 		this.dialogElements = new HashMap<String, XMLDialogs>();
 		XmlReader reader = new XmlReader();
@@ -60,6 +70,11 @@ public class DialogXMLParser {
 		return sb.toString();
 	}
 	
+	/**
+	 * Retrieve the {@link XMLDialogs} passing in the corresponding key
+	 * @param key the key to this xml dialogs
+	 * @return the {@link XMLDialogs} 
+	 */
 	public XMLDialogs getXMLDialog(String key) {
 		return dialogElements.get(key);
 	}

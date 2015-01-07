@@ -9,14 +9,29 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField.TextFieldStyle;
 import com.badlogic.gdx.utils.Array;
 
+/**
+ * This handles an {@link Array} of {@link Dialog} objects. 
+ * The objects are created from an {@link XMLDialogs} objects.
+ * @author Johan Fredin
+ *
+ */
 public class Dialogs extends InGameScreen {
 
 	private Array<Dialog> dialogs;
 	private AnimatedBitmapFont font;
 	
+	/**
+	 * Construct a new {@link Dialogs} object
+	 * @param xmlDialogs the {@link XMLDialogs} from the xml file
+	 * @param atlas the {@link TextureAtlas} the {@link Stage} will use. Since this class 
+	 * extends {@link InGameScreen} it is required
+	 * @param font the {@link AnimatedBitmapFont} to use
+	 * @param color the {@link Color} to use for the dialogs
+	 */
 	public Dialogs(XMLDialogs xmlDialogs, TextureAtlas atlas, AnimatedBitmapFont font, Color color) {
 		super(atlas);
 		this.font = font;
@@ -24,6 +39,14 @@ public class Dialogs extends InGameScreen {
 		this.dialogs = this.populateFromXML(xmlDialogs, style);
 	}
 	
+	/**
+	 * Construct a new {@link Dialogs} object
+	 * @param xmlDialogs the {@link XMLDialogs} from the xml file
+	 * @param pathToPackFile the path to the packfile that the {@link TextureAtlas} will use. Since this class 
+	 * extends {@link InGameScreen} it is required
+	 * @param pathToFont the path to the {@link AnimatedBitmapFont} to use
+	 * @param color the {@link Color} to use for the dialogs
+	 */
 	public Dialogs(XMLDialogs xmlDialogs, String pathToPackFile, String pathToFont, Color color) {
 		super(pathToPackFile);
 		this.font = new AnimatedBitmapFont(Gdx.files.internal(pathToFont));
@@ -31,17 +54,30 @@ public class Dialogs extends InGameScreen {
 		this.dialogs = this.populateFromXML(xmlDialogs, style);
 	}
 	
+	/**
+	 * Will open a dialog at a given index
+	 * @param index the index of the list
+	 */
 	public void openDialog(int index) {
 		Dialog dialog = this.dialogs.get(index);
 		dialog.openDialog();
 	}
 	
+	/**
+	 * Sets the position of all dialogs, not a good approach unless you want them all at the same place
+	 * @param position the {@link Vector2} object holding the position
+	 */
 	public void setPosition(Vector2 position) {
 		for(Dialog dialog : dialogs) {
 			dialog.setPosition(position.x, position.y);
 		}
 	}
 	
+	/**
+	 * Sets the position of all dialogs, not a good approach unless you want them all at the same place
+	 * @param x the x position
+	 * @param y the y position
+	 */
 	public void setPosition(float x, float y) {
 		for(Dialog dialog : dialogs) {
 			dialog.setPosition(x, y);
@@ -57,9 +93,6 @@ public class Dialogs extends InGameScreen {
 				if(i == 0 && !dialog.isAllowedToStart()) {
 					// If index is 0 we know we can start this dialog
 					dialog.setAllowedToStart(true);
-				}
-				
-				if(dialog.isAllowedToStart() && !dialog.isOpened()) {
 					dialog.openDialog();
 				}
 				

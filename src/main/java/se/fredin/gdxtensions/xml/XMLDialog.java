@@ -1,39 +1,34 @@
 package se.fredin.gdxtensions.xml;
 
-import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.utils.GdxRuntimeException;
 import com.badlogic.gdx.utils.XmlReader.Element;
 
-public class XMLDialog {
+/**
+ * This class corresponds to the "dialog" elements of the xml.  
+ * @author burtburgenstein
+ *
+ */
+public class XMLDialog extends XMLCommons {
 
 	private String header;
 	private String text;
 	private float timeToDisplay;
-	private float x;
-	private float y;
 	
+	/**
+	 * Create a new {@link XMLDialog}
+	 * @param element the {@link Element} from the xml, in this case it will be the dialog element
+	 */
 	public XMLDialog(Element element) {
+		super(element);
 		this.header = element.getAttribute("header", null);
 		this.timeToDisplay = element.getFloatAttribute("timeToDisplay", 0.0f);
 		this.text = element.getText();
-		this.x = getPosOrNegativeOneValue(element, 'x');
-		this.y = getPosOrNegativeOneValue(element, 'y');
 	}
 	
-	public void setTimeToDisplay(float timeToDisplay) {
-		this.timeToDisplay = timeToDisplay;
-	}
-	
+	/**
+	 * @return the time this dialog should be played (if 0 or less this dialog will not be time limited)
+	 */
 	public float getTimeToDisplay() {
 		return timeToDisplay;
-	}
-	
-	public void setHeader(String name) {
-		this.header = name;
-	}
-	
-	public boolean hasPositionSet() {
-		return this.x > -1.0f && this.y > -1.0f;
 	}
 	
 	/**
@@ -53,32 +48,25 @@ public class XMLDialog {
 		return header;
 	}
 	
-	public void setText(String text) {
-		this.text = text;
-	}
-	
+	/**
+	 * @return the text from the element
+	 */
 	public String getText() {
 		return text;
 	}
 	
+	/**
+	 * @return whether or not this text is time limited
+	 */
 	public boolean isTimeLimited() {
 		return timeToDisplay > 0;
 	}
 	
+	/**
+	 * @return whether or not this element has a header attribute
+	 */
 	public boolean hasHeader() {
 		return header != null;
-	}
-	
-	public float getX() {
-		return x;
-	}
-	
-	public float getY() {
-		return y;
-	}
-	
-	public Vector2 getPosition() {
-		return new Vector2(x, y);
 	}
 	
 	/**
@@ -100,21 +88,6 @@ public class XMLDialog {
 	@Override
 	public String toString() {
 		return "Name=" + header + "\nText=" + text + "\ntime=" + timeToDisplay;
-	}
-	
-	private float getPosOrNegativeOneValue(Element element, char position) {
-		try {
-			String posAttributes[] = element.getAttribute("pos").split(",");
-			switch(position) {
-			case 'x':
-				return Float.parseFloat(posAttributes[0]);
-			case 'y':
-				return Float.parseFloat(posAttributes[1]);
-			}
-		} catch(GdxRuntimeException ex) {
-			System.err.println("Element " + element.getName() + " does not have the attribute pos");
-		}
-		return -1f;
 	}
 	
 }

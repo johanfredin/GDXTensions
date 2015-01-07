@@ -2,7 +2,7 @@ package se.fredin.gdxtensions.utils.text;
 
 
 /**
- * Lets us format the output of a labels text to fix into a given dialog etc.
+ * Lets us format the output of a text to fix into a given dialog etc.
  * @author Johan Fredin
  *
  */
