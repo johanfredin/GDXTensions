@@ -56,6 +56,7 @@ public class Dialog extends TextArea {
 	
 	private boolean isAllowedToStart;
 	private boolean isOpened;
+	private boolean isTriggerForOtherDialogs;
 	
 	
 	/**
@@ -133,7 +134,6 @@ public class Dialog extends TextArea {
 		this.frame.setColor(Color.BLUE);
 		
 		this.openCloseOptions = new DialogOpenAndCloseOptions(this);
-	
 	}
 	
 	/**
@@ -265,10 +265,6 @@ public class Dialog extends TextArea {
 		animatedText.tick(delta);
 		String currentText = animatedText.getCurrentText();
 		
-		if(baseInput.isJumpButtonPressed()) {
-			System.out.println("jump button pressed in Dialog class yallS");
-		}
-		
 		if(hasHeader()) {
 			setText(header + currentText);
 		} else {
@@ -281,6 +277,11 @@ public class Dialog extends TextArea {
 				if(timer >= timeToDisplay) {
 					closeDialog();
 				}
+			}
+		} else {
+			// If the dialog is not time limited it means we can close it with a key press
+			if(baseInput.isInteractButtonPressed() && animatedText.finishedAnimating(currentText)) {
+				closeDialog();
 			}
 		}
 	}
@@ -431,6 +432,25 @@ public class Dialog extends TextArea {
 	 */
 	public boolean isAllowedToStart() {
 		return isAllowedToStart;
+	}
+	
+	/**
+	 * If we have more than one {@link Dialog} objects in a list we need to know which one will act as a trigger.
+	 * Meaning that if this one is a trigger it can be opened and closed by user input whereas the following dialogs
+	 * will be opened automatically in order and only be able to be closed by user input (unless they are time limited in
+	 * which they will be closed automatically)
+	 * @return whether or not this dialog is a trigger e.g can be opened by user input
+	 */
+	public boolean isTriggerForOtherDialogs() {
+		return isTriggerForOtherDialogs;
+	}
+	
+	/**
+	 * Set whether or not this dialog is a trigger e.g can be opened by user input
+	 * @param isTriggerForOtherDialogs
+	 */
+	public void setTriggerForOtherDialogs(boolean isTriggerForOtherDialogs) {
+		this.isTriggerForOtherDialogs = isTriggerForOtherDialogs;
 	}
 	
 	@Override

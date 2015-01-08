@@ -25,6 +25,7 @@ public class Dialogs extends InGameScreen {
 	private Array<Dialog> dialogs;
 	private AnimatedBitmapFont font;
 	private BaseInput baseInput;
+	private boolean hasBeenTriggered;
 	
 	/**
 	 * Construct a new {@link Dialogs} object
@@ -105,6 +106,13 @@ public class Dialogs extends InGameScreen {
 			dialog.setPosition(x, y);
 		}
 	}
+
+	/**
+	 * @return whether or not the first (or only) dialog has been triggered either by user input or automatically
+	 */
+	public boolean isHasBeenTriggered() {
+		return hasBeenTriggered;
+	}
 	
 	@Override
 	public void tick(float deltaTime) {
@@ -112,10 +120,10 @@ public class Dialogs extends InGameScreen {
 		if(dialogs.size > 0) {
 			for(short i = 0; i < dialogs.size; i++) {
 				Dialog dialog = dialogs.get(i);
-				if(i == 0 && !dialog.isAllowedToStart()) {
-					// If index is 0 we know we can start this dialog
+				if(canBeTriggered(dialog, i)) {
 					dialog.setAllowedToStart(true);
 					dialog.openDialog();
+					hasBeenTriggered = true;
 				}
 				
 				if(dialogs.get(i).isClosed()) {
@@ -125,6 +133,20 @@ public class Dialogs extends InGameScreen {
 		}
 	}
 	
+	/**
+	 * If the dialog can be triggered by user input, if the dialog is time limited or if this dialog is
+	 * a following dialog in a sequence then this dialog should be able to start
+	 * @param dialog the dialog to check
+	 * @param index the index in the list
+	 * @return whether or not this dialog can be triggered
+	 */
+	public boolean canBeTriggered(Dialog dialog, short index) {
+		return index == 0 && (hasInput() && dialog.isTriggerForOtherDialogs() && baseInput.isInteractButtonPressed()) || dialog.isTimeLimited() || hasBeenTriggered;
+	}
+	
+	/**
+	 * @return whether or not this class has user input set
+	 */	
 	public boolean hasInput() {
 		return baseInput != null;
 	}
@@ -133,6 +155,7 @@ public class Dialogs extends InGameScreen {
 		Array<Dialog> dialogs = new Array<Dialog>();
 		float parentX = xmlDialogs.getX();
 		float parentY = xmlDialogs.getY();
+		short i = 0;
 		for(XMLDialog xmlDialog : xmlDialogs.getDialogElements()) {
 			String text = xmlDialog.getText();
 			float x = parentX;
@@ -150,8 +173,12 @@ public class Dialogs extends InGameScreen {
 			}
 			
 			if(this.hasInput()) {
-				System.out.println("has input daddy");
 				dialog.setBaseInput(baseInput);
+			}
+			
+			if(i == 0) {
+				// If i is 0 that means that this will be the first dialog so it is in fact a trigger
+				dialog.setTriggerForOtherDialogs(true);
 			}
 			
 			this.stage.addActor(dialog);
@@ -159,7 +186,6 @@ public class Dialogs extends InGameScreen {
 		}
 		return dialogs;
 	}
-	
 	
 	
 }

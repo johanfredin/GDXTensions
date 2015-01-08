@@ -19,11 +19,12 @@ public class BaseInput implements InputProcessor {
 	protected boolean upButtonPressed;
 	protected boolean downButtonPressed;
 	protected boolean shootButtonPressed;
+	protected boolean interactButtonPressed;
 	protected boolean menuButtonPressed;
 	protected boolean mapButtonPressed;
 	protected boolean pauseButtonPressed;
-	protected boolean isCrouchButtonPressed;
-	protected boolean isJumpButtonPressed;
+	protected boolean crouchButtonPressed;
+	protected boolean jumpButtonPressed;
 	
 	protected short left = Keys.LEFT;
 	protected short right = Keys.RIGHT;
@@ -31,6 +32,7 @@ public class BaseInput implements InputProcessor {
 	protected short down = Keys.DOWN;
 	protected short shoot = Keys.CONTROL_LEFT;
 	protected short exit = Keys.ESCAPE;
+	protected short interact = Keys.E;
 	protected short menu = Keys.ALT_LEFT;
 	protected short pause = Keys.P;
 	protected short map = Keys.M;
@@ -74,11 +76,15 @@ public class BaseInput implements InputProcessor {
 	}
 
 	public boolean isCrouchButtonPressed() {
-		return isCrouchButtonPressed;
+		return crouchButtonPressed;
 	}
 
 	public boolean isJumpButtonPressed() {
-		return isJumpButtonPressed;
+		return jumpButtonPressed;
+	}
+	
+	public boolean isInteractButtonPressed() {
+		return interactButtonPressed;
 	}
 	
 	@Override
@@ -100,14 +106,15 @@ public class BaseInput implements InputProcessor {
 		} if(keycode == exit) {
 			exitButtonPressed = true;
 		} if(keycode == crouch) {
-			isCrouchButtonPressed = true;
+			crouchButtonPressed = true;
 		} if(keycode == menu) {
 			menuButtonPressed = true;
 		} if(keycode == jump) {
-			isJumpButtonPressed = true;
-		} else {
-			return false;
-		}
+			jumpButtonPressed = true;
+		} if(keycode == interact) {
+			interactButtonPressed = true;
+		} 
+		
 		return false;
 	}
 	
@@ -130,15 +137,16 @@ public class BaseInput implements InputProcessor {
 		} if(keycode == exit) {
 			exitButtonPressed = false;
 		} if(keycode == crouch) {
-			isCrouchButtonPressed = false;
+			crouchButtonPressed = false;
 		} if(keycode == menu) {
 			menuButtonPressed = false;
 		} if(keycode == jump) {
-			isJumpButtonPressed = false;
-		} else {
-			return false;
+			jumpButtonPressed = false;
+		} if(keycode == interact) {
+			interactButtonPressed = false;
 		}
-		return true;
+		
+		return false;
 	}
 
 	@Override
