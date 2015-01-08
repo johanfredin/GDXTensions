@@ -123,7 +123,11 @@ public class AnimatedBitmapFont extends BitmapFont {
 	 * @param animatedText the {@link AnimatedText}
 	 */
 	public void drawAnimatedText(SpriteBatch batch, AnimatedText animatedText) {
-		drawAnimatedText(batch, animatedText, x, y);
+		if(isMultiLine) {
+			drawMultiLine(batch, animatedText.getCurrentText(), x, y);
+		} else {
+			draw(batch, animatedText.getCurrentText(), x, y);
+		}
 	}
 	
 	/**
@@ -141,42 +145,86 @@ public class AnimatedBitmapFont extends BitmapFont {
 		}
 	}
 	
+	/**
+	 * Gets the correct width using a {@link BitmapFontBoundsCalculator}
+	 * @param animatedText the {@link AnimatedText} to use for calculation
+	 * @return the correct width
+	 */
 	public float getWidth(AnimatedText animatedText) {
 		return this.bitmapFontBoundsCalculator.getCalculatedWidth(animatedText);
 	}
 	
+	/**
+	 * Gets the correct height using a {@link BitmapFontBoundsCalculator}
+	 * @param animatedText the {@link AnimatedText} to use for calculation
+	 * @return the correct height
+	 */
 	public float getHeight(AnimatedText animatedText) {
 		return this.bitmapFontBoundsCalculator.getCalculatedHeight(animatedText);
 	}
 	
+	/**
+	 * Gets the correct height using a {@link BitmapFontBoundsCalculator}.
+	 * Use this method instead of the regular {@link #getHeight(AnimatedText)}
+	 * if you have a text from an xml containing a header field!
+	 * @param animatedText the {@link AnimatedText} to use for calculation
+	 * @param amountOfAdditionalLineBreaks the amount of extra line breaks to take into consideration.
+	 * (when a header is involved it is usually 3)
+	 * @return the correct height
+	 */
 	public float getHeight(AnimatedText animatedText, byte amountOfAdditionalLineBreaks) {
 		return this.bitmapFontBoundsCalculator.getCalculatedHeight(animatedText, amountOfAdditionalLineBreaks);
 	}
 	
+	/**
+	 * Adds an optional amount of line breaks
+	 * @param amount the amount of line breaks to add
+	 */
 	public void addLineBreaks(byte amount) {
 		this.bitmapFontBoundsCalculator.addLinebreaks(amount);
 	}
 	
+	/**
+	 * Set the x position
+	 * @param x the x position
+	 */
 	public void setX(float x) {
 		this.x = x;
 	}
 	
+	/**
+	 * Set the y position
+	 * @param y the y position
+	 */
 	public void setY(float y) {
 		this.y = y;
 	}
 	
+	/**
+	 * @return the x position
+	 */
 	public float getX() {
 		return x;
 	}
 	
+	/**
+	 * @return the y position
+	 */
 	public float getY() {
 		return y;
 	}
 	
+	/**
+	 * Set whether or not to use multiple lines for drawing
+	 * @param isMultiLine
+	 */
 	public void setMultiLine(boolean isMultiLine) {
 		this.isMultiLine = isMultiLine;
 	}
 	
+	/**
+	 * @return whether or not multiple lines are used when drawing
+	 */
 	public boolean isMultiLine() {
 		return isMultiLine;
 	}

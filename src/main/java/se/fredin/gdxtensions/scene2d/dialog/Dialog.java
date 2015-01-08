@@ -1,6 +1,7 @@
 package se.fredin.gdxtensions.scene2d.dialog;
 
 import se.fredin.gdxtensions.font.AnimatedBitmapFont;
+import se.fredin.gdxtensions.input.BaseInput;
 import se.fredin.gdxtensions.scene2d.dialog.DialogOpenAndCloseOptions.OpenCloseAnimation;
 import se.fredin.gdxtensions.utils.text.AnimatedText;
 import se.fredin.gdxtensions.utils.text.OutputFormatter;
@@ -26,6 +27,8 @@ public class Dialog extends TextArea {
 	public static float[] defaultPaddingSettings = {defaultPadding, defaultPadding, defaultPadding, defaultPadding};
 	/** The default duration of the frame animation */
 	public static float defaultDuration = .66f;
+	
+	private BaseInput baseInput;
 	
 	private float[] padding;
 	
@@ -131,6 +134,21 @@ public class Dialog extends TextArea {
 		
 		this.openCloseOptions = new DialogOpenAndCloseOptions(this);
 	
+	}
+	
+	/**
+	 * Set the {@link BaseInput} you wish to use
+	 * @param baseInput
+	 */
+	public void setBaseInput(BaseInput baseInput) {
+		this.baseInput = baseInput;
+	}
+	
+	/**
+	 * @return the {@link BaseInput} used for this dialog
+	 */
+	public BaseInput getBaseInput() {
+		return baseInput;
 	}
 	
 	/**
@@ -246,6 +264,11 @@ public class Dialog extends TextArea {
 	public void tick(float delta) {
 		animatedText.tick(delta);
 		String currentText = animatedText.getCurrentText();
+		
+		if(baseInput.isJumpButtonPressed()) {
+			System.out.println("jump button pressed in Dialog class yallS");
+		}
+		
 		if(hasHeader()) {
 			setText(header + currentText);
 		} else {

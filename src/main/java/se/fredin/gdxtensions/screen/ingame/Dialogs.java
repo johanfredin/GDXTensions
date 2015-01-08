@@ -1,6 +1,7 @@
 package se.fredin.gdxtensions.screen.ingame;
 
 import se.fredin.gdxtensions.font.AnimatedBitmapFont;
+import se.fredin.gdxtensions.input.BaseInput;
 import se.fredin.gdxtensions.scene2d.dialog.Dialog;
 import se.fredin.gdxtensions.xml.XMLDialog;
 import se.fredin.gdxtensions.xml.XMLDialogs;
@@ -23,35 +24,56 @@ public class Dialogs extends InGameScreen {
 
 	private Array<Dialog> dialogs;
 	private AnimatedBitmapFont font;
+	private BaseInput baseInput;
 	
 	/**
 	 * Construct a new {@link Dialogs} object
+	 * @param baseInput the {@link BaseInput} object you wish to use for interacting with the dialogs
 	 * @param xmlDialogs the {@link XMLDialogs} from the xml file
 	 * @param atlas the {@link TextureAtlas} the {@link Stage} will use. Since this class 
 	 * extends {@link InGameScreen} it is required
 	 * @param font the {@link AnimatedBitmapFont} to use
 	 * @param color the {@link Color} to use for the dialogs
 	 */
-	public Dialogs(XMLDialogs xmlDialogs, TextureAtlas atlas, AnimatedBitmapFont font, Color color) {
+	public Dialogs(BaseInput baseInput, XMLDialogs xmlDialogs, TextureAtlas atlas, AnimatedBitmapFont font, Color color) {
 		super(atlas);
+		this.baseInput = baseInput;
 		this.font = font;
 		TextFieldStyle style = new TextFieldStyle(font, color, null, null, skin.getDrawable("bg"));
 		this.dialogs = this.populateFromXML(xmlDialogs, style);
+		
 	}
 	
 	/**
 	 * Construct a new {@link Dialogs} object
+	 * @param baseInput the {@link BaseInput} object you wish to use for interacting with the dialogs
 	 * @param xmlDialogs the {@link XMLDialogs} from the xml file
 	 * @param pathToPackFile the path to the packfile that the {@link TextureAtlas} will use. Since this class 
 	 * extends {@link InGameScreen} it is required
 	 * @param pathToFont the path to the {@link AnimatedBitmapFont} to use
 	 * @param color the {@link Color} to use for the dialogs
 	 */
-	public Dialogs(XMLDialogs xmlDialogs, String pathToPackFile, String pathToFont, Color color) {
+	public Dialogs(BaseInput baseInput, XMLDialogs xmlDialogs, String pathToPackFile, String pathToFont, Color color) {
 		super(pathToPackFile);
+		this.baseInput = baseInput;
 		this.font = new AnimatedBitmapFont(Gdx.files.internal(pathToFont));
 		TextFieldStyle style = new TextFieldStyle(font, color, null, null, skin.getDrawable("bg"));
 		this.dialogs = this.populateFromXML(xmlDialogs, style);
+	}
+	
+	/**
+	 * Set the {@link BaseInput} you wish to use
+	 * @param baseInput
+	 */
+	public void setBaseInput(BaseInput baseInput) {
+		this.baseInput = baseInput;
+	}
+	
+	/**
+	 * @return the {@link BaseInput} used for these dialogs
+	 */
+	public BaseInput getBaseInput() {
+		return baseInput;
 	}
 	
 	/**
@@ -103,6 +125,10 @@ public class Dialogs extends InGameScreen {
 		}
 	}
 	
+	public boolean hasInput() {
+		return baseInput != null;
+	}
+	
 	private Array<Dialog> populateFromXML(XMLDialogs xmlDialogs, TextFieldStyle style) {
 		Array<Dialog> dialogs = new Array<Dialog>();
 		float parentX = xmlDialogs.getX();
@@ -122,10 +148,18 @@ public class Dialogs extends InGameScreen {
 				dialog.setHeader(xmlDialog.getHeader(true));
 				dialog.addAdditionalLineBreaks((byte)2);
 			}
+			
+			if(this.hasInput()) {
+				System.out.println("has input daddy");
+				dialog.setBaseInput(baseInput);
+			}
+			
 			this.stage.addActor(dialog);
 			dialogs.add(dialog);
 		}
 		return dialogs;
 	}
+	
+	
 	
 }

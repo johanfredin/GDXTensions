@@ -35,34 +35,60 @@ public abstract class TiledMapLevel<T extends BaseScreen> extends Level {
 		this.mapRenderer = new OrthogonalTiledMapRenderer(map, screen.getSpriteBatch());
 	}
 	
+	/**
+	 * Set the {@link OrthogonalTiledMapRenderer} to use
+	 * @param mapRenderer the renderer to use
+	 */
 	public void setMapRenderer(OrthogonalTiledMapRenderer mapRenderer) {
 		this.mapRenderer = mapRenderer;
 	}
 	
+	/**
+	 * @return the maprenderer
+	 */
 	public OrthogonalTiledMapRenderer getMapRenderer() {
 		return mapRenderer;
 	}
 
+	/**
+	 * @return the tiled map used
+	 */
 	public TiledMap getMap() {
 		return map;
 	}
 
+	/**
+	 * Set what {@link TiledMap} to use
+	 * @param map the map to use
+	 */
 	public void setMap(TiledMap map) {
 		this.map = map;
 	}
 	
+	/**
+	 * @return the width of the map e.g the width * tile width of each tile
+	 */
 	public int getMapWidth() {
 		return mapWidth;
 	}
 	
+	/**
+	 * @return the height of the map e.g the height * height of each tile
+	 */
 	public int getMapHeight() {
 		return mapHeight;
 	}
 	
+	/**
+	 * @return the width of the tiles
+	 */
 	public int getTileWidth() {
 		return tileWidth;
 	}
 	
+	/**
+	 * @return the height of the tiles
+	 */
 	public int getTileHeight() {
 		return tileHeight;
 	}

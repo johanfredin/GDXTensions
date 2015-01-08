@@ -11,8 +11,8 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Disposable;
 
 /**
- * Super class for all Entities in the game (except for AICow)
- * @author Johan Fredin, Niklas Istenes
+ * Super class for all Entities
+ * @author Johan Fredin
  *
  */
 public abstract class GameObject implements GameObjectBase, Disposable {

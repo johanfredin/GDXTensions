@@ -1,33 +1,48 @@
 package se.fredin.gdxtensions.utils;
 
-import se.fredin.gdxtensions.font.AnimatedBitmapFont;
 import se.fredin.gdxtensions.utils.text.AnimatedText;
 
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.BitmapFont.BitmapFontData;
 import com.badlogic.gdx.graphics.g2d.BitmapFont.Glyph;
 
 /** 
- * Helper class to figure out exact width and height of a bitmapfont. 
+ * Helper class to figure out exact width and height of a {@link BitmapFont}. 
  * Useful when not using a monospace type font.
  */
 public class BitmapFontBoundsCalculator {
 
-	private AnimatedBitmapFont font;
+	private BitmapFont font;
 	private float width;
 	private float height;
-	private boolean isMonoSpace;
 	private byte amountOfLineBreaks;
 	
-	public BitmapFontBoundsCalculator(AnimatedBitmapFont font) {
+	/**
+	 * Construct a new {@link BitmapFontBoundsCalculator}
+	 * @param font the {@link BitmapFont} to use for calculation
+	 */
+	public BitmapFontBoundsCalculator(BitmapFont font) {
 		this.font = font;
 	}
 	
-	public BitmapFontBoundsCalculator(AnimatedBitmapFont font, AnimatedText text) {
+	/**
+	 * Construct a new {@link BitmapFontBoundsCalculator}
+	 * @param font the {@link BitmapFont} to use for calculation
+	 * @param text the {@link AnimatedText} object to use for calculating width and height
+	 */
+	public BitmapFontBoundsCalculator(BitmapFont font, AnimatedText text) {
 		this.font = font;
 		this.width = getCalculatedWidth(text);
 		this.height = getCalculatedHeight(text);
 	}
 	
+	/**
+	 * Calculates what the width would be using an animated font.
+	 * It checks each row of the text, and combines the width of each character to get the
+	 * correct width, also checks if another row has more characters than the previous.
+	 * @param animatedText the {@link AnimatedText} to use for calculation
+	 * @return the correct width to use
+	 */
 	public float getCalculatedWidth(AnimatedText animatedText) {
 		BitmapFontData data = font.getData();
 		float finalWidth = 0;
@@ -62,9 +77,9 @@ public class BitmapFontBoundsCalculator {
 	}
 	
 	/**
-	 * Get the calculated height according to font width and amount of line breaks
-	 * @param text the text 
-	 * @return
+	 * Get the calculated height according to font height and amount of line breaks
+	 * @param text the {@link AnimatedText} to use for calculation
+	 * @return the correct height
 	 */
 	public float getCalculatedHeight(AnimatedText text) {
 		return getCalculatedHeight(text, (byte) 0);
@@ -83,10 +98,10 @@ public class BitmapFontBoundsCalculator {
 	}
 	
 	/**
-	 * Checks if the width of each glyph differs, slight differ indicates that the font is not monospace
+	 * Checks if the width of each {@link Glyph} differs, slight differ indicates that the font is not monospace
 	 * @return whether or not the font is a monospace type font.
 	 */
-	public boolean checkIfMonoSpace() {
+	public boolean isMonoSpace() {
 		BitmapFontData data = font.getData();
 		float initialWidth = data.getFirstGlyph().width;
 		int index = 0;
@@ -106,20 +121,27 @@ public class BitmapFontBoundsCalculator {
 		return false;
 	}
 	
+	/**
+	 * Adds an optional amount of line breaks to the text
+	 * @param amount the amount of line breaks to add
+	 */
 	public void addLinebreaks(byte amount) {
 		this.amountOfLineBreaks += amount;
 	}
 	
+	/**
+	 * @return the width
+	 */
 	public float getWidth() {
 		return width;
 	}
 	
+	/**
+	 * @return the height
+	 */
 	public float getHeight() {
 		return height;
 	}
 	
-	public boolean isMonoSpace() {
-		return isMonoSpace;
-	}
 
 }
