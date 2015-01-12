@@ -119,15 +119,21 @@ public class Dialogs extends InGameScreen {
 		super.tick(deltaTime);
 		if(dialogs.size > 0) {
 			for(short i = 0; i < dialogs.size; i++) {
-				Dialog dialog = dialogs.get(i);
-				if(canBeTriggered(dialog, i)) {
-					dialog.setAllowedToStart(true);
-					dialog.openDialog();
-					hasBeenTriggered = true;
-				}
+				if(i == 0) {
+					Dialog dialog = dialogs.get(i);
+					if(canBeTriggered(dialog)) {
+						dialog.setAllowedToStart(true);
+						dialog.openDialog();
+						hasBeenTriggered = true;
+					}
 				
-				if(dialogs.get(i).isClosed()) {
-					dialogs.removeIndex(i);
+					if(dialog.isClosed()) {
+						if(dialog.isSecondEncounter()) {
+							hasBeenTriggered = false;
+						} else {
+							dialogs.removeIndex(i);
+						}
+					}
 				}
 			}
 		}
@@ -137,11 +143,12 @@ public class Dialogs extends InGameScreen {
 	 * If the dialog can be triggered by user input, if the dialog is time limited or if this dialog is
 	 * a following dialog in a sequence then this dialog should be able to start
 	 * @param dialog the dialog to check
-	 * @param index the index in the list
 	 * @return whether or not this dialog can be triggered
 	 */
-	public boolean canBeTriggered(Dialog dialog, short index) {
-		return index == 0 && (hasInput() && dialog.isTriggerForOtherDialogs() && baseInput.isInteractButtonPressed()) || dialog.isTimeLimited() || hasBeenTriggered;
+	public boolean canBeTriggered(Dialog dialog) {
+		return (hasInput() && dialog.isTriggerForOtherDialogs() && baseInput.isInteractButtonPressed()) || 
+				dialog.isTimeLimited() || 
+				(hasBeenTriggered && !dialog.isSecondEncounter()) || (baseInput.isInteractButtonPressed() && dialog.isSecondEncounter() && !hasBeenTriggered);
 	}
 	
 	/**
@@ -164,7 +171,7 @@ public class Dialogs extends InGameScreen {
 				x = xmlDialog.getX();
 				y = xmlDialog.getY();
 			} 
-			Dialog dialog = new Dialog(text, x - 150, y, style);
+			Dialog dialog = new Dialog(text, x, y, style);
 			if(xmlDialog.isTimeLimited()) {
 				dialog.setTimeToDisplay(xmlDialog.getTimeToDisplay());
 			} if(xmlDialog.hasHeader()) {
@@ -179,6 +186,10 @@ public class Dialogs extends InGameScreen {
 			if(i == 0) {
 				// If i is 0 that means that this will be the first dialog so it is in fact a trigger
 				dialog.setTriggerForOtherDialogs(true);
+			}
+			
+			if(xmlDialog.isSecondEncounter()) {
+				dialog.setSecondEncounter(true);
 			}
 			
 			this.stage.addActor(dialog);

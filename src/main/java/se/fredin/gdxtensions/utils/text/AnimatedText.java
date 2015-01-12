@@ -232,6 +232,16 @@ public class AnimatedText {
 	}
 	
 	/**
+	 * Resets the timer and the current text so that the animation could start over again
+	 */
+	public void reset() {
+		this.timer = 0.0f;
+		this.counter = 0.0f;
+		this.index = 0;
+		this.currentText = "";
+	}
+	
+	/**
 	 * @return the total time it will take until all the characters of this text is visible
 	 */
 	public float getTotalTime() {

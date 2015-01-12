@@ -185,7 +185,10 @@ public class DialogOpenAndCloseOptions {
 	public void openDialog(OpenCloseAnimation openCloseAnimation, final float duration) {
 		final float innerDuration = duration / 2;
 		this.dialog.setPosition(x, y);
+		this.isTimeToCloseDialog = false;
+		this.canTick = false;
 		float delayTime = duration / 8;
+		
 		
 		switch(openCloseAnimation) {
 		case QUAD_EVEN:
@@ -304,12 +307,16 @@ public class DialogOpenAndCloseOptions {
 			@Override
 			public void run() {
 				Stage stage = dialog.getStage();
-				if(stage != null) {
+				if(stage != null && !dialog.isSecondEncounter()) {
 					stage.getActors().removeValue(dialog, true);
 					stage.getActors().removeValue(frame, true);
-					isClosed = true;
 					LogUtils.log("Dialog succesfully removed from stage");
+				} else {
+					dialog.setOpened(false);
+					dialog.getAnimatedText().reset();
+					LogUtils.log("Dialog is second encounter so therefore should not be removed once closed");
 				}
+				isClosed = true;
 			}
 		};
 	}

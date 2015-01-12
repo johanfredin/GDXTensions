@@ -12,6 +12,7 @@ public class XMLDialog extends XMLCommons {
 	private String header;
 	private String text;
 	private float timeToDisplay;
+	private boolean isSecondEncounter;
 	
 	/**
 	 * Create a new {@link XMLDialog}
@@ -20,8 +21,9 @@ public class XMLDialog extends XMLCommons {
 	public XMLDialog(Element element) {
 		super(element);
 		this.header = element.getAttribute("header", null);
-		this.timeToDisplay = element.getFloatAttribute("timeToDisplay", 0.0f);
+		this.timeToDisplay = element.getFloatAttribute("time", 0.0f);
 		this.text = element.getText();
+		this.isSecondEncounter = element.getBooleanAttribute("secondary", false);
 	}
 	
 	/**
@@ -67,6 +69,13 @@ public class XMLDialog extends XMLCommons {
 	 */
 	public boolean hasHeader() {
 		return header != null;
+	}
+	
+	/**
+	 * @return whether or not this is a second enounter e.g the main dialog has been played already
+	 */
+	public boolean isSecondEncounter() {
+		return isSecondEncounter;
 	}
 	
 	/**

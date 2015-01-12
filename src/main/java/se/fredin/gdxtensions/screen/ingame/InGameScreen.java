@@ -193,6 +193,20 @@ public abstract class InGameScreen implements Disposable {
 	}
 	
 	/**
+	 * Removes one actor and adds another, the new actor will be ontop of the stage
+	 * @param oldActor the {@link Actor} to be removed
+	 * @param newActor the {@link Actor} to add
+	 * @param atOldZIndex whether or not to have the new actor at the same z index as the old one
+	 */
+	public void switchActors(Actor oldActor, Actor newActor, boolean atOldZIndex) {
+		if(atOldZIndex) {
+			newActor.setZIndex(oldActor.getZIndex());
+		}
+		stage.getActors().removeValue(oldActor, true);
+		stage.addActor(newActor);
+	}
+	
+	/**
 	 * Disables touch focus for all the actors of the stage
 	 */
 	protected void disableStage() {

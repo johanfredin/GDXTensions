@@ -57,6 +57,7 @@ public class Dialog extends TextArea {
 	private boolean isAllowedToStart;
 	private boolean isOpened;
 	private boolean isTriggerForOtherDialogs;
+	private boolean isSecondEncounter;
 	
 	
 	/**
@@ -115,12 +116,13 @@ public class Dialog extends TextArea {
 		this.frame = new Image(style.background);
 		this.padding = padding;
 		
-		this.animatedText = new AnimatedText(text, timePerCharacter, lineBreakIndex, lineBreakSettings);
 		this.timePerCharacter = timePerCharacter;
 		this.lineBreakIndex = lineBreakIndex;
 		this.lineBreakSettings = lineBreakSettings;
 		this.font = (AnimatedBitmapFont) style.font;
 
+		this.animatedText = new AnimatedText(text, timePerCharacter, lineBreakIndex, lineBreakSettings);
+		
 		this.dialogWidth = font.getWidth(animatedText);
 		this.dialogHeight = font.getHeight(animatedText);
 		this.frameWidth = dialogWidth + (padding[LEFT] + padding[RIGHT]);
@@ -132,6 +134,8 @@ public class Dialog extends TextArea {
 		this.setSize(0, 0);
 		this.frame.setSize(0, 0);
 		this.frame.setColor(Color.BLUE);
+		
+		animatedText.setLogToConsole(true);
 		
 		this.openCloseOptions = new DialogOpenAndCloseOptions(this);
 	}
@@ -294,9 +298,13 @@ public class Dialog extends TextArea {
 	 */
 	public void openDialog() {
 		if(isAllowedToStart && !isOpened) {
-			openCloseOptions.openDialog();
+			openDialog(defaultDuration);
 			this.isOpened = true;
 		}
+	}
+	
+	public void setOpened(boolean isOpened) {
+		this.isOpened = isOpened;
 	}
 	
 	/**
@@ -321,6 +329,7 @@ public class Dialog extends TextArea {
 	 */
 	public void openDialog(float duration) {
 		openCloseOptions.openDialog(duration);
+		isOpened = true;
 	}
 	
 	/**
@@ -451,6 +460,21 @@ public class Dialog extends TextArea {
 	 */
 	public void setTriggerForOtherDialogs(boolean isTriggerForOtherDialogs) {
 		this.isTriggerForOtherDialogs = isTriggerForOtherDialogs;
+	}
+	
+	/**
+	 * Set whether or not this dialog should be a second encounter dialog
+	 * @param isSecondEncounter
+	 */
+	public void setSecondEncounter(boolean isSecondEncounter) {
+		this.isSecondEncounter = isSecondEncounter;
+	}
+	
+	/**
+	 * @return whether or not this dialog is a second encounter dialog
+	 */
+	public boolean isSecondEncounter() {
+		return isSecondEncounter;
 	}
 	
 	@Override
