@@ -1,6 +1,7 @@
 package se.fredin.gdxtensions.level;
 
 import se.fredin.gdxtensions.assetmanagement.Assets;
+import se.fredin.gdxtensions.collision.CollisionHandler;
 import se.fredin.gdxtensions.screen.BaseScreen;
 
 import com.badlogic.gdx.maps.tiled.TiledMap;
@@ -19,6 +20,7 @@ public abstract class TiledMapLevel<T extends BaseScreen> extends Level {
 	
 	protected OrthogonalTiledMapRenderer mapRenderer;
 	protected TiledMap map;
+	protected CollisionHandler collisionHandler;
 	protected int mapWidth;
 	protected int mapHeight;
 	protected int tileWidth;

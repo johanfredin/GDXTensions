@@ -43,8 +43,6 @@ public abstract class GameObject implements GameObjectBase, Disposable {
 	protected float gravity;
 	protected byte direction = DIRECTION_NONE;
 	
-	//TODO:Remove once collision controls work1
-	public Rectangle movingBounds = new Rectangle();
 	
 	protected float top, left, bottom, right;
 	protected float speed;
@@ -132,6 +130,16 @@ public abstract class GameObject implements GameObjectBase, Disposable {
 		this.position.set(x, y);
 		this.bounds.setPosition(position.x + left, position.y + top);
 	}
+	
+	public void setX(float x) {
+		this.position.x = x + left;
+	}
+	
+	public void setY(float y) {
+		this.position.y = y + top;
+	}
+	
+	
 
 	public float getHeight() {
 		return bounds.height;
@@ -159,6 +167,26 @@ public abstract class GameObject implements GameObjectBase, Disposable {
 
 	public boolean isMoving() {
 		return direction != DIRECTION_NONE;
+	}
+	
+	public void setVelocity(Vector2 velocity) {
+		this.velocity.set(velocity);
+	}
+	
+	public void setVelocity(float xSpeed, float ySpeed) {
+		this.velocity.set(xSpeed, ySpeed);
+	}
+	
+	public Vector2 getVelocity() {
+		return velocity;
+	}
+	
+	public void setXSpeed(float xSpeed) {
+		this.velocity.x = xSpeed;
+	}
+	
+	public void setYSpeed(float ySpeed) {
+		this.velocity.y = ySpeed;
 	}
 	
 	/**
