@@ -5,7 +5,7 @@ import se.fredin.gdxtensions.object.GameObject;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.utils.Array;
 
-/**
+/** 
  * Handler for rectangle based collision
  * @author root
  *
@@ -28,50 +28,58 @@ public class CollisionHandler {
 		return gameObject;
 	}
 	
-	public void checkForCollision(Rectangle bounds) {
-		Rectangle colliderBounds = gameObject.getBounds();
-		if(colliderBounds.overlaps(bounds)) {
-			float cx = colliderBounds.x;
-			float cw = colliderBounds.width;
-			float cy = colliderBounds.y;
-			float ch = colliderBounds.height;
-			float bx = bounds.x;
-			float bw = bounds.width;
-			float by = bounds.y;
-			float bh = bounds.height;
-			float cxPW = cx + cw;
-			float bxPW = bx + bw;
-			float cyPH = cy + ch;
-			float byPH = by + bh;
-			
-			float x = gameObject.getPosition().x, y = gameObject.getPosition().y;
-			
-			if(cx <= bxPW && cxPW > bx) {
-				// From right
-				x = bx;
-				System.out.println("from right");
-			} if(cxPW >= bx && cxPW < bxPW) {
-				// From left
-				x = bx - cw;
-				System.out.println("from left");
-			} if(cy <= byPH && cyPH > by) {
-				// From top
-				y = byPH;
-				System.out.println("from top");
-			} if(cyPH >= by && cy < byPH) {
-				// From bottom
-//				y = by - ch;
-				System.out.println("from bottom");
+	public void checkForCollision(Rectangle collisionRect) {
+		Rectangle collider = gameObject.getBounds();
+		float x = collider.getX();
+		float y = collider.getY();
+		if(collider.overlaps(collisionRect)) {
+			if(fromLeft(collider, collisionRect)) {
+				x = collisionRect.x - collider.width;
+			} if(fromRight(collider, collisionRect)) {
+				x = collisionRect.x + collisionRect.width;
+			} if(fromTop(collider, collisionRect)) {
+				y = collisionRect.y + collisionRect.height;
+			} if(fromBottom(collider, collisionRect)) {
+				y = collisionRect.y - collider.height;
 			}
-			
+			System.out.println("collision");
 			gameObject.setPosition(x, y);
 		}
+	}
+	
+	public boolean fromLeft(Rectangle collider, Rectangle collisionRect) {
+		return collider.x + collider.width >= collisionRect.x;
+	}
+	
+	public boolean fromRight(Rectangle collider, Rectangle collisionRect) {
+		return collider.x <= collisionRect.x + collisionRect.width;
+	}
+	
+	public boolean fromTop(Rectangle collider, Rectangle collisionRect) {
+		return collider.y >= collisionRect.y + collisionRect.height;
+	}
+	
+	public boolean fromBottom(Rectangle collider, Rectangle collisionRect) {
+		return collider.y + collider.height <= collisionRect.y;
 	}
 	
 	public void checkForCollision(Array<Rectangle> bounds) {
 		for(Rectangle rect : bounds) {
 			checkForCollision(rect);
 		}
+	}
+	
+	/**
+	 * Used to specify type of block that we collide with.
+	 * could be a wall, a grass hill or a door.
+	 * @authors Niklas Istenes, Johan Fredin
+	 *
+	 */
+	public static class Filter {
+		public static final byte HARD = 1;
+		public static final byte SOFT = 2;
+		public static final byte DOOR = 4;
+		public static final byte SAND = 8;
 	}
 	
 
