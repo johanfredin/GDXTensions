@@ -13,11 +13,24 @@ import com.badlogic.gdx.utils.Array;
 public class CollisionHandler {
 	
 	private GameObject gameObject;
+	private Array<Rectangle> hardBlocks;
+	private Array<Rectangle> softBlocks;
 	
 	public CollisionHandler() {}
 	
 	public CollisionHandler(GameObject gameObject) {
+		this(gameObject, null, null);
+	}
+	
+	public CollisionHandler(GameObject gameObject, Array<Rectangle> hardBlocks, Array<Rectangle> softBlocks) {
 		this.gameObject = gameObject;
+		this.hardBlocks = hardBlocks;
+		this.softBlocks = softBlocks;
+	}
+	
+	public void setHardAndSoftBlocks(Array<Rectangle> hardBlocks, Array<Rectangle> softBlocks) {
+		this.hardBlocks = hardBlocks;
+		this.softBlocks = softBlocks;
 	}
 	
 	public void setGameObject(GameObject gameObject) {
@@ -30,22 +43,11 @@ public class CollisionHandler {
 	
 	public void checkForCollision(Rectangle collisionRect) {
 		Rectangle collider = gameObject.getBounds();
-		float x = collider.getX();
-		float y = collider.getY();
 		if(collider.overlaps(collisionRect)) {
-			if(fromLeft(collider, collisionRect)) {
-				x = collisionRect.x - collider.width;
-			} if(fromRight(collider, collisionRect)) {
-				x = collisionRect.x + collisionRect.width;
-			} if(fromTop(collider, collisionRect)) {
-				y = collisionRect.y + collisionRect.height;
-			} if(fromBottom(collider, collisionRect)) {
-				y = collisionRect.y - collider.height;
-			}
 			System.out.println("collision");
-			gameObject.setPosition(x, y);
 		}
 	}
+	
 	
 	public boolean fromLeft(Rectangle collider, Rectangle collisionRect) {
 		return collider.x + collider.width >= collisionRect.x;
@@ -70,16 +72,41 @@ public class CollisionHandler {
 	}
 	
 	/**
+	 * Used to check for collision.
+	 * @param bounds the bounding box of the colliding object
+	 * @param filter the type of block we collided with (hard, soft or door)
+	 * @param collider the colliding object
+	 * @return the rectangle of the collided object (if any)
+	 */
+	public Rectangle getBoundsAt(Rectangle bounds, byte filter, GameObject collider) {
+		if((filter&Filter.HARD) == Filter.HARD) {
+			for(Rectangle hardBlock : hardBlocks) {
+				if(hardBlock.overlaps(bounds)) {
+					return hardBlock;
+				}
+			}
+		}
+
+		if((filter&Filter.SOFT) == Filter.SOFT) {
+			for(Rectangle softBlock : softBlocks) {
+				if(softBlock.overlaps(bounds)) {
+					return softBlock;
+				}
+			}
+		}
+		
+		return null;
+	}
+	
+	/**
 	 * Used to specify type of block that we collide with.
 	 * could be a wall, a grass hill or a door.
-	 * @authors Niklas Istenes, Johan Fredin
+	 * @authors Niklas Istenes
 	 *
 	 */
 	public static class Filter {
 		public static final byte HARD = 1;
 		public static final byte SOFT = 2;
-		public static final byte DOOR = 4;
-		public static final byte SAND = 8;
 	}
 	
 
