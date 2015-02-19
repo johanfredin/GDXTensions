@@ -27,6 +27,7 @@ public class Dialog extends TextArea {
 	public static float[] defaultPaddingSettings = {defaultPadding, defaultPadding, defaultPadding, defaultPadding};
 	/** The default duration of the frame animation */
 	public static float defaultDuration = .66f;
+	public static boolean canJump = true;
 	
 	private BaseInput baseInput;
 	

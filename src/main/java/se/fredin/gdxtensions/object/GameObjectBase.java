@@ -21,5 +21,6 @@ public interface GameObjectBase {
 	 * @param player the player object to check for collision (used by the enemy objects etc)
 	 */
 	void tick(float deltaTime, GameObject gameObject);
+	
 
 }

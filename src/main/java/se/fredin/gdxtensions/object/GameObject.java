@@ -1,7 +1,8 @@
 
 package se.fredin.gdxtensions.object;
 
-import se.fredin.gdxtensions.level.LevelBase;
+import se.fredin.gdxtensions.collision.CollisionHandler;
+import se.fredin.gdxtensions.collision.CollisionHandler.Filter;
 import se.fredin.gdxtensions.utils.ParticleHelper;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -33,8 +34,8 @@ public abstract class GameObject implements GameObjectBase, Disposable {
 	protected Vector2 velocity;
 	protected Rectangle bounds;
 	protected TextureRegion currentFrame;
-	protected LevelBase levelBase;
-
+	protected CollisionHandler collisionHandler;
+	
 	protected boolean isJumping;
 	protected boolean isCollidedWith;
 	protected boolean isTeleporting;
@@ -53,23 +54,22 @@ public abstract class GameObject implements GameObjectBase, Disposable {
 	
 
 	public GameObject(Vector2 position) {
-		this.position = position;
-		this.bounds = new Rectangle();
-		this.velocity = new Vector2();
+		this(position, null, 0f, 0f, 0f, 0f, 0f, 0f);
 	}
 
 	public GameObject(Vector2 position, float width, float height) {
-		this.position = position;
-		this.bounds = new Rectangle(position.x, position.y, width, height);
-		this.velocity = new Vector2();
+		this(position, null, width, height, 0f, 0f, 0f, 0f);
 	}
 
-	public GameObject(Vector2 position, LevelBase levelBase, float width, float height) {
-		this(position, width, height);
-		this.levelBase = levelBase;
+	public GameObject(Vector2 position, CollisionHandler collisionHandler, float width, float height) {
+		this(position, collisionHandler, width, height, 0f, 0f, 0f, 0f);
 	}
 
 	public GameObject(Vector2 position, float width, float height, float right, float bottom, float left, float top) {
+		this(position, null, width, height, right, bottom, left, top);
+	}
+
+	public GameObject(Vector2 position, CollisionHandler collisionHandler, float width, float height, float right, float bottom, float left, float top) {
 		this.position = position;
 		this.right = right;
 		this.bottom = bottom;
@@ -77,11 +77,7 @@ public abstract class GameObject implements GameObjectBase, Disposable {
 		this.top = top;
 		this.bounds = new Rectangle(position.x + left, position.y + top, width - (left + right), height - (bottom + top));
 		this.velocity = new Vector2();
-	}
-
-	public GameObject(Vector2 position, LevelBase levelBase, float width, float height, float right, float bottom, float left, float top) {
-		this(position, width, height, right, bottom, left, top);
-		this.levelBase = levelBase;
+		this.collisionHandler = collisionHandler;
 	}
 
 	public float getGravity() {
@@ -91,7 +87,7 @@ public abstract class GameObject implements GameObjectBase, Disposable {
 	public void setGravity(float gravity) {
 		this.gravity = gravity;
 	}
-
+	
 	public boolean isCollidedWith() {
 		return isCollidedWith;
 	}
@@ -104,10 +100,14 @@ public abstract class GameObject implements GameObjectBase, Disposable {
 		this.isTeleporting = isTeleporting;
 	}
 	
-	public void setLevel(LevelBase levelBase) {
-		this.levelBase = levelBase;
+	public void setCollisionHandler(CollisionHandler collisionHandler) {
+		this.collisionHandler = collisionHandler;
 	}
-
+	
+	public CollisionHandler getCollisionHandler() {
+		return collisionHandler;
+	}
+	
 	//TODO  Transforms the given vector by this transform
 	public Vector2 mul(Vector2 v){
 		return v;
@@ -139,8 +139,6 @@ public abstract class GameObject implements GameObjectBase, Disposable {
 		this.position.y = y + top;
 	}
 	
-	
-
 	public float getHeight() {
 		return bounds.height;
 	}
@@ -149,6 +147,18 @@ public abstract class GameObject implements GameObjectBase, Disposable {
 		return this.bounds.width;
 	}
 
+	public void setBounds(Rectangle bounds) {
+		this.bounds = bounds;
+	}
+	
+	public void setBounds(float x, float y, float width, float height) {
+		if(this.bounds != null) {
+			this.bounds.set(x, y, width, height);
+		} else {
+			this.bounds = new Rectangle(x, y, width, height);
+		}
+	}
+	
 	public Rectangle getBounds() {
 		return this.bounds;
 	}
@@ -264,6 +274,66 @@ public abstract class GameObject implements GameObjectBase, Disposable {
 	 */
 	protected void animate(float deltaTime) {
 		stateTime += deltaTime;
+	}
+	
+	/**
+	 * Checks for collision with walls and doors in all directions
+	 * @param newPosition where we want to go
+	 * @return 
+	 */
+	protected boolean tryMove(Vector2 newPosition) {
+		onGround = false;
+
+		if(newPosition.y < position.y) {
+			handleVerticalCollisionFromAbove(newPosition);
+		} else {
+			setPosition(position.x, newPosition.y);
+		}
+
+		handleVerticalCollisionFromBelow(newPosition);
+		handleHorizontalCollision(newPosition);
+		return false;
+	}
+
+	protected void handleVerticalCollisionFromAbove(Vector2 newPosition) {
+		Rectangle tmpBounds = new Rectangle(bounds);
+		tmpBounds.y = newPosition.y;
+		tmpBounds.height = (newPosition.y - bounds.y) * -1;
+		Rectangle downBounds = collisionHandler.getBoundsAt(tmpBounds, (byte)(Filter.HARD|Filter.SOFT), this);
+		if(downBounds!=null) {
+			onGround = true;
+			Vector2 groundedPosition = new Vector2(position.x, downBounds.y + downBounds.height);
+			setPosition(groundedPosition);
+		} else {
+			onGround = false;
+			setPosition(position.x, newPosition.y);
+		}
+	}
+
+	protected void handleVerticalCollisionFromBelow(Vector2 newPosition) {
+		Rectangle headBounds = new Rectangle(bounds);
+		headBounds.y += headBounds.height;
+		headBounds.height = 1;
+		Rectangle topBounds = collisionHandler.getBoundsAt(headBounds, (byte)(Filter.HARD), this);
+		if(topBounds != null) {
+			isJumping = false;
+			gravity *= -.1f;
+			setPosition(position.x, topBounds.y - bounds.height - 1f);
+		} 
+	}
+
+	protected void handleHorizontalCollision(Vector2 newPosition) {
+		Rectangle tmpHorzBounds = new Rectangle(bounds);
+		tmpHorzBounds.x = newPosition.x + left;
+		Rectangle horzBounds = collisionHandler.getBoundsAt(tmpHorzBounds, (byte)(Filter.HARD), this);
+		if(horzBounds!=null) {
+			if(onGround) {
+//				switchDirection();
+			}
+			setPosition(position.x, position.y);
+		} else {
+			setPosition(newPosition.x, position.y);
+		}
 	}
 
 }

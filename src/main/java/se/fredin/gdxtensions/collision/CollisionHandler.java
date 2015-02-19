@@ -1,6 +1,7 @@
 package se.fredin.gdxtensions.collision;
 
 import se.fredin.gdxtensions.object.GameObject;
+import se.fredin.gdxtensions.utils.TiledMapUtils;
 
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.utils.Array;
@@ -12,42 +13,19 @@ import com.badlogic.gdx.utils.Array;
  */
 public class CollisionHandler {
 	
-	private GameObject gameObject;
-	private Array<Rectangle> hardBlocks;
-	private Array<Rectangle> softBlocks;
+	protected Array<Rectangle> hardBlocks;
+	protected Array<Rectangle> softBlocks;
 	
-	public CollisionHandler() {}
-	
-	public CollisionHandler(GameObject gameObject) {
-		this(gameObject, null, null);
+	public CollisionHandler(TiledMapUtils tiledMapUtils) {
+		this.hardBlocks = tiledMapUtils.getRectangularMapObjects("hard-blocks");
+		this.softBlocks = tiledMapUtils.getRectangularMapObjects("soft-blocks");
 	}
 	
-	public CollisionHandler(GameObject gameObject, Array<Rectangle> hardBlocks, Array<Rectangle> softBlocks) {
-		this.gameObject = gameObject;
-		this.hardBlocks = hardBlocks;
-		this.softBlocks = softBlocks;
-	}
 	
 	public void setHardAndSoftBlocks(Array<Rectangle> hardBlocks, Array<Rectangle> softBlocks) {
 		this.hardBlocks = hardBlocks;
 		this.softBlocks = softBlocks;
 	}
-	
-	public void setGameObject(GameObject gameObject) {
-		this.gameObject = gameObject;
-	}
-	
-	public GameObject getGameObject() {
-		return gameObject;
-	}
-	
-	public void checkForCollision(Rectangle collisionRect) {
-		Rectangle collider = gameObject.getBounds();
-		if(collider.overlaps(collisionRect)) {
-			System.out.println("collision");
-		}
-	}
-	
 	
 	public boolean fromLeft(Rectangle collider, Rectangle collisionRect) {
 		return collider.x + collider.width >= collisionRect.x;
@@ -65,12 +43,6 @@ public class CollisionHandler {
 		return collider.y + collider.height <= collisionRect.y;
 	}
 	
-	public void checkForCollision(Array<Rectangle> bounds) {
-		for(Rectangle rect : bounds) {
-			checkForCollision(rect);
-		}
-	}
-	
 	/**
 	 * Used to check for collision.
 	 * @param bounds the bounding box of the colliding object
@@ -79,7 +51,7 @@ public class CollisionHandler {
 	 * @return the rectangle of the collided object (if any)
 	 */
 	public Rectangle getBoundsAt(Rectangle bounds, byte filter, GameObject collider) {
-		if((filter&Filter.HARD) == Filter.HARD) {
+		if((filter&Filter.HARD) == Filter.HARD && hardBlocks != null) {
 			for(Rectangle hardBlock : hardBlocks) {
 				if(hardBlock.overlaps(bounds)) {
 					return hardBlock;
@@ -87,7 +59,7 @@ public class CollisionHandler {
 			}
 		}
 
-		if((filter&Filter.SOFT) == Filter.SOFT) {
+		if((filter&Filter.SOFT) == Filter.SOFT && softBlocks != null) {
 			for(Rectangle softBlock : softBlocks) {
 				if(softBlock.overlaps(bounds)) {
 					return softBlock;
@@ -108,6 +80,9 @@ public class CollisionHandler {
 		public static final byte HARD = 1;
 		public static final byte SOFT = 2;
 	}
-	
+
+	public Array<Rectangle> getHardBlocks() {
+		return hardBlocks;
+	}
 
 }
