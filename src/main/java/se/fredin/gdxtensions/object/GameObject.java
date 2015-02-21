@@ -4,19 +4,19 @@ package se.fredin.gdxtensions.object;
 import se.fredin.gdxtensions.collision.CollisionHandler;
 import se.fredin.gdxtensions.collision.CollisionHandler.Filter;
 import se.fredin.gdxtensions.utils.ParticleHelper;
+import se.fredin.gdxtensions.utils.Settings;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.utils.Disposable;
 
 /**
  * Super class for all Entities
  * @author Johan Fredin
  *
  */
-public abstract class GameObject implements GameObjectBase, Disposable {
+public abstract class GameObject implements GameObjectBase {
 
 	public final byte DIRECTION_LEFT = 0;
 	public final byte DIRECTION_RIGHT = 1;
@@ -24,11 +24,10 @@ public abstract class GameObject implements GameObjectBase, Disposable {
 	public final byte DIRECTION_DOWN = 4;
 	public final byte DIRECTION_NONE = 8;
  
-	protected static final float GAMESPEED = 1.0f;
-	protected static final float JUMP = 306.0f * GAMESPEED;
+	protected static final float JUMP = 306.0f * Settings.GAMESPEED;
 
-	protected final float TERMINAL_VELOCITY = 1200.0f * GAMESPEED;
-	protected final float ACCELERATION = 760.0f * GAMESPEED;
+	protected final float TERMINAL_VELOCITY = 1200.0f * Settings.GAMESPEED;
+	protected final float ACCELERATION = 760.0f * Settings.GAMESPEED;
 
 	protected Vector2 position;
 	protected Vector2 velocity;

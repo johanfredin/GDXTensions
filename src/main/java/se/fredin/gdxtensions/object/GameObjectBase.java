@@ -1,13 +1,14 @@
 package se.fredin.gdxtensions.object;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.utils.Disposable;
 
 /**
  * General methods that all Game Objects should have
  * @author Niklas Istenes, Johan Fredin
  *
  */
-public interface GameObjectBase {
+public interface GameObjectBase extends Disposable{
 
 	/**
 	 * Renders to the screen
@@ -22,5 +23,7 @@ public interface GameObjectBase {
 	 */
 	void tick(float deltaTime, GameObject gameObject);
 	
+	@Override
+	public void dispose();
 
 }
