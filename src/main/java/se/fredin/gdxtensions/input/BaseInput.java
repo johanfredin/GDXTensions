@@ -115,7 +115,7 @@ public class BaseInput implements InputProcessor {
 			interactButtonPressed = true;
 		} 
 		
-		return false;
+		return true;
 	}
 	
 	@Override
@@ -146,7 +146,7 @@ public class BaseInput implements InputProcessor {
 			interactButtonPressed = false;
 		}
 		
-		return false;
+		return true;
 	}
 
 	@Override
@@ -183,5 +183,12 @@ public class BaseInput implements InputProcessor {
 	public boolean scrolled(int amount) {
 		// TODO Auto-generated method stub
 		return false;
+	}
+	
+	/**
+	 * @return whether or not any movement key was pressed (use to detect if a player is not moving for ex)
+	 */
+	public boolean noMovementKeysPressed() {
+		return !leftButtonPressed && !rightButtonPressed && !downButtonPressed && !upButtonPressed;
 	}
 }

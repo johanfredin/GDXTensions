@@ -24,11 +24,11 @@ public abstract class GameObject implements GameObjectBase, Disposable {
 	public final byte DIRECTION_DOWN = 4;
 	public final byte DIRECTION_NONE = 8;
  
-	protected static final float GAMESPEED = 1f;
-	protected static final float JUMP = 216.0f * GAMESPEED;
+	protected static final float GAMESPEED = 1.0f;
+	protected static final float JUMP = 306.0f * GAMESPEED;
 
-	protected final float TERMINAL_VELOCITY = 600.0f * GAMESPEED;
-	protected final float ACCELERATION = 360.0f * GAMESPEED;
+	protected final float TERMINAL_VELOCITY = 1200.0f * GAMESPEED;
+	protected final float ACCELERATION = 760.0f * GAMESPEED;
 
 	protected Vector2 position;
 	protected Vector2 velocity;
@@ -43,7 +43,6 @@ public abstract class GameObject implements GameObjectBase, Disposable {
 	protected boolean onGround;
 	protected float gravity;
 	protected byte direction = DIRECTION_NONE;
-	
 	
 	protected float top, left, bottom, right;
 	protected float speed;
