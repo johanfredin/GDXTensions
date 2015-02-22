@@ -130,11 +130,9 @@ public class GameCamera extends OrthographicCamera {
 	public void follow(float xCoord, float yCoord) {
 		if(boundsSet()) {
 			follow(xCoord, yCoord, this.bounds.x, this.bounds.y);
-			return;
 		}
 		
 		zoom = zoomLevel;
-		position.set(xCoord, yCoord, 0);
 		update();
 	}
 	
