@@ -21,7 +21,7 @@ public interface GameObjectBase extends Disposable{
 	 * @param deltaTime the time interval since the last rendering occurred 
 	 * @param player the player object to check for collision (used by the enemy objects etc)
 	 */
-	void tick(float deltaTime, GameObject gameObject);
+	void tick(float deltaTime, RichGameObject gameObject);
 	
 	@Override
 	public void dispose();

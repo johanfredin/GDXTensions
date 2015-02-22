@@ -1,6 +1,6 @@
 package se.fredin.gdxtensions.collision;
 
-import se.fredin.gdxtensions.object.GameObject;
+import se.fredin.gdxtensions.object.RichGameObject;
 import se.fredin.gdxtensions.utils.TiledMapUtils;
 
 import com.badlogic.gdx.math.Rectangle;
@@ -50,7 +50,7 @@ public class CollisionHandler {
 	 * @param collider the colliding object
 	 * @return the rectangle of the collided object (if any)
 	 */
-	public Rectangle getBoundsAt(Rectangle bounds, byte filter, GameObject collider) {
+	public Rectangle getBoundsAt(Rectangle bounds, byte filter, RichGameObject collider) {
 		if((filter&Filter.HARD) == Filter.HARD && hardBlocks != null) {
 			for(Rectangle hardBlock : hardBlocks) {
 				if(hardBlock.overlaps(bounds)) {
