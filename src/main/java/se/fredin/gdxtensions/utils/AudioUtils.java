@@ -51,15 +51,28 @@ public class AudioUtils {
 		return audioUtils;
 	}
 	
+	/**
+	 * Set the paths to where the sound effects and music files are. 
+	 * will only work if all sound effects is in one folder and all music in another (or the same)
+	 * @param musicPath the path to the music files
+	 * @param soundEffectsPath the path to the sound effect files
+	 */
 	public static void setPathsToBothMusicAndSoundEffects(String musicPath, String soundEffectsPath) {
 		musicFilesPath = musicPath;
 		soundEffecFilesPath = soundEffectsPath;
 	}
 	
+	/**
+	 * Set whether or not to mute all audio
+	 * @param isMute
+	 */
 	public void setMute(boolean isMute) {
 		this.isMute = isMute;
 	}
 	
+	/**
+	 * @return wheather or not all audio is mute
+	 */
 	public boolean isMute() {
 		return isMute;
 	}
@@ -91,6 +104,18 @@ public class AudioUtils {
 	 * @param shouldStopOnceFadingDone whether or not to stop playback of the track we fade out once fading is done
 	 */
 	public void crossFadeTracks(final String nameOfTrackToFadeOut, final String nameOfTrackToFadeIn, final float duration, final boolean shouldStopOnceFadingDone) {
+		crossFadeTracks(nameOfTrackToFadeOut, nameOfTrackToFadeIn, duration, shouldStopOnceFadingDone, Gdx.graphics.getDeltaTime());
+	}	
+	
+	/**
+	 * Creates a volume cross fade effect between two tracks.
+	 * @param nameOfTrackToFadeOut the name of the track to fade out
+	 * @param nameOfTrackToFadeIn the name of the track to fade in
+	 * @param duration the fade duration
+	 * @param shouldStopOnceFadingDone whether or not to stop playback of the track we fade out once fading is done
+	 * @param deltaTime the time interval since last rendering occurred
+	 */
+	public void crossFadeTracks(final String nameOfTrackToFadeOut, final String nameOfTrackToFadeIn, final float duration, final boolean shouldStopOnceFadingDone, final float deltaTime) {
 		new Thread(new Runnable() {
 			@Override
 			public void run() {
@@ -100,7 +125,7 @@ public class AudioUtils {
 				playMusic(nameOfTrackToFadeIn, true);
 				while(timer <= duration) {
 					try {
-						timer += Gdx.graphics.getDeltaTime();
+						timer += deltaTime;
 						tracks.get(nameOfTrackToFadeOut).setVolume(Math.abs(VOLUME_MAX - ((VOLUME_MAX / duration) * timer)));
 						tracks.get(nameOfTrackToFadeIn).setVolume(Math.abs((VOLUME_MAX / duration) * timer));
 						Thread.sleep(4);
@@ -122,13 +147,24 @@ public class AudioUtils {
 	 * @param shouldStopOnceFadingDone whether or not to stop playback of the track we fade out once fading is done
 	 */
 	public void fadeOutTrack(final String nameOfTrackToFadeOut, final float duration, final boolean shouldStopOnceFadingDone) {
+		fadeOutTrack(nameOfTrackToFadeOut, duration, shouldStopOnceFadingDone, Gdx.graphics.getDeltaTime());
+	}
+	
+	/**
+	 * Fades out the volume of a track
+	 * @param nameOfTrackToFadeOut the name of the track to fade out
+	 * @param duration the fade duration
+	 * @param shouldStopOnceFadingDone whether or not to stop playback of the track we fade out once fading is done
+	 * @param deltaTime the time interval since last rendering occurred
+	 */
+	public void fadeOutTrack(final String nameOfTrackToFadeOut, final float duration, final boolean shouldStopOnceFadingDone, final float deltaTime) {
 		new Thread(new Runnable() {
 			@Override
 			public void run() {
 				float timer = 0.0f;
 				while(timer <= duration) {
 					try {
-						timer += Gdx.graphics.getDeltaTime();
+						timer += deltaTime;
 						tracks.get(nameOfTrackToFadeOut).setVolume(Math.abs(VOLUME_MAX - ((VOLUME_MAX / duration) * timer)));
 						Thread.sleep(4);
 					} catch(Exception e) {

@@ -3,38 +3,49 @@ package se.fredin.gdxtensions.level;
 import se.fredin.gdxtensions.assetmanagement.Assets;
 import se.fredin.gdxtensions.collision.CollisionHandler;
 import se.fredin.gdxtensions.screen.BaseScreen;
+import se.fredin.gdxtensions.utils.TiledMapUtils;
 
+import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 
 /***
- * Extension of Level, used when we want to create a level that works with a tiled map
- * created in Tiled or any other editor supporting the .TMX format. contains a TiledMap and a
- * OrthogonalTiledMapRenderer for further functionality
- * @author johan
+ * Used when we want to create a {@link Level} that works with a tiled map
+ * created in Tiled or any other editor supporting the .TMX format. Contains a {@link TiledMap}, 
+ * {@link OrthogonalTiledMapRenderer} and a {@link CollisionHandler}. Also comes equipped with
+ * an instance of {@link TiledMapUtils} that comes with a bunch of 
+ * helper methods for quickly retrieving map objects, properties and layers.
+ * @author Johan Fredin
  *
- * @param <T>
+ * @param <T> any class extending {@link BaseScreen}
  */
 @SuppressWarnings("rawtypes")
 public abstract class TiledMapLevel<T extends BaseScreen> extends Level {
 	
 	protected OrthogonalTiledMapRenderer mapRenderer;
 	protected TiledMap map;
+	protected TiledMapUtils tiledMapUtils;
 	protected CollisionHandler collisionHandler;
 	protected int mapWidth;
 	protected int mapHeight;
 	protected int tileWidth;
 	protected int tileHeight;
 	
+	/**
+	 * Construct a new {@link TiledMapLevel}
+	 * @param levelName the path and name of the .tmx map
+	 * @param screen the {@link Screen} that will render this level
+	 */
 	@SuppressWarnings("unchecked")
 	public TiledMapLevel(String levelName, T screen) {
 		super(screen);
 		this.map = (TiledMap) Assets.getInstance().get(levelName);
-		this.tileWidth = map.getProperties().get("tilewidth", Integer.class);
-		this.tileHeight = map.getProperties().get("tileheight", Integer.class);
-		this.mapWidth = map.getProperties().get("width", Integer.class) * tileWidth;
-		this.mapHeight = map.getProperties().get("height", Integer.class) * tileHeight;
-		this.mapRenderer = new OrthogonalTiledMapRenderer(map, screen.getSpriteBatch());
+		this.tiledMapUtils = new TiledMapUtils(this.map);
+		this.tileWidth = this.tiledMapUtils.getTileWidth();
+		this.tileHeight = this.tiledMapUtils.getTileHeight();
+		this.mapWidth = this.tiledMapUtils.getMapWidth();
+		this.mapHeight = this.tiledMapUtils.getMapHeight();
+		this.mapRenderer = new OrthogonalTiledMapRenderer(this.map, screen.getSpriteBatch());
 	}
 	
 	/**
@@ -58,7 +69,7 @@ public abstract class TiledMapLevel<T extends BaseScreen> extends Level {
 	public TiledMap getMap() {
 		return map;
 	}
-
+	
 	/**
 	 * Set what {@link TiledMap} to use
 	 * @param map the map to use
@@ -68,31 +79,10 @@ public abstract class TiledMapLevel<T extends BaseScreen> extends Level {
 	}
 	
 	/**
-	 * @return the width of the map e.g the width * tile width of each tile
+	 * @return the {@link TiledMapUtils} instance
 	 */
-	public int getMapWidth() {
-		return mapWidth;
-	}
-	
-	/**
-	 * @return the height of the map e.g the height * height of each tile
-	 */
-	public int getMapHeight() {
-		return mapHeight;
-	}
-	
-	/**
-	 * @return the width of the tiles
-	 */
-	public int getTileWidth() {
-		return tileWidth;
-	}
-	
-	/**
-	 * @return the height of the tiles
-	 */
-	public int getTileHeight() {
-		return tileHeight;
+	public TiledMapUtils getTiledMapUtils() {
+		return tiledMapUtils;
 	}
 	
 	@Override

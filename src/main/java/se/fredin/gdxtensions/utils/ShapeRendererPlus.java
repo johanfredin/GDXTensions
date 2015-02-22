@@ -58,18 +58,32 @@ public class ShapeRendererPlus extends ShapeRenderer {
 		this.shapeType = shapeType;
 	}
 	
+	/**
+	 * Set the camera to use
+	 * @param camera the {@link GameCamera} to use
+	 */
 	public void setCamera(GameCamera camera) {
 		this.camera = camera;
 	}
 	
+	/**
+	 * @return the {@link GameCamera} used by this instance
+	 */
 	public GameCamera getCamera() {
 		return camera;
 	}
 	
+	/**
+	 * Set the shape type to use for rendering
+	 * @param shapeType the {@link ShapeType}
+	 */
 	public void setShapeType(ShapeType shapeType) {
 		this.shapeType = shapeType;
 	}
 	
+	/**
+	 * @return the {@link ShapeType} used by this instance
+	 */
 	public ShapeType getShapeType() {
 		return shapeType;
 	}

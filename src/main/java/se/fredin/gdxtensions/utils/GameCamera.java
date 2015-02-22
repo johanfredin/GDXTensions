@@ -4,9 +4,9 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.math.Vector2;
 
 /**
- * Extension of the standard LibGDX orthographic camera, contains more methods for following positions,
+ * Extension of the standard LibGDX {@link OrthographicCamera}, contains more methods for following positions,
  * specifying bounds and rumble features.
- * @author johan
+ * @author Johan Fredin
  *
  */
 public class GameCamera extends OrthographicCamera {
