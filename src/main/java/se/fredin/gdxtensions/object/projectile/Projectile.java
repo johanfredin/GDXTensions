@@ -4,6 +4,7 @@ import se.fredin.gdxtensions.collision.CollisionHandler;
 import se.fredin.gdxtensions.object.BasicGameObject;
 import se.fredin.gdxtensions.object.RichGameObject;
 
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 
 /**
@@ -13,9 +14,14 @@ import com.badlogic.gdx.math.Vector2;
  * @author Johan Fredin
  *
  */
-public abstract class Projectile extends BasicGameObject {
+public class Projectile extends BasicGameObject {
 	
 	private float damage;
+	
+	/**
+	 * Construct a new {@link Projectile} without setting anything
+	 */
+	public Projectile() {}
 	
 	/**
 	 * Construct a new {@link RichGameObject}
@@ -139,6 +145,12 @@ public abstract class Projectile extends BasicGameObject {
 		this.damage = damage;
 	}
 	
+	public Projectile(Projectile projectile) {
+		super(projectile.getPosition(), projectile.getCollisionHandler(), projectile.getBoundsWidth(), projectile.getBoundsHeight(), 
+			  projectile.getRight(), projectile.getBottom(), projectile.getLeft(), projectile.getTop());
+		this.damage = projectile.getDamage();
+	}
+	
 	/**
 	 * Set the amount of damage this projectile will deliver
 	 * @param damage
@@ -152,6 +164,21 @@ public abstract class Projectile extends BasicGameObject {
 	 */
 	public float getDamage() {
 		return damage;
+	}
+
+	@Override
+	public void render(SpriteBatch batch) {
+		batch.draw(currentFrame, position.x, position.y);
+	}
+
+	@Override
+	public void tick(float deltaTime, RichGameObject gameObject) {
+		//TODO: Do something here?
+	}
+
+	@Override
+	public void dispose() {
+		
 	}
 	
 

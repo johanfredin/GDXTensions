@@ -39,6 +39,11 @@ public abstract class RichGameObject extends BasicGameObject {
 	protected float stateTime;
 
 	/**
+	 * Construct a new {@link RichGameObject} without setting anything
+	 */
+	public RichGameObject() {}
+	
+	/**
 	 * Construct a new {@link RichGameObject}
 	 * @param position the initial position
 	 */

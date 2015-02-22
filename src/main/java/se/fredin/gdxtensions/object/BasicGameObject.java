@@ -33,6 +33,11 @@ public abstract class BasicGameObject implements GameObjectBase {
 	protected ParticleHelper particleHelper;
 	
 	/**
+	 * Construct a new {@link BasicGameObject} without setting anything
+	 */
+	public BasicGameObject() {}
+	
+	/**
 	 * Construct a new {@link BasicGameObject}
 	 * @param position the initial position
 	 */
@@ -315,6 +320,22 @@ public abstract class BasicGameObject implements GameObjectBase {
 	 */
 	public boolean isVerticalCollision(float colliderY, float collisionObjectY) {
 		return colliderY < collisionObjectY;
+	}
+	
+	public float getTop() {
+		return top;
+	}
+	
+	public float getBottom() {
+		return bottom;
+	}
+	
+	public float getLeft() {
+		return left;
+	}
+	
+	public float getRight() {
+		return right;
 	}
 	
 }
