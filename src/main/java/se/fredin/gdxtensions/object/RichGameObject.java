@@ -3,8 +3,10 @@ package se.fredin.gdxtensions.object;
 
 import se.fredin.gdxtensions.collision.CollisionHandler;
 import se.fredin.gdxtensions.collision.CollisionHandler.Filter;
+import se.fredin.gdxtensions.input.BaseInput;
 import se.fredin.gdxtensions.utils.Settings;
 
+import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 
@@ -17,27 +19,34 @@ import com.badlogic.gdx.math.Vector2;
  */
 public abstract class RichGameObject extends BasicGameObject {
 
+	public static final byte MAX_HEALTH = 100;
+	protected static final float JUMP = 306.0f * Settings.GAMESPEED;
 	
 	public final byte DIRECTION_LEFT = 0;
 	public final byte DIRECTION_RIGHT = 1;
 	public final byte DIRECTION_UP = 2;
 	public final byte DIRECTION_DOWN = 4;
 	public final byte DIRECTION_NONE = 8;
- 
-	protected static final float JUMP = 306.0f * Settings.GAMESPEED;
 
 	protected final float TERMINAL_VELOCITY = 1200.0f * Settings.GAMESPEED;
 	protected final float ACCELERATION = 760.0f * Settings.GAMESPEED;
 
 	protected boolean isJumping;
 	protected boolean isTeleporting;
+	protected boolean isVisible;
 	protected boolean down;
 	protected boolean onGround;
 	protected float gravity;
 	protected byte direction = DIRECTION_NONE;
+	protected float health;
+	protected Vector2 teleportLandingPosition;
+	
 	
 	protected float stateTime;
 
+	//TODO: For now only fixed keyboard, fix later to map to any keys or gamepad or touchpad
+	protected BaseInput input;
+	
 	/**
 	 * Construct a new {@link RichGameObject} without setting anything
 	 */
@@ -99,6 +108,7 @@ public abstract class RichGameObject extends BasicGameObject {
 	 */
 	public RichGameObject(Vector2 position, CollisionHandler collisionHandler, float width, float height, float right, float bottom, float left, float top) {
 		super(position, collisionHandler, width, height, right, bottom, left, top);
+		this.health = MAX_HEALTH;
 	}
 
 	/**
@@ -123,12 +133,28 @@ public abstract class RichGameObject extends BasicGameObject {
 		return isTeleporting;
 	}
 	
+	public void setOnGround(boolean onGround) {
+		this.onGround = onGround;
+	}
+
+	public Vector2 getTeleportLandingPosition() {
+		return teleportLandingPosition;
+	}
+
+	public void setTeleportLandingPosition(Vector2 teleportLandingPosition) {
+		this.teleportLandingPosition = teleportLandingPosition;
+	}
+	
 	/**
 	 * Set whether or not we are teleporting
 	 * @param isTeleporting
 	 */
 	public void setTeleporting(boolean isTeleporting) {
 		this.isTeleporting = isTeleporting;
+	}
+	
+	public InputProcessor getInput() {
+		return input;
 	}
 	
 	/**
@@ -207,6 +233,43 @@ public abstract class RichGameObject extends BasicGameObject {
 	}
 	
 	/**
+	 * Adds health to the player
+	 * @param amount the amount of health to add
+	 */
+	public void increaseHealth(float amount) {
+		if(health < MAX_HEALTH) {
+			this.health += amount;
+		}
+	}
+
+	public float getHealth() {
+		return health;
+	}
+
+	/**
+	 * Sets the players health to zero
+	 */
+	public void kill() {
+		this.health = 0.0f;
+	}
+	
+	/**
+	 * Set the player to visible or not
+	 * @param isVisible
+	 */
+	public void setVisible(boolean isVisible) {
+		this.isVisible = isVisible;
+	}
+
+	/**
+	 * Check if the player is visible
+	 * @return
+	 */
+	public boolean isVisible() {
+		return isVisible;
+	}
+	
+	/**
 	 * Set the direction we should be heading in
 	 * @param direction the direction we want to set
 	 * must be one of the following:<br>
@@ -218,6 +281,18 @@ public abstract class RichGameObject extends BasicGameObject {
 	 */
 	public void setDirection(byte direction) {
 		this.direction = direction;
+	}
+	
+	public void handleInput() {
+		if(input.isLeftButtonPressed()) {
+			direction = DIRECTION_LEFT;
+		} if(input.isRightButtonPressed()) {
+			direction = DIRECTION_RIGHT;
+		} else {
+			if(input.noMovementKeysPressed()) {
+				direction = DIRECTION_NONE;
+			}
+		}
 	}
 
 	/**

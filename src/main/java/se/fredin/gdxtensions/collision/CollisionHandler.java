@@ -27,6 +27,10 @@ public class CollisionHandler {
 		this.softBlocks = softBlocks;
 	}
 	
+	public boolean isCollision(Rectangle collider, Rectangle collisionRect) {
+		return collider.overlaps(collisionRect);
+	}
+	
 	public boolean fromLeft(Rectangle collider, Rectangle collisionRect) {
 		return collider.x + collider.width >= collisionRect.x;
 	}

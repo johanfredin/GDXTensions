@@ -1,8 +1,11 @@
 package se.fredin.gdxtensions.object;
 
+import se.fredin.gdxtensions.assetmanagement.Assets;
 import se.fredin.gdxtensions.collision.CollisionHandler;
 import se.fredin.gdxtensions.utils.ParticleHelper;
 
+import com.badlogic.gdx.files.FileHandle;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Rectangle;
@@ -23,7 +26,7 @@ public abstract class BasicGameObject implements GameObjectBase {
 	protected Vector2 position;
 	protected Vector2 velocity;
 	protected Rectangle bounds;
-	protected TextureRegion currentFrame;
+	protected TextureRegion gameObjectTexture;
 	protected CollisionHandler collisionHandler;
 	protected boolean isCollidedWith;
 	protected float top, left, bottom, right;
@@ -338,4 +341,20 @@ public abstract class BasicGameObject implements GameObjectBase {
 		return right;
 	}
 	
+	public void setGameObjectTexture(TextureRegion gameObjectTexture) {
+		this.gameObjectTexture = gameObjectTexture;
+	}
+	
+	public void setGameObjectTexture(String path) {
+		this.gameObjectTexture = new TextureRegion((Texture) Assets.getInstance().get(path));
+	}
+	
+	public void setGameObjectTexture(FileHandle fileHandle) {
+		this.gameObjectTexture = new TextureRegion(new Texture(fileHandle));
+	}
+	
+	public TextureRegion getGameObjectTexture() {
+		return gameObjectTexture;
+	}
+
 }

@@ -168,13 +168,14 @@ public class Projectile extends BasicGameObject {
 
 	@Override
 	public void render(SpriteBatch batch) {
-		batch.draw(currentFrame, position.x, position.y);
+		batch.draw(gameObjectTexture, position.x, position.y);
 	}
 
 	@Override
 	public void tick(float deltaTime, RichGameObject gameObject) {
-		//TODO: Do something here?
+		this.position.add(velocity);
 	}
+	
 
 	@Override
 	public void dispose() {
