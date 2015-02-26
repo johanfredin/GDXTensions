@@ -3,9 +3,12 @@ package se.fredin.gdxtensions.object.projectile;
 import se.fredin.gdxtensions.collision.CollisionHandler;
 import se.fredin.gdxtensions.object.BasicGameObject;
 import se.fredin.gdxtensions.object.RichGameObject;
+import se.fredin.gdxtensions.utils.Settings;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.utils.Pool.Poolable;
 
 /**
  * This class handles projectiles like bullets etc.
@@ -14,7 +17,7 @@ import com.badlogic.gdx.math.Vector2;
  * @author Johan Fredin
  *
  */
-public class Projectile extends BasicGameObject {
+public class Projectile extends BasicGameObject implements Poolable {
 	
 	private float damage;
 	
@@ -83,6 +86,19 @@ public class Projectile extends BasicGameObject {
 	public Projectile(Vector2 position, CollisionHandler collisionHandler, float width, float height, float damage) {
 		this(position, collisionHandler, width, height, 0f, 0f, 0f, 0f, damage);
 	}
+	
+	/**
+	 * Construct a new {@link RichGameObject}
+	 * @param position the initial position
+	 * @param collisionHandler the {@link CollisionHandler} that will handle collision for this game object
+	 * @param width the width of the bounding box
+	 * @param height the height of the bounding box
+	 * @param damage how much damage this bullet will do
+	 */
+	public Projectile(Vector2 position, CollisionHandler collisionHandler, float width, float height, float damage, TextureRegion gameObjectTexture) {
+		this(position, collisionHandler, width, height, 0f, 0f, 0f, 0f, damage);
+		this.gameObjectTexture = gameObjectTexture;
+	}
 
 	/**
 	 * Construct a new {@link RichGameObject}
@@ -150,7 +166,7 @@ public class Projectile extends BasicGameObject {
 			  projectile.getRight(), projectile.getBottom(), projectile.getLeft(), projectile.getTop());
 		this.damage = projectile.getDamage();
 	}
-	
+
 	/**
 	 * Set the amount of damage this projectile will deliver
 	 * @param damage
@@ -176,10 +192,21 @@ public class Projectile extends BasicGameObject {
 		this.position.add(velocity);
 	}
 	
+	public void tick(float deltaTime) {
+		this.tick(deltaTime, null);
+	}
 
 	@Override
 	public void dispose() {
 		
+	}
+
+	@Override
+	public void reset() {
+		this.position.set(0, 0);
+		this.velocity.set(Settings.defaultProjectileSpeed, 0);
+		this.top = this.bottom = this.left = this.right = this.damage = this.speed = 0;
+		this.bounds.setPosition(this.position);
 	}
 	
 

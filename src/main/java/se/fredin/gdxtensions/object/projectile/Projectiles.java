@@ -13,14 +13,26 @@ public class Projectiles implements GameObjectBase {
 	private Array<Projectile> projectiles;
 	private ProjectilesPool projectilesPool;
 	
-	public Projectiles(Projectile template, int initialCapacity, int maxCapacity) {
-		this.projectilesPool = new ProjectilesPool(template, initialCapacity, maxCapacity);
+	public Projectiles(int initialCapacity, int maxCapacity) {
+		this.projectilesPool = new ProjectilesPool(initialCapacity, maxCapacity);
 		this.projectiles = new Array<Projectile>(initialCapacity);
 		this.maxCapacity = maxCapacity;
 	}
 	
-	public void shoot() {
-		projectiles.add(projectilesPool.obtain());
+	public void shoot(Projectile projectile) {
+		Projectile obtainedProjectile = projectilesPool.obtain();
+		this.transferValuesFrom(obtainedProjectile, projectile);
+		projectiles.add(obtainedProjectile);
+	}
+	
+	private void transferValuesFrom(Projectile projectileToAddTo, Projectile populatedProjectile) {
+		projectileToAddTo.setPosition(populatedProjectile.getPosition());
+		projectileToAddTo.setSpeed(populatedProjectile.getSpeed());
+		projectileToAddTo.setVelocity(populatedProjectile.getVelocity());
+		projectileToAddTo.setDamage(populatedProjectile.getDamage());
+		projectileToAddTo.setBounds(populatedProjectile.getBounds());
+		projectileToAddTo.setCollisionHandler(populatedProjectile.getCollisionHandler());
+		projectileToAddTo.setGameObjectTexture(populatedProjectile.getGameObjectTexture());
 	}
 	
 	public void populateProjectilesArray(int amount) {
@@ -64,16 +76,14 @@ public class Projectiles implements GameObjectBase {
 	
 	public static class ProjectilesPool extends Pool<Projectile> {
 
-		private Projectile template;
 		
-		public ProjectilesPool(Projectile template, int initialCapacity, int max) {
+		public ProjectilesPool(int initialCapacity, int max) {
 			super(initialCapacity, max);
-			this.template = template;
 		}
 		
 		@Override
 		protected Projectile newObject() {
-			return new Projectile(template);
+			return new Projectile();
 		}
 		
 	}

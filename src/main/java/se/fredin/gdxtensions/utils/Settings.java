@@ -36,6 +36,8 @@ public class Settings {
 	/** Used to find out what brand we are running */
 	public static String androidBrandName;
 	
+	public static float defaultProjectileSpeed = 5f;
+	
 	/**
 	 * Used to determine if we are running on a low end device.
 	 * We set the limit for low end to be 480 * 320 in width and height.

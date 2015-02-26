@@ -140,7 +140,9 @@ public abstract class BasicGameObject implements GameObjectBase {
 	 */
 	public void setPosition(Vector2 position) {
 		this.position = position;
-		this.bounds.setPosition(position.x + left, position.y + top);
+		if(bounds != null) {
+			this.bounds.setPosition(position.x + left, position.y + top);
+		} 
 	}
 
 	/**
@@ -150,7 +152,9 @@ public abstract class BasicGameObject implements GameObjectBase {
 	 */
 	public void setPosition(float x, float y) {
 		this.position.set(x, y);
-		this.bounds.setPosition(position.x + left, position.y + top);
+		if(bounds != null) {
+			this.bounds.setPosition(position.x + left, position.y + top);
+		}
 	}
 	
 	/**
@@ -241,7 +245,11 @@ public abstract class BasicGameObject implements GameObjectBase {
 	 * @param velocity
 	 */
 	public void setVelocity(Vector2 velocity) {
-		this.velocity.set(velocity);
+		if(this.velocity != null) {
+			this.velocity.set(velocity);
+		} else {
+			this.velocity = new Vector2(velocity);
+		}
 	}
 	
 	/**
@@ -342,15 +350,17 @@ public abstract class BasicGameObject implements GameObjectBase {
 	}
 	
 	public void setGameObjectTexture(TextureRegion gameObjectTexture) {
-		this.gameObjectTexture = gameObjectTexture;
+		if(this.gameObjectTexture == null) {
+			this.gameObjectTexture = gameObjectTexture;
+		}
 	}
 	
 	public void setGameObjectTexture(String path) {
-		this.gameObjectTexture = new TextureRegion((Texture) Assets.getInstance().get(path));
+		this.setGameObjectTexture(new TextureRegion((Texture) Assets.getInstance().get(path)));
 	}
 	
 	public void setGameObjectTexture(FileHandle fileHandle) {
-		this.gameObjectTexture = new TextureRegion(new Texture(fileHandle));
+		this.setGameObjectTexture(new TextureRegion(new Texture(fileHandle)));
 	}
 	
 	public TextureRegion getGameObjectTexture() {
