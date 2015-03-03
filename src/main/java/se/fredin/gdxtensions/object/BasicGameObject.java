@@ -366,5 +366,21 @@ public abstract class BasicGameObject implements GameObjectBase {
 	public TextureRegion getGameObjectTexture() {
 		return gameObjectTexture;
 	}
+	
+	/**
+	 * Get the width of the current frame texture region
+	 * @return width
+	 */
+	public int getTextureWidth() {
+		return gameObjectTexture == null ? 32 : gameObjectTexture.getRegionWidth();
+	}
+
+	/**
+	 * Get the height of the current frame texture region
+	 * @return height
+	 */
+	public int getTextureHeight() {
+		return gameObjectTexture == null ? 32 : gameObjectTexture.getRegionHeight();
+	}
 
 }

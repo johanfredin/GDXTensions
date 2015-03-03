@@ -36,7 +36,7 @@ public class Settings {
 	/** Used to find out what brand we are running */
 	public static String androidBrandName;
 	
-	public static float defaultProjectileSpeed = 5f;
+	public static float defaultProjectileSpeed = 800f;
 	
 	/**
 	 * Used to determine if we are running on a low end device.

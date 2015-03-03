@@ -30,7 +30,8 @@ public class BaseInput implements InputProcessor {
 	protected short right = Keys.RIGHT;
 	protected short up = Keys.UP;
 	protected short down = Keys.DOWN;
-	protected short shoot = Keys.CONTROL_LEFT;
+	protected short shoot1 = Keys.CONTROL_LEFT;
+	protected short shoot2 = Keys.CONTROL_RIGHT;
 	protected short exit = Keys.ESCAPE;
 	protected short interact = Keys.E;
 	protected short menu = Keys.ALT_LEFT;
@@ -97,9 +98,8 @@ public class BaseInput implements InputProcessor {
 			upButtonPressed = true;
 		} if(keycode == down) {
 			downButtonPressed = true;
-		} if(keycode == shoot) {
+		} if(keycode == shoot1 || keycode == shoot2) {
 			shootButtonPressed = true;
-		} if(keycode == map) {
 			mapButtonPressed = true;
 		} if(keycode == pause) {
 			pauseButtonPressed = true;
@@ -128,7 +128,7 @@ public class BaseInput implements InputProcessor {
 			upButtonPressed = false;
 		} if(keycode == down) {
 			downButtonPressed = false;
-		} if(keycode == shoot) {
+		} if(keycode == shoot1 || keycode == shoot2) {
 			shootButtonPressed = false;
 		} if(keycode == map) {
 			mapButtonPressed = false;
@@ -151,7 +151,6 @@ public class BaseInput implements InputProcessor {
 
 	@Override
 	public boolean keyTyped(char character) {
-		// TODO Auto-generated method stub
 		return false;
 	}
 
