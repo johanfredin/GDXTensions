@@ -193,7 +193,7 @@ public class Projectile extends BasicGameObject implements Poolable {
 
 	@Override
 	public void tick(float deltaTime, RichGameObject gameObject) {
-		this.position.add(velocity.x * deltaTime, velocity.y == 0 ? velocity.y : velocity.y * deltaTime);
+		this.position.add(velocity.x * deltaTime, velocity.y * deltaTime);
 		this.bounds.setPosition(position);
 		this.isCollidedWith = collisionHandler.isCollisionWithHardBlock(bounds);
 	}

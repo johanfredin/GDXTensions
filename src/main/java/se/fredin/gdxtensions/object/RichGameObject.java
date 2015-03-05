@@ -38,6 +38,7 @@ public abstract class RichGameObject extends BasicGameObject {
 	protected boolean onGround;
 	protected float gravity;
 	protected byte direction = DIRECTION_NONE;
+	protected byte lastKnownDirection;
 	protected float health;
 	protected Vector2 teleportLandingPosition;
 	
@@ -232,6 +233,14 @@ public abstract class RichGameObject extends BasicGameObject {
 		return direction;
 	}
 	
+	public void setLastKnownDirection(byte lastKnownDirection) {
+		this.lastKnownDirection = lastKnownDirection;
+	}
+	
+	public byte getLastKnownDirection() {
+		return lastKnownDirection;
+	}
+	
 	/**
 	 * Adds health to the player
 	 * @param amount the amount of health to add
@@ -286,15 +295,17 @@ public abstract class RichGameObject extends BasicGameObject {
 	public void handleInput() {
 		if(input.isLeftButtonPressed()) {
 			direction = DIRECTION_LEFT;
+			lastKnownDirection = direction;
 		} if(input.isRightButtonPressed()) {
 			direction = DIRECTION_RIGHT;
+			lastKnownDirection = direction;
 		} else {
 			if(input.noMovementKeysPressed()) {
 				direction = DIRECTION_NONE;
 			}
 		}
 	}
-
+	
 	/**
 	 * Animates the object.
 	 * @param deltaTime

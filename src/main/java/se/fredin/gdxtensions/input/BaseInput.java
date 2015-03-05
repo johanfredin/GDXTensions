@@ -17,6 +17,10 @@ public class BaseInput implements InputProcessor {
 	protected boolean leftButtonPressed;
 	protected boolean rightButtonPressed;
 	protected boolean upButtonPressed;
+	protected boolean upRightButtonPressed;
+	protected boolean upLeftButtonPressed;
+	protected boolean downRightButtonPressed;
+	protected boolean downLeftButtonPressed;
 	protected boolean downButtonPressed;
 	protected boolean shootButtonPressed;
 	protected boolean interactButtonPressed;
@@ -86,6 +90,22 @@ public class BaseInput implements InputProcessor {
 	
 	public boolean isInteractButtonPressed() {
 		return interactButtonPressed;
+	}
+	
+	public boolean isDownLeftButtonPressed() {
+		return downButtonPressed && leftButtonPressed;
+	}
+	
+	public boolean isDownRightButtonPressed() {
+		return downButtonPressed && rightButtonPressed;
+	}
+	
+	public boolean isUpLeftButtonPressed() {
+		return upButtonPressed && leftButtonPressed;
+	}
+	
+	public boolean isUpRightButtonPressed() {
+		return upButtonPressed && rightButtonPressed;
 	}
 	
 	@Override
