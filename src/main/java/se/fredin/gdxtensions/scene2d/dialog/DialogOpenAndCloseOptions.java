@@ -1,6 +1,6 @@
 package se.fredin.gdxtensions.scene2d.dialog;
 
-import se.fredin.gdxtensions.utils.LogUtils;
+import se.fredin.gdxtensions.utils.logging.LogUtils;
 
 import com.badlogic.gdx.math.Interpolation;
 import com.badlogic.gdx.scenes.scene2d.Actor;

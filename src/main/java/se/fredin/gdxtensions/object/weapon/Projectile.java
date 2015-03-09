@@ -1,8 +1,7 @@
-package se.fredin.gdxtensions.object.projectile;
+package se.fredin.gdxtensions.object.weapon;
 
 import se.fredin.gdxtensions.collision.CollisionHandler;
 import se.fredin.gdxtensions.object.BasicGameObject;
-import se.fredin.gdxtensions.object.RichGameObject;
 import se.fredin.gdxtensions.utils.Settings;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -27,7 +26,7 @@ public class Projectile extends BasicGameObject implements Poolable {
 	public Projectile() {}
 	
 	/**
-	 * Construct a new {@link RichGameObject}
+	 * Construct a new {@link Projectile}
 	 * @param position the initial position
 	 */
 	public Projectile(Vector2 position) {
@@ -35,7 +34,7 @@ public class Projectile extends BasicGameObject implements Poolable {
 	}
 	
 	/**
-	 * Construct a new {@link RichGameObject}
+	 * Construct a new {@link Projectile}
 	 * @param position the initial position
 	 * @param damage how much damage this bullet will do
 	 */
@@ -44,7 +43,7 @@ public class Projectile extends BasicGameObject implements Poolable {
 	}
 
 	/**
-	 * Construct a new {@link RichGameObject}
+	 * Construct a new {@link Projectile}
 	 * @param position the initial position
 	 * @param width the width of the bounding box
 	 * @param height the height of the bounding box
@@ -54,7 +53,7 @@ public class Projectile extends BasicGameObject implements Poolable {
 	}
 	
 	/**
-	 * Construct a new {@link RichGameObject}
+	 * Construct a new {@link Projectile}
 	 * @param position the initial position
 	 * @param width the width of the bounding box
 	 * @param height the height of the bounding box
@@ -65,9 +64,9 @@ public class Projectile extends BasicGameObject implements Poolable {
 	}
 
 	/**
-	 * Construct a new {@link RichGameObject}
+	 * Construct a new {@link Projectile}
 	 * @param position the initial position
-	 * @param collisionHandler the {@link CollisionHandler} that will handle collision for this game object
+	 * @param collisionHandler the {@link CollisionHandler} that will handle collision for this projectile
 	 * @param width the width of the bounding box
 	 * @param height the height of the bounding box
 	 */
@@ -76,9 +75,9 @@ public class Projectile extends BasicGameObject implements Poolable {
 	}
 	
 	/**
-	 * Construct a new {@link RichGameObject}
+	 * Construct a new {@link Projectile}
 	 * @param position the initial position
-	 * @param collisionHandler the {@link CollisionHandler} that will handle collision for this game object
+	 * @param collisionHandler the {@link CollisionHandler} that will handle collision for this projectile 
 	 * @param width the width of the bounding box
 	 * @param height the height of the bounding box
 	 * @param damage how much damage this bullet will do
@@ -88,9 +87,9 @@ public class Projectile extends BasicGameObject implements Poolable {
 	}
 	
 	/**
-	 * Construct a new {@link RichGameObject}
+	 * Construct a new {@link Projectile}
 	 * @param position the initial position
-	 * @param collisionHandler the {@link CollisionHandler} that will handle collision for this game object
+	 * @param collisionHandler the {@link CollisionHandler} that will handle collision for this projectile
 	 * @param width the width of the bounding box
 	 * @param height the height of the bounding box
 	 * @param damage how much damage this bullet will do
@@ -101,7 +100,7 @@ public class Projectile extends BasicGameObject implements Poolable {
 	}
 
 	/**
-	 * Construct a new {@link RichGameObject}
+	 * Construct a new {@link Projectile}
 	 * @param position the initial position
 	 * @param width the width of the bounding box
 	 * @param height the height of the bounding box
@@ -115,7 +114,7 @@ public class Projectile extends BasicGameObject implements Poolable {
 	}
 	
 	/**
-	 * Construct a new {@link RichGameObject}
+	 * Construct a new {@link Projectile}
 	 * @param position the initial position
 	 * @param width the width of the bounding box
 	 * @param height the height of the bounding box
@@ -130,9 +129,9 @@ public class Projectile extends BasicGameObject implements Poolable {
 	}
 
 	/**
-	 * Construct a new {@link RichGameObject}
+	 * Construct a new {@link Projectile}
 	 * @param position the initial position
-	 * @param collisionHandler the {@link CollisionHandler} that will handle collision for this game object
+	 * @param collisionHandler the {@link CollisionHandler} that will handle collision for this projectile
 	 * @param width the width of the bounding box
 	 * @param height the height of the bounding box
 	 * @param right how much to crop or enlarge the bounding box on the right
@@ -145,9 +144,9 @@ public class Projectile extends BasicGameObject implements Poolable {
 	}
 	
 	/**
-	 * Construct a new {@link RichGameObject}
+	 * Construct a new {@link Projectile}
 	 * @param position the initial position
-	 * @param collisionHandler the {@link CollisionHandler} that will handle collision for this game object
+	 * @param collisionHandler the {@link CollisionHandler} that will handle collision for this projectile
 	 * @param width the width of the bounding box
 	 * @param height the height of the bounding box
 	 * @param right how much to crop or enlarge the bounding box on the right
@@ -161,6 +160,11 @@ public class Projectile extends BasicGameObject implements Poolable {
 		this.damage = damage;
 	}
 	
+	/**
+	 * Constructs a new {@link Projectile} populating it with values from 
+	 * a passed in {@link Projectile}
+	 * @param projectile the {@link Projectile} we want to transfer the values from
+	 */
 	public Projectile(Projectile projectile) {
 		super(projectile.getPosition(), projectile.getCollisionHandler(), projectile.getBoundsWidth(), projectile.getBoundsHeight(), 
 			  projectile.getRight(), projectile.getBottom(), projectile.getLeft(), projectile.getTop());
@@ -186,13 +190,17 @@ public class Projectile extends BasicGameObject implements Poolable {
 	public void render(SpriteBatch batch) {
 		batch.draw(gameObjectTexture, position.x, position.y);
 	}
-
+	
+	/**
+	 * Updates the projectile
+	 * @param deltaTime the time interval since last rendering occured
+	 */
 	public void tick(float deltaTime) {
 		this.tick(deltaTime, null);
 	}
 
 	@Override
-	public void tick(float deltaTime, RichGameObject gameObject) {
+	public void tick(float deltaTime, BasicGameObject gameObject) {
 		this.position.add(velocity.x * deltaTime, velocity.y * deltaTime);
 		this.bounds.setPosition(position);
 		this.isCollidedWith = collisionHandler.isCollisionWithHardBlock(bounds);

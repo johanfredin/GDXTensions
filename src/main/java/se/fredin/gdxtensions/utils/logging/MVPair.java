@@ -1,4 +1,4 @@
-package se.fredin.gdxtensions.utils;
+package se.fredin.gdxtensions.utils.logging;
 
 /**
  * A very basic helper key value pair class but with only Strings

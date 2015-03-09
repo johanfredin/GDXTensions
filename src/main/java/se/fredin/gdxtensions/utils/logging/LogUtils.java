@@ -1,4 +1,4 @@
-package se.fredin.gdxtensions.utils;
+package se.fredin.gdxtensions.utils.logging;
 
 import com.badlogic.gdx.Gdx;
 
