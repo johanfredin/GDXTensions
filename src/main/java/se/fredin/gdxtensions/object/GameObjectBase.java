@@ -17,11 +17,10 @@ public interface GameObjectBase extends Disposable{
 	void render(SpriteBatch batch);
 
 	/**
-	 * Updates game state
+	 * Updates the state of the game object
 	 * @param deltaTime the time interval since the last rendering occurred 
-	 * @param player the player object to check for collision (used by the enemy objects etc)
 	 */
-	void tick(float deltaTime, BasicGameObject gameObject);
+	void tick(float deltaTime);
 	
 	@Override
 	public void dispose();

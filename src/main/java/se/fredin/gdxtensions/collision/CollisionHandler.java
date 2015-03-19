@@ -13,35 +13,50 @@ import com.badlogic.gdx.utils.Array;
  */
 public class CollisionHandler {
 	
-	protected Array<Rectangle> hardBlocks;
-	protected Array<Rectangle> softBlocks;
+	private Array<Rectangle> hardBlocks;
+	private Array<Rectangle> softBlocks;
+	private Rectangle colliderBounds;
 	
 	public CollisionHandler() {}
 	
+	public CollisionHandler(Rectangle colliderBounds) {
+		this(colliderBounds, null);
+	}
+	
 	public CollisionHandler(TiledMapUtils tiledMapUtils) {
+		this(null, tiledMapUtils);
+	}
+	
+	public CollisionHandler(Rectangle colliderBounds, TiledMapUtils tiledMapUtils) {
 		this.hardBlocks = tiledMapUtils.getRectangularMapObjects("hard-blocks");
 		this.softBlocks = tiledMapUtils.getRectangularMapObjects("soft-blocks");
+		this.colliderBounds = colliderBounds;
 	}
 	
-	public boolean isCollision(Rectangle collider, Rectangle collisionRect) {
-		return collider.overlaps(collisionRect);
+	public void setColliderBounds(Rectangle colliderBounds) {
+		this.colliderBounds = colliderBounds;
 	}
 	
-	public boolean fromLeft(Rectangle collider, Rectangle collisionRect) {
-		return collider.x + collider.width >= collisionRect.x;
+	public Rectangle getColliderBounds() {
+		return colliderBounds;
+	}
+
+	public void setHardBlocks(Array<Rectangle> hardBlocks) {
+		this.hardBlocks = hardBlocks;
 	}
 	
-	public boolean fromRight(Rectangle collider, Rectangle collisionRect) {
-		return collider.x <= collisionRect.x + collisionRect.width;
+	public Array<Rectangle> getHardBlocks() {
+		return hardBlocks;
 	}
 	
-	public boolean fromTop(Rectangle collider, Rectangle collisionRect) {
-		return collider.y >= collisionRect.y + collisionRect.height;
+	public void setSoftBlocks(Array<Rectangle> softBlocks) {
+		this.softBlocks = softBlocks;
 	}
 	
-	public boolean fromBottom(Rectangle collider, Rectangle collisionRect) {
-		return collider.y + collider.height <= collisionRect.y;
+	public Array<Rectangle> getSoftBlocks() {
+		return softBlocks;
 	}
+
 	
 	/**
 	 * Used to check for collision.
@@ -79,6 +94,47 @@ public class CollisionHandler {
 		return false;
 	}
 	
+	
+	public boolean isCollision(Rectangle collisionRect) {
+		return this.colliderBounds.overlaps(collisionRect);
+	}
+	
+	public boolean fromLeft(Rectangle collisionRect) {
+		return this.colliderBounds.x + this.colliderBounds.width >= collisionRect.x;
+	}
+	
+	public boolean fromRight(Rectangle collisionRect) {
+		return this.colliderBounds.x <= collisionRect.x + collisionRect.width;
+	}
+	
+	public boolean fromTop(Rectangle collisionRect) {
+		return this.colliderBounds.y >= collisionRect.y + collisionRect.height;
+	}
+	
+	public boolean fromBottom(Rectangle collisionRect) {
+		return this.colliderBounds.y + this.colliderBounds.height <= collisionRect.y;
+	}
+	
+	public boolean isCollision(Rectangle collider, Rectangle collisionRect) {
+		return collider.overlaps(collisionRect);
+	}
+	
+	public boolean fromLeft(Rectangle collider, Rectangle collisionRect) {
+		return collider.x + collider.width >= collisionRect.x;
+	}
+	
+	public boolean fromRight(Rectangle collider, Rectangle collisionRect) {
+		return collider.x <= collisionRect.x + collisionRect.width;
+	}
+	
+	public boolean fromTop(Rectangle collider, Rectangle collisionRect) {
+		return collider.y >= collisionRect.y + collisionRect.height;
+	}
+	
+	public boolean fromBottom(Rectangle collider, Rectangle collisionRect) {
+		return collider.y + collider.height <= collisionRect.y;
+	}
+	
 	/**
 	 * Used to specify type of block that we collide with.
 	 * could be a wall, a grass hill or a door.
@@ -89,21 +145,5 @@ public class CollisionHandler {
 		public static final byte HARD = 1;
 		public static final byte SOFT = 2;
 	}
-
-	public void setHardBlocks(Array<Rectangle> hardBlocks) {
-		this.hardBlocks = hardBlocks;
-	}
 	
-	public Array<Rectangle> getHardBlocks() {
-		return hardBlocks;
-	}
-	
-	public void setSoftBlocks(Array<Rectangle> softBlocks) {
-		this.softBlocks = softBlocks;
-	}
-	
-	public Array<Rectangle> getSoftBlocks() {
-		return softBlocks;
-	}
-
 }

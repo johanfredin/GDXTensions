@@ -1,6 +1,6 @@
 package se.fredin.gdxtensions.object.weapon;
 
-import se.fredin.gdxtensions.object.GameObjectBase;
+import se.fredin.gdxtensions.object.BasicGameObject;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -17,7 +17,7 @@ import com.badlogic.gdx.utils.Array;
  * @author Johan Fredin
  *
  */
-public abstract class Weapon implements GameObjectBase {
+public abstract class Weapon extends BasicGameObject {
 	
 	/** Default time interval until next projectile can be fired, 
 	 * useful mostly for automatic weapons. Value={@value #SHOOTING_INTERVAL_DEFAULT} seconds
@@ -27,6 +27,8 @@ public abstract class Weapon implements GameObjectBase {
 	protected TextureRegion weaponTexture;
 	protected float shootingInterval;
 	protected float timer;
+	protected float damage;
+	protected float range;
 	protected int maxCapacity;
 	protected short ammo;
 	protected boolean isUnlimitedFiringInterval;
@@ -109,7 +111,6 @@ public abstract class Weapon implements GameObjectBase {
 		projectileToAddTo.setPosition(populatedProjectile.getPosition());
 		projectileToAddTo.setSpeed(populatedProjectile.getSpeed());
 		projectileToAddTo.setVelocity(populatedProjectile.getVelocity());
-		projectileToAddTo.setDamage(populatedProjectile.getDamage());
 		projectileToAddTo.setBounds(populatedProjectile.getBounds());
 		projectileToAddTo.setCollisionHandler(populatedProjectile.getCollisionHandler());
 		projectileToAddTo.setGameObjectTexture(populatedProjectile.getGameObjectTexture());
@@ -276,6 +277,36 @@ public abstract class Weapon implements GameObjectBase {
 	 */
 	public boolean isSemiAutomaticMode() {
 		return firingMode == FiringMode.SEMI;
+	}
+	
+	/**
+	 * Set the distance in pixels for how far the projectiles can go
+	 * @param range
+	 */
+	public void setRange(float range) {
+		this.range = range;
+	}
+
+	/**
+	 * @return the distance in pixels for how far the projectiles can go
+	 */
+	public float getRange() {
+		return range;
+	}
+	
+	/**
+	 * Set the amount of damage that this weapon will cause
+	 * @param damage
+	 */
+	public void setDamage(float damage) {
+		this.damage = damage;
+	}
+	
+	/***
+	 * @return the amount of damage this weapon causes
+	 */
+	public float getDamage() {
+		return damage;
 	}
 	
 	@Override

@@ -1,9 +1,13 @@
-package se.fredin.gdxtensions.object.weapon;
-
-import com.badlogic.gdx.utils.Array;
+package se.fredin.gdxtensions.object.weapon.semi;
 
 import se.fredin.gdxtensions.input.BaseInput;
-import se.fredin.gdxtensions.object.BasicGameObject;
+import se.fredin.gdxtensions.object.weapon.FiringMode;
+import se.fredin.gdxtensions.object.weapon.Projectile;
+import se.fredin.gdxtensions.object.weapon.ProjectilesPool;
+import se.fredin.gdxtensions.object.weapon.Weapon;
+import se.fredin.gdxtensions.object.weapon.automatic.AutomaticWeapon;
+
+import com.badlogic.gdx.utils.Array;
 
 /**
  * Abstract super class for all semi-automatic {@link Weapon}s 
@@ -75,7 +79,7 @@ public abstract class SemiAutomaticWeapon extends Weapon {
 	}
 	
 	@Override
-	public void tick(float deltaTime, BasicGameObject gameObject) {
+	public void tick(float deltaTime) {
 		checkInputStatus();
 		
 		if(timer > shootingInterval) {
@@ -84,7 +88,7 @@ public abstract class SemiAutomaticWeapon extends Weapon {
 		timer += deltaTime;
 		
 		for(Projectile projectile : projectiles) {
-			projectile.tick(deltaTime, gameObject);
+			projectile.tick(deltaTime);
 			if(projectile.isCollidedWith() || isMaxedOut()) {
 				projectiles.removeValue(projectile, true);
 				projectilesPool.free(projectile);

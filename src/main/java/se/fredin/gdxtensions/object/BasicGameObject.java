@@ -3,6 +3,7 @@ package se.fredin.gdxtensions.object;
 import se.fredin.gdxtensions.assetmanagement.Assets;
 import se.fredin.gdxtensions.collision.CollisionHandler;
 import se.fredin.gdxtensions.utils.ParticleHelper;
+import se.fredin.gdxtensions.utils.logging.LogUtils;
 
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Texture;
@@ -10,6 +11,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.utils.Array;
 
 /**
  * This class contains the very basic elements that most game objects require.
@@ -381,6 +383,45 @@ public abstract class BasicGameObject implements GameObjectBase {
 	 */
 	public int getTextureHeight() {
 		return gameObjectTexture == null ? 32 : gameObjectTexture.getRegionHeight();
+	}
+	
+	/**
+	 * Used for handling collision with other objects extending this class. Collision happens 
+	 * when the both the game objects {@link #bounds} overlaps each other.
+	 * As it is by default, only a log will appear when the game objects have collided so
+	 * this method is intended to be overriden by classes extending {@link BasicGameObject}
+	 * @param gameObjectCollidedWith the {@link BasicGameObject} we collide with
+	 */
+	protected void handleCollision(BasicGameObject gameObjectCollidedWith) {
+		if(collisionHandler.isCollision(gameObjectCollidedWith.getBounds())) {
+			LogUtils.log(this.getClass().getSimpleName() + " collided with " + gameObjectCollidedWith.getClass().getSimpleName());
+		}
+	}
+	
+	/**
+	 * Used for handling collision with other objects extending this class. Collision happens 
+	 * when the both the game objects {@link #bounds} overlaps each other.
+	 * As it is by default, only a log will appear when the game objects have collided so
+	 * this method is intended to be overriden by classes extending {@link BasicGameObject}
+	 * @param gameObjectsCollidedWith the {@link BasicGameObject}s we collide with
+	 */
+	protected void handleCollision(Array<BasicGameObject> gameObjectsCollidedWith) {
+		for(BasicGameObject gameObjectCollidedWith : gameObjectsCollidedWith) {
+			handleCollision(gameObjectCollidedWith);
+		}
+	}
+	
+	/**
+	 * Used for handling collision with other objects extending this class. Collision happens 
+	 * when the both the game objects {@link #bounds} overlaps each other.
+	 * As it is by default, only a log will appear when the game objects have collided so
+	 * this method is intended to be overriden by classes extending {@link BasicGameObject}
+	 * @param gameObjectsCollidedWith and arbitrary amount of {@link Array}s of {@link BasicGameObject} we collide with
+	 */
+	protected void handleCollision(Array<BasicGameObject>... gameObjectsCollidedWith) {
+		for(Array<BasicGameObject> gameObjects : gameObjectsCollidedWith) {
+			handleCollision(gameObjects);
+		}
 	}
 
 }

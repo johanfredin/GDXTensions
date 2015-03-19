@@ -1,8 +1,11 @@
-package se.fredin.gdxtensions.object.weapon;
+package se.fredin.gdxtensions.object.weapon.automatic;
+
+import se.fredin.gdxtensions.object.weapon.FiringMode;
+import se.fredin.gdxtensions.object.weapon.Projectile;
+import se.fredin.gdxtensions.object.weapon.ProjectilesPool;
+import se.fredin.gdxtensions.object.weapon.Weapon;
 
 import com.badlogic.gdx.utils.Array;
-
-import se.fredin.gdxtensions.object.BasicGameObject;
 
 /**
  * Abstract super class for all automatic {@link Weapon}s 
@@ -63,14 +66,14 @@ public abstract class AutomaticWeapon extends Weapon {
 	}
 	
 	@Override
-	public void tick(float deltaTime, BasicGameObject gameObject) {
+	public void tick(float deltaTime) {
 		if(timer > shootingInterval) {
 			timer = 0.0f;
 		} 
 		timer += deltaTime;
 		
 		for(Projectile projectile : projectiles) {
-			projectile.tick(deltaTime, gameObject);
+			projectile.tick(deltaTime);
 			if(projectile.isCollidedWith() || isMaxedOut()) {
 				projectiles.removeValue(projectile, true);
 				projectilesPool.free(projectile);
