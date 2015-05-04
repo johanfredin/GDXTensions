@@ -20,6 +20,7 @@ import com.badlogic.gdx.utils.Pool.Poolable;
 public class Projectile extends BasicGameObject implements Poolable {
 	
 	private boolean isShootASAP = true;
+	private float angle;
 	
 	/**
 	 * Construct a new {@link Projectile} without setting anything
@@ -127,8 +128,12 @@ public class Projectile extends BasicGameObject implements Poolable {
 	
 	@Override
 	public void tick(float deltaTime) {
+		this.tick(deltaTime, 1.0f);
+	}
+	
+	public void tick(float deltaTime, float angle) {
 		if(isShootASAP) {
-			this.position.add(velocity.x * deltaTime, velocity.y * deltaTime);
+			this.position.add((velocity.x * angle) * deltaTime, (velocity.y * angle) * deltaTime);
 			this.bounds.setPosition(position);
 			this.isCollidedWith = collisionHandler.isCollisionWithHardBlock(bounds);
 		}
@@ -147,6 +152,21 @@ public class Projectile extends BasicGameObject implements Poolable {
 	 */
 	public void setShootASAP(boolean canMove) {
 		this.isShootASAP = canMove;
+	}
+	
+	/**
+	 * If you want the bullet to sort of bend a bit you can angle it to stray from its default path.
+	 * @param angle
+	 */
+	public void setAngle(float angle) {
+		this.angle = angle;
+	}
+	
+	/**
+	 * @return the angle this bullet strays from its default path.
+	 */
+	public float getAngle() {
+		return angle;
 	}
 
 	@Override

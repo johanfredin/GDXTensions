@@ -96,15 +96,6 @@ public abstract class SemiAutomaticWeapon extends Weapon {
 		}
 	}
 	
-	@Override
-	public void shoot(Projectile projectile) {
-		super.shoot(projectile);
-		
-		if(!isUnlimitedAmmo) {
-			ammo--;
-		}
-	}
-	
 	/**
 	 * Checks whether or not the shoot button has been pressed
 	 */

@@ -95,8 +95,24 @@ public abstract class Weapon extends BasicGameObject {
 	 * @param projectile the {@link Projectile} to add to the projectiles array
 	 */
 	public void shoot(Projectile projectile) {
+		this.shoot(projectile, 1.0f);
+	}
+	
+	/**
+	 * Adds a {@link Projectile} to the projectiles {@link Array} by obtaining one from the {@link ProjectilesPool}
+	 * This method (if not overriden of course) will call {@link #transferValuesFrom(Projectile, Projectile)} method to
+	 * decide logic for the projectile to be added.
+	 * @param projectile the {@link Projectile} to add to the projectiles array
+	 * @param angle the amount in degrees this projectile will stray from the original path
+	 */
+	public void shoot(Projectile projectile, float angle) {
 		if(canShoot()) {
+			if(!isUnlimitedAmmo) {
+				ammo--;
+			}
+			
 			Projectile obtainedProjectile = projectilesPool.obtain();
+			obtainedProjectile.setAngle(angle);
 			this.transferValuesFrom(obtainedProjectile, projectile);
 			projectiles.add(obtainedProjectile);
 		}
@@ -307,6 +323,13 @@ public abstract class Weapon extends BasicGameObject {
 	 */
 	public float getDamage() {
 		return damage;
+	}
+	
+	/**
+	 * @return whether or not this weapon should be treated as a spread gun
+	 */
+	public boolean isSpreadWeapon() {
+		return this instanceof Shotgun;
 	}
 	
 	@Override
