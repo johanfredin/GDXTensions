@@ -100,15 +100,6 @@ public class AnimatedBitmapFont extends BitmapFont {
 		super(data, region, integer);
 	}
 
-	/** Constructs a new BitmapFont from the given {@link BitmapFontData} and array of {@link TextureRegion}. If the TextureRegion
-	 * is null or empty, the image path(s) will be read from the BitmapFontData. The dispose() method will not dispose the texture
-	 * of the region(s) if the regions array is != null and not empty.
-	 * 
-	 * @param integer If true, rendering positions will be at integer values to avoid filtering artifacts. */
-	public AnimatedBitmapFont(BitmapFontData data, TextureRegion[] regions, boolean integer) {
-		super(data, regions, integer);
-	}
-
 	/** Creates a BitmapFont from a BMFont file, using the specified image for glyphs. Any image specified in the BMFont file is
 	 * ignored.
 	 * @param flip If true, the glyphs will be flipped for use with a perspective where 0,0 is the upper left corner.
@@ -123,11 +114,11 @@ public class AnimatedBitmapFont extends BitmapFont {
 	 * @param animatedText the {@link AnimatedText}
 	 */
 	public void drawAnimatedText(SpriteBatch batch, AnimatedText animatedText) {
-		if(isMultiLine) {
-			drawMultiLine(batch, animatedText.getCurrentText(), x, y);
-		} else {
+//		if(isMultiLine) {
+//			drawMultiLine(batch, animatedText.getCurrentText(), x, y);
+//		} else {
 			draw(batch, animatedText.getCurrentText(), x, y);
-		}
+//		}
 	}
 	
 	/**
@@ -138,11 +129,11 @@ public class AnimatedBitmapFont extends BitmapFont {
 	 * @param y the y position
 	 */
 	public void drawAnimatedText(SpriteBatch batch, AnimatedText animatedText, float x, float y) {
-		if(isMultiLine) {
-			drawMultiLine(batch, animatedText.getCurrentText(), x, y);
-		} else {
+//		if(isMultiLine) {
+//			drawMultiLine(batch, animatedText.getCurrentText(), x, y);
+//		} else {
 			draw(batch, animatedText.getCurrentText(), x, y);
-		}
+//		}
 	}
 	
 	/**

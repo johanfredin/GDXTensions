@@ -120,7 +120,6 @@ public class BaseInput implements InputProcessor {
 			downButtonPressed = true;
 		} if(keycode == shoot1 || keycode == shoot2) {
 			shootButtonPressed = true;
-			mapButtonPressed = true;
 		} if(keycode == pause) {
 			pauseButtonPressed = true;
 		} if(keycode == exit) {

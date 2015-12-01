@@ -316,7 +316,7 @@ public abstract class BasicGameObject implements GameObjectBase {
 
 	/**
 	 * Lets us separate the rendering of particles from the actual game object. Usually we will want
-	 * the particles to be rendered in front of game and map objects. This method renders aswell as updates
+	 * the particles to be rendered in front of game and map objects. This method renders as well as updates
 	 * the particles
 	 * @param batch 
 	 * @param deltaTime

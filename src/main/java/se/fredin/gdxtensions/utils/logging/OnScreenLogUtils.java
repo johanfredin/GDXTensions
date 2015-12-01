@@ -69,6 +69,6 @@ public class OnScreenLogUtils {
 		for(String log : logs) {
 			finalLog += log + "\n";
 		}
-		font.drawMultiLine(batch, finalLog, x, y);
+		font.draw(batch, finalLog, x, y);
 	}
 }
