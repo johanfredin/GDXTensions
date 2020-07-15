@@ -74,9 +74,7 @@ public class TextureUtils {
 	
 	/**
 	 * Splits up a TextureRegion object into a TextureRegion array with given width and height.
-	 * @param textureToSplit the Texture object to split up
-	 * @param defaultFrameWidth the desired frame width
-	 * @param defaultFrameHeight the desired frame height
+	 * @param textureRegionToSplit the Texture object to split up
 	 * @return a new TextureRegion sprite sheet array
 	 */
 	public static TextureRegion[] split (TextureRegion textureRegionToSplit) {
@@ -96,7 +94,7 @@ public class TextureUtils {
 	
 	/**
 	 * Splits up a TextureRegion object into a TextureRegion array with given width and height.
-	 * @param textureToSplit the Texture object to split up
+	 * @param textureRegionToSplit the Texture object to split up
 	 * @param frameWidth the desired frame width
 	 * @param frameHeight the desired frame height
 	 * @return a new TextureRegion sprite sheet array
@@ -119,7 +117,7 @@ public class TextureUtils {
 	
 	/**
 	 * Splits up a TextureRegion object into a TextureRegion array with given width and height.
-	 * @param textureToSplit the Texture object to split up
+	 * @param textureRegionToSplit the Texture object to split up
 	 * @param frameWidth the desired frame width
 	 * @param frameHeight the desired frame height
 	 * @param flipX whether or not to flip each frame horizontally
@@ -144,7 +142,7 @@ public class TextureUtils {
 	
 	/**
 	 * Splits up a TextureRegion object into a TextureRegion array with given width and height.
-	 * @param textureToSplit the Texture object to split up
+	 * @param textureRegionToSplit the Texture object to split up
 	 * @param frameWidth the desired frame width
 	 * @param frameHeight the desired frame height
 	 * @param flipX whether or not to flip each frame horizontally
@@ -190,7 +188,7 @@ public class TextureUtils {
 	
 	/**
 	 * Splits up a TextureRegion object into a TextureRegion array with given width and height.
-	 * @param textureToSplit the Texture object to split up
+	 * @param textureRegionToSplit the Texture object to split up
 	 * @param frameWidth the desired frame width
 	 * @param frameHeight the desired frame height
 	 * @param flipX whether or not to flip each frame horizontally
@@ -236,7 +234,7 @@ public class TextureUtils {
 	
 	/**
 	 * Splits up a TextureRegion object into a TextureRegion array with given width and height.
-	 * @param textureToSplit the Texture object to split up
+	 * @param region the Texture object to split up
 	 * @param frameWidth the desired frame width
 	 * @param frameHeight the desired frame height
 	 * @param flipX whether or not to flip each frame horizontally

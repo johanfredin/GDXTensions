@@ -8,7 +8,7 @@ public class AnimationUtils {
 	/**
 	 * Creates a customized animation from from a given sprite sheet. 
 	 * @param animSpeed the speed of the animation
-	 * @param textureToSplit the Texture object to split up
+	 * @param region the Texture object to split up
 	 * @return a new animation object
 	 */
 	public static Animation getAnimation(TextureRegion region, float animSpeed) {

@@ -116,28 +116,25 @@ public class AudioUtils {
 	 * @param deltaTime the time interval since last rendering occurred
 	 */
 	public void crossFadeTracks(final String nameOfTrackToFadeOut, final String nameOfTrackToFadeIn, final float duration, final boolean shouldStopOnceFadingDone, final float deltaTime) {
-		new Thread(new Runnable() {
-			@Override
-			public void run() {
-				float timer = 0.0f;
-				tracks.get(nameOfTrackToFadeOut).setVolume(VOLUME_MUTE);
-				tracks.get(nameOfTrackToFadeIn).setVolume(VOLUME_MAX);
-				playMusic(nameOfTrackToFadeIn, true);
-				while(timer <= duration) {
-					try {
-						timer += deltaTime;
-						tracks.get(nameOfTrackToFadeOut).setVolume(Math.abs(VOLUME_MAX - ((VOLUME_MAX / duration) * timer)));
-						tracks.get(nameOfTrackToFadeIn).setVolume(Math.abs((VOLUME_MAX / duration) * timer));
-						Thread.sleep(4);
-					} catch(Exception e) { 
-						e.printStackTrace();
-					}
-				}
-				if(shouldStopOnceFadingDone) {
-					tracks.get(nameOfTrackToFadeOut).stop();
+		new Thread(() -> {
+			float timer = 0.0f;
+			tracks.get(nameOfTrackToFadeOut).setVolume(VOLUME_MUTE);
+			tracks.get(nameOfTrackToFadeIn).setVolume(VOLUME_MAX);
+			playMusic(nameOfTrackToFadeIn, true);
+			while(timer <= duration) {
+				try {
+					timer += deltaTime;
+					tracks.get(nameOfTrackToFadeOut).setVolume(Math.abs(VOLUME_MAX - ((VOLUME_MAX / duration) * timer)));
+					tracks.get(nameOfTrackToFadeIn).setVolume(Math.abs((VOLUME_MAX / duration) * timer));
+					Thread.sleep(4);
+				} catch(Exception e) {
+					e.printStackTrace();
 				}
 			}
-		}).start(); 
+			if(shouldStopOnceFadingDone) {
+				tracks.get(nameOfTrackToFadeOut).stop();
+			}
+		}).start();
 	}
 	
 	/**
@@ -158,22 +155,19 @@ public class AudioUtils {
 	 * @param deltaTime the time interval since last rendering occurred
 	 */
 	public void fadeOutTrack(final String nameOfTrackToFadeOut, final float duration, final boolean shouldStopOnceFadingDone, final float deltaTime) {
-		new Thread(new Runnable() {
-			@Override
-			public void run() {
-				float timer = 0.0f;
-				while(timer <= duration) {
-					try {
-						timer += deltaTime;
-						tracks.get(nameOfTrackToFadeOut).setVolume(Math.abs(VOLUME_MAX - ((VOLUME_MAX / duration) * timer)));
-						Thread.sleep(4);
-					} catch(Exception e) {
-						e.printStackTrace();
-					}
+		new Thread(() -> {
+			float timer = 0.0f;
+			while(timer <= duration) {
+				try {
+					timer += deltaTime;
+					tracks.get(nameOfTrackToFadeOut).setVolume(Math.abs(VOLUME_MAX - ((VOLUME_MAX / duration) * timer)));
+					Thread.sleep(4);
+				} catch(Exception e) {
+					e.printStackTrace();
 				}
-				if(shouldStopOnceFadingDone) {
-					tracks.get(nameOfTrackToFadeOut).stop();
-				}
+			}
+			if(shouldStopOnceFadingDone) {
+				tracks.get(nameOfTrackToFadeOut).stop();
 			}
 		}).start();
 	}
@@ -245,8 +239,8 @@ public class AudioUtils {
 	 * Create our singleton instance and populates the tracks and soundEffects hash maps
 	 */
 	private AudioUtils() {
-		this.tracks = new HashMap<String, Music>();
-		this.soundEffects = new HashMap<String, Sound>();
+		this.tracks = new HashMap<>();
+		this.soundEffects = new HashMap<>();
 	}
 	
 	
@@ -310,7 +304,7 @@ public class AudioUtils {
 	 * Lets user add an arbitrary amount of sound effects. The method takes for granted that
 	 * the soundEffecFilesPath have been set already, will not work otherwise, the names to pass
 	 * in should be the final name of the track e.g "myeffect.wav". The absolute path will be 
-	 * soundEffecFilesPath + effectName. This method uses {@link se.fredin.gdxtensions.Assets}
+	 * soundEffecFilesPath + effectName. This method uses {@link Assets}
 	 * to load the sound effects and therefore those assets HAVE TO have been loaded previously before
 	 * attempting to add them here.
 	 * @param soundEffects the names of the sound effects without the path e.g "myeffect.wav"
@@ -325,7 +319,7 @@ public class AudioUtils {
 	 * Lets user add an arbitrary amount of sound effects. The method takes for granted that
 	 * the soundEffecFilesPath have been set already, will not work otherwise, the names to pass
 	 * in should be the final name of the track e.g "myeffect.wav". The absolute path will be 
-	 * soundEffecFilesPath + effectName. This method uses {@link se.fredin.gdxtensions.Assets}
+	 * soundEffecFilesPath + effectName. This method uses {@link Assets}
 	 * to load the sound effects and therefore those assets HAVE TO have been loaded previously before
 	 * attempting to add them here.
 	 * @param soundEffects the names of the sound effects without the path e.g "myeffect.wav"
@@ -353,7 +347,7 @@ public class AudioUtils {
 	 * Lets user add an arbitrary amount of sound effects. The method takes for granted that
 	 * the soundEffecFilesPath have been set already, will not work otherwise, the names to pass
 	 * in should be the final name of the track e.g "myeffect.wav". The absolute path will be 
-	 * soundEffecFilesPath + effectName. This method uses {@link se.fredin.gdxtensions.Assets}
+	 * soundEffecFilesPath + effectName. This method uses {@link Assets}
 	 * to load the sound effects and therefore those assets HAVE TO have been loaded previously before
 	 * attempting to add them here.
 	 * @param soundEffects the names of the sound effects without the path e.g "myeffect.wav"

@@ -79,8 +79,7 @@ public class GameCamera extends OrthographicCamera {
 	 * Sets the camera to focus on a given position. Unless the given position
 	 * is about to go outside of the cameras boundaries it will follow it.
 	 * @param positionToFollow the position we want to keep the camera looking at.
-	 * @param boundsX camera will not go beyond this x position
-	 * @param boundsY camera will not go beyond this y position
+	 * @param bounds camera will not go beyond this position
 	 */
 	public void follow(Vector2 positionToFollow, Vector2 bounds) {
 		follow(positionToFollow.x, positionToFollow.y, bounds.x, bounds.y);

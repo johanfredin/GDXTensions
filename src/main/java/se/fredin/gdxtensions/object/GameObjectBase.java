@@ -23,6 +23,6 @@ public interface GameObjectBase extends Disposable{
 	void tick(float deltaTime);
 	
 	@Override
-	public void dispose();
+	void dispose();
 
 }

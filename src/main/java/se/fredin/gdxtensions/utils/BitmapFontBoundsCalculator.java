@@ -12,7 +12,7 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont.Glyph;
  */
 public class BitmapFontBoundsCalculator {
 
-	private BitmapFont font;
+	private final BitmapFont font;
 	private float width;
 	private float height;
 	private byte amountOfLineBreaks;
@@ -55,7 +55,7 @@ public class BitmapFontBoundsCalculator {
 				Glyph glyphAt = data.getGlyph(charAt);
 				char space = ' ';
 				if(charAt == space) {
-					dynamicWidth += data.spaceWidth;
+					dynamicWidth += data.spaceXadvance;
 				} else {
 					if(glyphAt != null) {
 						dynamicWidth += glyphAt.width;

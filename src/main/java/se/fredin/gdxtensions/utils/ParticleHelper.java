@@ -36,7 +36,7 @@ public class ParticleHelper implements Disposable {
 		this.particleEffect = new ParticleEffect();
 		this.particleEffect.load(Gdx.files.internal("effects/" + particleName), Gdx.files.internal("effects"));
 		this.particleEffectPool = new ParticleEffectPool(particleEffect, initialCapacity, maxCapacity);
-		this.pooledEffectsArray = new Array<PooledEffect>();
+		this.pooledEffectsArray = new Array<>();
 	}
 	
 	/**

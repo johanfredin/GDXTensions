@@ -108,7 +108,7 @@ public class TiledMapUtils {
 	 */
 	public Array<Rectangle> getRectangularMapObjects(String objectLayerName) {
 		Array<RectangleMapObject> rectangleMapObjects = map.getLayers().get(objectLayerName).getObjects().getByType(RectangleMapObject.class);
-		Array<Rectangle> rectangles = new Array<Rectangle>();
+		Array<Rectangle> rectangles = new Array<>();
 		for(RectangleMapObject rectangleMapObject : rectangleMapObjects) {
 			rectangles.add(rectangleMapObject.getRectangle());
 		}
